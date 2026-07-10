@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google"; // <-- Added Google Provider Import
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
@@ -14,6 +15,14 @@ const loginSchema = z.object({
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   providers: [
+    // 1. Google Provider Added Cleanly at the top of the list
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true, // Seamless linking if they have a credentials account
+    }),
+
+    // 2. Your original, untouched Credentials Provider block
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },

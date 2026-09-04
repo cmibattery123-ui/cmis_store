@@ -6,12 +6,28 @@ import { db } from "@/lib/db";
 // ─────────────────────────────────────────────────────────────────────────────
 // Provider factory — swap provider by env var without changing business logic
 // ─────────────────────────────────────────────────────────────────────────────
-function getProvider(): PaymentProvider {
-  const keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_SECRET;
-  const useRazorpay = Boolean(keyId && keySecret);
+async function getProvider(): Promise<PaymentProvider> {
+  let keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+  let keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_SECRET;
 
-  return useRazorpay ? new RazorpayPaymentProvider() : new MockPaymentProvider();
+  if (!keyId || !keySecret) {
+    try {
+      const settings = await db.systemSetting.findMany({
+        where: {
+          key: { in: ["RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "RAZORPAY_SECRET"] },
+        },
+      });
+      const map: Record<string, string> = {};
+      settings.forEach((s) => (map[s.key] = s.value));
+      keyId = keyId || map["RAZORPAY_KEY_ID"];
+      keySecret = keySecret || map["RAZORPAY_KEY_SECRET"] || map["RAZORPAY_SECRET"];
+    } catch (e) {
+      console.error("[PaymentService] Error fetching system payment settings:", e);
+    }
+  }
+
+  const useRazorpay = Boolean(keyId && keySecret);
+  return useRazorpay ? new RazorpayPaymentProvider(keyId, keySecret) : new MockPaymentProvider();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -31,7 +47,7 @@ export const paymentService = {
     if (!order) throw new Error("Order not found");
     if (order.payment?.status === "PAID") throw new Error("Order already paid");
 
-    const provider = getProvider();
+    const provider = await getProvider();
     const result = await provider.createOrder({
       orderId,
       amount: Number(order.totalAmount),
@@ -65,7 +81,7 @@ export const paymentService = {
    * Verify a payment and update both Payment and Order records.
    */
   async verifyPayment(params: PaymentVerifyParams) {
-    const provider = getProvider();
+    const provider = await getProvider();
     const result = await provider.verifyPayment(params);
 
     if (result.success) {
@@ -103,7 +119,7 @@ export const paymentService = {
       throw new Error("Payment record not found or not yet completed");
     }
 
-    const provider = getProvider();
+    const provider = await getProvider();
     const result = await provider.refundPayment({
       providerPaymentId: payment.providerPaymentId,
       amount,

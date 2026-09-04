@@ -15,13 +15,20 @@ import type {
  */
 export class RazorpayPaymentProvider implements PaymentProvider {
   private baseUrl = "https://api.razorpay.com/v1";
+  private customKeyId?: string;
+  private customKeySecret?: string;
+
+  constructor(keyId?: string, keySecret?: string) {
+    this.customKeyId = keyId;
+    this.customKeySecret = keySecret;
+  }
 
   private get keyId(): string {
-    return process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "";
+    return this.customKeyId || process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "";
   }
 
   private get keySecret(): string {
-    return process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_SECRET || "";
+    return this.customKeySecret || process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_SECRET || "";
   }
 
   private get authHeader(): string {

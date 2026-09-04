@@ -30,6 +30,7 @@ Resources:
         - arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier
         - arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier
         - arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
 
   EBInstanceProfile:
     Type: AWS::IAM::InstanceProfile

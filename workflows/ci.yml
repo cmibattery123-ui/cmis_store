@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 22
   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres?pgbouncer=true"
   DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
   NEXTAUTH_SECRET: "ci-test-secret-minimum-32-chars-long"

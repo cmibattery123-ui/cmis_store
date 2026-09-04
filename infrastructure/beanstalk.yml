@@ -57,7 +57,10 @@ Resources:
           Value: !Ref EBInstanceProfile
         - Namespace: aws:autoscaling:launchconfiguration
           OptionName: InstanceType
-          Value: t3.small
+          Value: t3.micro
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: EnvironmentType
+          Value: SingleInstance
         - Namespace: aws:elasticbeanstalk:environment
           OptionName: ServiceRole
           Value: !Ref EBServiceRole

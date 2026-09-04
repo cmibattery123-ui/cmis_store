@@ -12,15 +12,21 @@ export default auth((req) => {
 
   // Admin routes — ADMIN only
   if (nextUrl.pathname.startsWith("/admin")) {
-    if (!isLoggedIn || role !== "ADMIN") {
+    if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/auth/login?callbackUrl=/admin", nextUrl));
+    }
+    if (role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/customer", nextUrl));
     }
   }
 
   // Dealer routes — DEALER or ADMIN
   if (nextUrl.pathname.startsWith("/dealer")) {
-    if (!isLoggedIn || (role !== "DEALER" && role !== "ADMIN")) {
+    if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/auth/login?callbackUrl=/dealer", nextUrl));
+    }
+    if (role !== "DEALER" && role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/customer", nextUrl));
     }
   }
 

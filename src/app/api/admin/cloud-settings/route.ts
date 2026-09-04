@@ -28,6 +28,7 @@ export async function GET(req: Request) {
       awsSecretKey: settings.awsSecretKey ? "****************" : "",
       awsRegion: settings.awsRegion || "ap-south-1",
       awsAccountId: settings.awsAccountId || "",
+      awsS3Bucket: settings.awsS3Bucket || "",
     });
   } catch (error: any) {
     console.error("GET CloudSettings error:", error);
@@ -46,7 +47,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { awsAccessKeyId, awsSecretKey, awsRegion, awsAccountId } = body;
+    const { awsAccessKeyId, awsSecretKey, awsRegion, awsAccountId, awsS3Bucket } = body;
 
     const db = getDb();
     
@@ -55,6 +56,7 @@ export async function POST(req: Request) {
       awsAccessKeyId,
       awsRegion,
       awsAccountId,
+      awsS3Bucket,
     };
 
     if (awsSecretKey && !awsSecretKey.startsWith("***")) {

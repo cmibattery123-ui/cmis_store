@@ -16,6 +16,7 @@ export default function CloudSettingsPage() {
     awsSecretKey: "",
     awsRegion: "us-east-1",
     awsAccountId: "",
+    awsS3Bucket: "",
   });
   
   const [billing, setBilling] = useState<{ amountUsed: string, amountRemaining: string, error?: string }>({
@@ -187,6 +188,19 @@ export default function CloudSettingsPage() {
                   onChange={(e) => setFormData({ ...formData, awsRegion: e.target.value })}
                   placeholder="us-east-1"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="awsS3Bucket">AWS S3 Bucket Name</Label>
+                <Input
+                  id="awsS3Bucket"
+                  value={formData.awsS3Bucket}
+                  onChange={(e) => setFormData({ ...formData, awsS3Bucket: e.target.value })}
+                  placeholder="e.g. cmibattery-media-1234"
+                />
+                <p className="text-xs text-muted-foreground">
+                  The bucket where images and videos will be uploaded.
+                </p>
               </div>
 
               <Button type="submit" disabled={loading} className="w-full">

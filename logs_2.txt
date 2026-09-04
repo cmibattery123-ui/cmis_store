@@ -1,0 +1,415 @@
+----------------------------------------
+/var/log/docker-events.log
+----------------------------------------
+2026-09-04T21:03:18.278737502Z container prune  (reclaimed=0)
+2026-09-04T21:03:59.141735611Z image pull 602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app:de8536b8d1cb11691abf269f8a0ce643020ca741 (name=602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app)
+2026-09-04T21:04:00.561046498Z image tag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=aws_beanstalk/staging-app)
+2026-09-04T21:04:04.236973878Z container create 8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9 (image=af138f96ae41, name=mystifying_pare)
+2026-09-04T21:04:04.310958298Z network connect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9, name=bridge, type=bridge)
+2026-09-04T21:04:05.034558081Z container start 8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9 (image=af138f96ae41, name=mystifying_pare)
+2026-09-04T21:04:11.236280682Z image tag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=aws_beanstalk/current-app:latest)
+2026-09-04T21:04:11.258496689Z image untag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e)
+2026-09-04T21:04:13.025306741Z image untag sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8 (name=sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8)
+2026-09-04T21:04:13.028267696Z image untag sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8 (name=sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8)
+2026-09-04T21:04:13.032152349Z image delete sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8 (name=sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8)
+2026-09-04T21:09:40.588454350Z container prune  (reclaimed=0)
+2026-09-04T21:09:42.466359181Z image pull 602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app:de8536b8d1cb11691abf269f8a0ce643020ca741 (name=602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app)
+2026-09-04T21:09:42.809358185Z image tag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=aws_beanstalk/staging-app)
+2026-09-04T21:09:46.775148007Z container kill 8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9 (image=af138f96ae41, name=mystifying_pare, signal=15)
+2026-09-04T21:09:47.091263013Z network disconnect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9, name=bridge, type=bridge)
+2026-09-04T21:09:47.102007101Z container stop 8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9 (image=af138f96ae41, name=mystifying_pare)
+2026-09-04T21:09:47.109901960Z container die 8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9 (execDuration=341, exitCode=143, image=af138f96ae41, name=mystifying_pare)
+2026-09-04T21:09:48.523534312Z container destroy 8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9 (image=af138f96ae41, name=mystifying_pare)
+2026-09-04T21:09:48.523559173Z container prune  (reclaimed=0)
+2026-09-04T21:09:48.562359940Z image untag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e)
+2026-09-04T21:09:48.618210456Z container create 23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911 (image=af138f96ae41, name=amazing_driscoll)
+2026-09-04T21:09:48.657279495Z network connect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911, name=bridge, type=bridge)
+2026-09-04T21:09:49.156858450Z container start 23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911 (image=af138f96ae41, name=amazing_driscoll)
+2026-09-04T21:09:55.209418732Z image tag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=aws_beanstalk/current-app:latest)
+2026-09-04T21:09:55.230965000Z image untag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e)
+2026-09-04T21:09:57.098280368Z image untag sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8 (name=sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8)
+2026-09-04T21:09:57.100694057Z image untag sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8 (name=sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8)
+2026-09-04T21:09:57.104197618Z image delete sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8 (name=sha256:635451b9d43ed68373e9907cab2b6c9bdaeed6a938c73373f4b40daf7f4596e8)
+2026-09-04T21:13:03.514527052Z container prune  (reclaimed=0)
+2026-09-04T21:13:43.804677287Z image pull 602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app:c3ee70f226e35e1b8ff3bfb047b1d28f89dd7be4 (name=602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app)
+2026-09-04T21:13:45.123442130Z image tag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=aws_beanstalk/staging-app)
+2026-09-04T21:13:50.136237169Z container kill 23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911 (image=af138f96ae41, name=amazing_driscoll, signal=15)
+2026-09-04T21:13:50.612218143Z network disconnect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911, name=bridge, type=bridge)
+2026-09-04T21:13:50.621374089Z container stop 23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911 (image=af138f96ae41, name=amazing_driscoll)
+2026-09-04T21:13:50.627201009Z container die 23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911 (execDuration=241, exitCode=143, image=af138f96ae41, name=amazing_driscoll)
+2026-09-04T21:13:52.088776988Z container destroy 23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911 (image=af138f96ae41, name=amazing_driscoll)
+2026-09-04T21:13:52.088820271Z container prune  (reclaimed=0)
+2026-09-04T21:13:52.125567500Z image untag sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e)
+2026-09-04T21:13:52.128925499Z image delete sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e (name=sha256:af138f96ae415949d73aa5e3b65a0378b4f4aac1b33091c1dc11d9353da6523e)
+2026-09-04T21:13:52.178833479Z container create 7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305 (image=26bc29fd9070, name=reverent_mahavira)
+2026-09-04T21:13:52.222124052Z network connect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305, name=bridge, type=bridge)
+2026-09-04T21:13:52.758586491Z container start 7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305 (image=26bc29fd9070, name=reverent_mahavira)
+2026-09-04T21:13:58.900733136Z image tag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=aws_beanstalk/current-app:latest)
+2026-09-04T21:13:58.922832255Z image untag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8)
+2026-09-04T21:14:00.751569406Z image untag sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:14:00.754267771Z image untag sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:14:00.758041933Z image delete sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:18:55.190031738Z container prune  (reclaimed=0)
+2026-09-04T21:18:57.043131707Z image pull 602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app:c3ee70f226e35e1b8ff3bfb047b1d28f89dd7be4 (name=602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app)
+2026-09-04T21:18:57.529197107Z image tag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=aws_beanstalk/staging-app)
+2026-09-04T21:19:02.864813637Z container kill 7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305 (image=26bc29fd9070, name=reverent_mahavira, signal=15)
+2026-09-04T21:19:03.251499818Z network disconnect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305, name=bridge, type=bridge)
+2026-09-04T21:19:03.261532296Z container stop 7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305 (image=26bc29fd9070, name=reverent_mahavira)
+2026-09-04T21:19:03.267580404Z container die 7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305 (execDuration=310, exitCode=143, image=26bc29fd9070, name=reverent_mahavira)
+2026-09-04T21:19:04.691563999Z container destroy 7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305 (image=26bc29fd9070, name=reverent_mahavira)
+2026-09-04T21:19:04.691600561Z container prune  (reclaimed=0)
+2026-09-04T21:19:04.731076486Z image untag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8)
+2026-09-04T21:19:04.797060510Z container create e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847 (image=26bc29fd9070, name=clever_ptolemy)
+2026-09-04T21:19:04.829979507Z network connect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847, name=bridge, type=bridge)
+2026-09-04T21:19:05.355455093Z container start e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847 (image=26bc29fd9070, name=clever_ptolemy)
+2026-09-04T21:19:11.616396423Z image tag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=aws_beanstalk/current-app:latest)
+2026-09-04T21:19:11.636701829Z image untag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8)
+2026-09-04T21:19:13.363483531Z image untag sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:19:13.366097423Z image untag sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:19:13.369542387Z image delete sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:20:20.458462045Z container prune  (reclaimed=0)
+2026-09-04T21:20:22.242120862Z image pull 602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app:c3ee70f226e35e1b8ff3bfb047b1d28f89dd7be4 (name=602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app)
+2026-09-04T21:20:22.685470576Z image tag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=aws_beanstalk/staging-app)
+2026-09-04T21:20:27.052382970Z container kill e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847 (image=26bc29fd9070, name=clever_ptolemy, signal=15)
+2026-09-04T21:20:27.410633016Z network disconnect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847, name=bridge, type=bridge)
+2026-09-04T21:20:27.456315874Z container stop e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847 (image=26bc29fd9070, name=clever_ptolemy)
+2026-09-04T21:20:27.462130116Z container die e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847 (execDuration=81, exitCode=143, image=26bc29fd9070, name=clever_ptolemy)
+2026-09-04T21:20:28.877992147Z container destroy e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847 (image=26bc29fd9070, name=clever_ptolemy)
+2026-09-04T21:20:28.878036523Z container prune  (reclaimed=0)
+2026-09-04T21:20:28.916841184Z image untag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8)
+2026-09-04T21:20:28.963632256Z container create 20f00a583f6327c1b664fe0b66333b5e8d23a37a49288cd2c3ac65dc77738269 (image=26bc29fd9070, name=thirsty_goldstine)
+2026-09-04T21:20:29.003760887Z network connect 114116760b604b09a7a2f9a736df5f6d75875c6cb15ae49041bc9654eebc59a1 (container=20f00a583f6327c1b664fe0b66333b5e8d23a37a49288cd2c3ac65dc77738269, name=bridge, type=bridge)
+2026-09-04T21:20:29.500267523Z container start 20f00a583f6327c1b664fe0b66333b5e8d23a37a49288cd2c3ac65dc77738269 (image=26bc29fd9070, name=thirsty_goldstine)
+2026-09-04T21:20:35.571640800Z image tag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=aws_beanstalk/current-app:latest)
+2026-09-04T21:20:35.593385251Z image untag sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8 (name=sha256:26bc29fd9070ffab93eed32191b9f5120af27df553b407b599f1af99f4ad04e8)
+2026-09-04T21:20:37.341354287Z image untag sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:20:37.343829535Z image untag sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+2026-09-04T21:20:37.347719374Z image delete sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f (name=sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f)
+
+
+----------------------------------------
+/var/log/eb-docker-process.log
+----------------------------------------
+2026/09/04 21:04:12.047184 [INFO] Loading Manifest...
+2026/09/04 21:04:12.080971 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBAutoScalingGroup --region ap-south-1
+2026/09/04 21:04:12.418416 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBBeanstalkMetadata --region ap-south-1
+2026/09/04 21:04:12.644316 [INFO] Checking if docker is running...
+2026/09/04 21:04:12.644428 [INFO] Fetch current app container id...
+2026/09/04 21:04:12.644467 [INFO] Running command: docker ps | grep 8306c8a7f755
+2026/09/04 21:04:12.676813 [INFO] 8306c8a7f755   af138f96ae41   "docker-entrypoint.s…"   8 seconds ago   Up 7 seconds   3000/tcp   mystifying_pare
+
+2026/09/04 21:04:12.676854 [INFO] Running command: docker wait  8306c8a7f755
+2026/09/04 21:09:56.084139 [INFO] Loading Manifest...
+2026/09/04 21:09:56.115893 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBAutoScalingGroup --region ap-south-1
+2026/09/04 21:09:56.460129 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBBeanstalkMetadata --region ap-south-1
+2026/09/04 21:09:56.737440 [INFO] Checking if docker is running...
+2026/09/04 21:09:56.737545 [INFO] Fetch current app container id...
+2026/09/04 21:09:56.737581 [INFO] Running command: docker ps | grep 23adb4a4daf5
+2026/09/04 21:09:56.771927 [INFO] 23adb4a4daf5   af138f96ae41   "docker-entrypoint.s…"   8 seconds ago   Up 7 seconds   3000/tcp   amazing_driscoll
+
+2026/09/04 21:09:56.771960 [INFO] Running command: docker wait  23adb4a4daf5
+2026/09/04 21:13:59.735260 [INFO] Loading Manifest...
+2026/09/04 21:13:59.775088 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBAutoScalingGroup --region ap-south-1
+2026/09/04 21:14:00.107303 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBBeanstalkMetadata --region ap-south-1
+2026/09/04 21:14:00.484121 [INFO] Checking if docker is running...
+2026/09/04 21:14:00.484233 [INFO] Fetch current app container id...
+2026/09/04 21:14:00.484826 [INFO] Running command: docker ps | grep 7bf930be6a99
+2026/09/04 21:14:00.516055 [INFO] 7bf930be6a99   26bc29fd9070   "docker-entrypoint.s…"   8 seconds ago   Up 7 seconds   3000/tcp   reverent_mahavira
+
+2026/09/04 21:14:00.516118 [INFO] Running command: docker wait  7bf930be6a99
+2026/09/04 21:19:03.264129 [INFO] 143
+
+2026/09/04 21:19:12.421748 [INFO] Loading Manifest...
+2026/09/04 21:19:12.450097 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBAutoScalingGroup --region ap-south-1
+2026/09/04 21:19:12.779980 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBBeanstalkMetadata --region ap-south-1
+2026/09/04 21:19:13.006328 [INFO] Checking if docker is running...
+2026/09/04 21:19:13.006495 [INFO] Fetch current app container id...
+2026/09/04 21:19:13.006530 [INFO] Running command: docker ps | grep e103207e304b
+2026/09/04 21:19:13.034185 [INFO] e103207e304b   26bc29fd9070   "docker-entrypoint.s…"   9 seconds ago   Up 7 seconds   3000/tcp   clever_ptolemy
+
+2026/09/04 21:19:13.034221 [INFO] Running command: docker wait  e103207e304b
+2026/09/04 21:20:36.350447 [INFO] Loading Manifest...
+2026/09/04 21:20:36.393534 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBAutoScalingGroup --region ap-south-1
+2026/09/04 21:20:36.651095 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBBeanstalkMetadata --region ap-south-1
+2026/09/04 21:20:36.972933 [INFO] Checking if docker is running...
+2026/09/04 21:20:36.973102 [INFO] Fetch current app container id...
+2026/09/04 21:20:36.973136 [INFO] Running command: docker ps | grep 20f00a583f63
+2026/09/04 21:20:37.009275 [INFO] 20f00a583f63   26bc29fd9070   "docker-entrypoint.s…"   9 seconds ago   Up 7 seconds   3000/tcp   thirsty_goldstine
+
+2026/09/04 21:20:37.009307 [INFO] Running command: docker wait  20f00a583f63
+
+
+----------------------------------------
+/var/log/docker
+----------------------------------------
+Sep  4 21:03:16 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:03:16.347178974Z" level=info msg="Starting up"
+Sep  4 21:03:16 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:03:16.557564785Z" level=info msg="Loading containers: start."
+Sep  4 21:03:17 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:03:17.177849836Z" level=info msg="Loading containers: done."
+Sep  4 21:03:17 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:03:17.200163655Z" level=info msg="Docker daemon" commit=6fdf0a6 containerd-snapshotter=false storage-driver=overlay2 version=25.0.16
+Sep  4 21:03:17 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:03:17.200632382Z" level=info msg="Daemon has completed initialization"
+Sep  4 21:03:17 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:03:17.267342315Z" level=info msg="API listen on /run/docker.sock"
+Sep  4 21:03:18 ip-172-31-23-79 docker[1893]: 2026/09/04 21:03:18 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:03:59 ip-172-31-23-79 docker[1893]: 2026/09/04 21:03:59 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:04:12 ip-172-31-23-79 docker[1893]: 2026/09/04 21:04:12 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:04:12 ip-172-31-23-79 docker[1893]: 2026/09/04 21:04:12 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:09:42 ip-172-31-23-79 docker[1893]: 2026/09/04 21:09:42 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:09:42 ip-172-31-23-79 docker[1893]: 2026/09/04 21:09:42 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:09:46 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:09:46.843735005Z" level=info msg="ignoring event" container=8306c8a7f755cc6825591b8f12a22498720091d065e346a9a674096ecf677fe9 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+Sep  4 21:09:57 ip-172-31-23-79 docker[1893]: 2026/09/04 21:09:57 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:09:57 ip-172-31-23-79 docker[1893]: 2026/09/04 21:09:57 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:09:57 ip-172-31-23-79 docker[1893]: 2026/09/04 21:09:57 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:13:44 ip-172-31-23-79 docker[1893]: 2026/09/04 21:13:44 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:13:50 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:13:50.303954597Z" level=info msg="ignoring event" container=23adb4a4daf5128cd78dc33d2f5a858b975a82b55768b7c960a3f92ae6a35911 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+Sep  4 21:14:00 ip-172-31-23-79 docker[1893]: 2026/09/04 21:14:00 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:14:00 ip-172-31-23-79 docker[1893]: 2026/09/04 21:14:00 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:18:57 ip-172-31-23-79 docker[1893]: 2026/09/04 21:18:57 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:19:02 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:19:02.987926596Z" level=info msg="ignoring event" container=7bf930be6a99669fea743ea8e4bb871288b8dcdc69ba8a955686e0ce3c056305 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+Sep  4 21:19:13 ip-172-31-23-79 docker[1893]: 2026/09/04 21:19:13 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:19:13 ip-172-31-23-79 docker[1893]: 2026/09/04 21:19:13 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:19:13 ip-172-31-23-79 docker[1893]: 2026/09/04 21:19:13 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:20:22 ip-172-31-23-79 docker[1893]: 2026/09/04 21:20:22 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+Sep  4 21:20:27 ip-172-31-23-79 docker[1893]: time="2026-09-04T21:20:27.147470904Z" level=info msg="ignoring event" container=e103207e304bc113b81a0899945f3898b3cd2000a4560c30bc2a88c87be15847 module=libcontainerd namespace=moby topic=/tasks/delete type="*events.TaskDelete"
+Sep  4 21:20:37 ip-172-31-23-79 docker[1893]: 2026/09/04 21:20:37 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:20:37 ip-172-31-23-79 docker[1893]: 2026/09/04 21:20:37 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Sep  4 21:20:37 ip-172-31-23-79 docker[1893]: 2026/09/04 21:20:37 http2: server: error reading preface from client @: read unix /run/docker.sock->@: read: connection reset by peer
+
+
+----------------------------------------
+/var/log/eb-engine.log
+----------------------------------------
+
+2026/09/04 21:20:35.595063 [INFO] Running command: systemctl show -p PartOf eb-docker.service
+2026/09/04 21:20:35.612554 [INFO] Running command: systemctl daemon-reload
+2026/09/04 21:20:35.914784 [INFO] Running command: systemctl reset-failed
+2026/09/04 21:20:35.923807 [INFO] Running command: systemctl enable eb-docker.service
+2026/09/04 21:20:36.244820 [INFO] The unit files have no installation config (WantedBy=, RequiredBy=, Also=,
+Alias= settings in the [Install] section, and DefaultInstance= for template
+units). This means they are not meant to be enabled using systemctl.
+ 
+Possible reasons for having this kind of units are:
+• A unit may be statically enabled by being symlinked from another unit's
+  .wants/ or .requires/ directory.
+• A unit's purpose may be to act as a helper for some other unit which has
+  a requirement dependency on it.
+• A unit may be started when needed via activation (socket, path, timer,
+  D-Bus, udev, scripted systemctl call, ...).
+• In case of template units, the unit is meant to be enabled with some
+  instance name specified.
+
+2026/09/04 21:20:36.244866 [INFO] Running command: systemctl show -p PartOf eb-docker.service
+2026/09/04 21:20:36.259804 [INFO] Running command: systemctl is-active eb-docker.service
+2026/09/04 21:20:36.268666 [INFO] Running command: systemctl start eb-docker.service
+2026/09/04 21:20:36.348905 [INFO] Running command: systemctl show -p PartOf eb-docker-log.service
+2026/09/04 21:20:36.367438 [INFO] Running command: systemctl daemon-reload
+2026/09/04 21:20:36.766676 [INFO] Running command: systemctl reset-failed
+2026/09/04 21:20:36.778661 [INFO] Running command: systemctl enable eb-docker-log.service
+2026/09/04 21:20:37.150921 [INFO] Created symlink /etc/systemd/system/eb-docker.service.wants/eb-docker-log.service → /etc/systemd/system/eb-docker-log.service.
+
+2026/09/04 21:20:37.150960 [INFO] Running command: systemctl show -p PartOf eb-docker-log.service
+2026/09/04 21:20:37.164098 [INFO] Running command: systemctl is-active eb-docker-log.service
+2026/09/04 21:20:37.172389 [INFO] Running command: systemctl start eb-docker-log.service
+2026/09/04 21:20:37.250445 [INFO] Running command: docker logs --since 2026-09-04T21:20:28Z 20f00a583f63 2>&1
+2026/09/04 21:20:37.278839 [INFO] ▲ Next.js 16.2.6
+- Local:         http://localhost:3000
+- Network:       http://0.0.0.0:3000
+✓ Ready in 0ms
+
+2026/09/04 21:20:37.278902 [INFO] docker container 20f00a583f63 is running aws_beanstalk/current-app
+2026/09/04 21:20:37.278908 [INFO] Cleanup images ...
+2026/09/04 21:20:37.278928 [INFO] Running command: docker images -a
+2026/09/04 21:20:37.306044 [INFO] REPOSITORY                                                     TAG                                        IMAGE ID       CREATED         SIZE
+602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app   c3ee70f226e35e1b8ff3bfb047b1d28f89dd7be4   301b12631353   9 minutes ago   1.39GB
+aws_beanstalk/current-app                                      latest                                     26bc29fd9070   9 minutes ago   1.39GB
+
+2026/09/04 21:20:37.306079 [INFO] Running command: docker rmi `docker images -aq`
+2026/09/04 21:20:37.350334 [INFO] Untagged: 602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app:c3ee70f226e35e1b8ff3bfb047b1d28f89dd7be4
+Untagged: 602322433153.dkr.ecr.ap-south-1.amazonaws.com/cmibattery-app@sha256:e75c126af30f7db93671d4e1af54c23580adb6b1e2a2547666060bf32207170e
+Deleted: sha256:301b12631353c8f5e6df54030c6b3ba2880211732fc580a5a2b83e329d6d841f
+
+2026/09/04 21:20:37.350361 [INFO] Error response from daemon: conflict: unable to delete 26bc29fd9070 (cannot be forced) - image is being used by running container 20f00a583f63
+
+2026/09/04 21:20:37.350376 [INFO] Running command: docker images -a
+2026/09/04 21:20:37.367824 [INFO] REPOSITORY                  TAG       IMAGE ID       CREATED         SIZE
+aws_beanstalk/current-app   latest    26bc29fd9070   9 minutes ago   1.39GB
+
+2026/09/04 21:20:37.367869 [INFO] Pruning build cache ...
+2026/09/04 21:20:37.367888 [INFO] Running command: docker builder prune -f
+2026/09/04 21:20:37.521622 [INFO] ID						RECLAIMABLE	SIZE		LAST ACCESSED
+1hs6xztph2cxx7pib3t9tuvc3*              	true 		118B      	14 seconds ago
+zi8o5fft7g3r8jyuizq4dx0ry*              	true 	0B        	14 seconds ago
+Total:	118B
+
+2026/09/04 21:20:37.521767 [INFO] Executing instruction: start X-Ray
+2026/09/04 21:20:37.521787 [INFO] X-Ray is not enabled.
+2026/09/04 21:20:37.521790 [INFO] Executing instruction: configureSqsd
+2026/09/04 21:20:37.521794 [INFO] This is a web server environment instance, skip configure sqsd daemon ...
+2026/09/04 21:20:37.521797 [INFO] Executing instruction: startSqsd
+2026/09/04 21:20:37.521800 [INFO] This is a web server environment instance, skip start sqsd daemon ...
+2026/09/04 21:20:37.521811 [INFO] Executing instruction: Track pids in healthd
+2026/09/04 21:20:37.521815 [INFO] This is an enhanced health env...
+2026/09/04 21:20:37.521835 [INFO] Running command: systemctl show -p ConsistsOf aws-eb.target | cut -d= -f2
+2026/09/04 21:20:37.544628 [INFO] nginx.service eb-docker-events.service eb-docker.service cfn-hup.service eb-docker-log.service docker.service healthd.service
+
+2026/09/04 21:20:37.544678 [INFO] Running command: systemctl show -p ConsistsOf eb-app.target | cut -d= -f2
+2026/09/04 21:20:37.555898 [INFO] 
+
+2026/09/04 21:20:37.556528 [INFO] Executing instruction: RunConfigDeployPostDeployHooks
+2026/09/04 21:20:37.556541 [INFO] No hooks found in .platform/confighooks/postdeploy/, skipping
+2026/09/04 21:20:37.556546 [INFO] Executing cleanup logic
+2026/09/04 21:20:37.556685 [INFO] CommandService Response: {"status":"SUCCESS","api_version":"1.0","results":[{"status":"SUCCESS","msg":"Engine execution has succeeded.","returncode":0,"events":[{"msg":"Instance deployment completed successfully.","timestamp":1788556837556,"severity":"INFO"}]}]}
+
+2026/09/04 21:20:37.596764 [INFO] Platform Engine finished execution on command: config-deploy
+
+2026/09/04 21:21:42.498071 [INFO] Starting...
+2026/09/04 21:21:42.498130 [INFO] Starting EBPlatform-PlatformEngine
+2026/09/04 21:21:42.498160 [INFO] reading event message file
+2026/09/04 21:21:42.499415 [INFO] Engine received EB command cfn-hup-exec
+
+2026/09/04 21:21:42.590917 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBAutoScalingGroup --region ap-south-1
+2026/09/04 21:21:42.786305 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-south-1:602322433153:stack/awseb-e-gkh3fvgn8p-stack/0e903dc0-a89a-11f1-bd59-0abc544c12b3 -r AWSEBBeanstalkMetadata --region ap-south-1
+2026/09/04 21:21:42.961940 [INFO] checking whether command tail-log is applicable to this instance...
+2026/09/04 21:21:42.961956 [INFO] this command is applicable to the instance, thus instance should execute command
+2026/09/04 21:21:42.961961 [INFO] Engine command: (tail-log)
+
+2026/09/04 21:21:42.962025 [INFO] Executing instruction: GetTailLogs
+2026/09/04 21:21:42.962029 [INFO] Tail Logs...
+2026/09/04 21:21:42.964001 [INFO] Running command: tail -n 100 /var/log/docker-events.log
+2026/09/04 21:21:42.967508 [INFO] Running command: tail -n 100 /var/log/eb-docker-process.log
+2026/09/04 21:21:42.969865 [INFO] Running command: tail -n 100 /var/log/docker
+2026/09/04 21:21:42.972571 [INFO] Running command: tail -n 100 /var/log/eb-engine.log
+
+
+----------------------------------------
+/var/log/nginx/access.log
+----------------------------------------
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /assets/LOGO/logo2.png HTTP/1.1" 304 0 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /api/auth/session HTTP/1.1" 500 119 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /?_rsc=ivliq HTTP/1.1" 200 985 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /cart?_rsc=1r34m HTTP/1.1" 200 222 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /?_rsc=1pn8p HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /?_rsc=nn07o HTTP/1.1" 200 1755 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /api/auth/session HTTP/1.1" 500 119 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /products?_rsc=1r34m HTTP/1.1" 200 225 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /auth/dealer-register?_rsc=1r34m HTTP/1.1" 200 232 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /cart?_rsc=98rw3 HTTP/1.1" 200 850 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /cart?_rsc=1pn8p HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /auth/dealer-register?_rsc=1pn8p HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /cart?_rsc=2lt1x HTTP/1.1" 200 492 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /products?_rsc=1pn8p HTTP/1.1" 200 964 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /auth/dealer-register?_rsc=m8rs8 HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /auth/dealer-register?_rsc=rmlt5 HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /products?_rsc=arqdb HTTP/1.1" 200 2607 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /products?_rsc=zhsu7 HTTP/1.1" 200 948 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:44 +0000] "GET /auth/dealer-register?_rsc=q9iaf HTTP/1.1" 200 514 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/register?_rsc=1r34m HTTP/1.1" 200 228 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/login?_rsc=1r34m HTTP/1.1" 200 226 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/register?_rsc=wwshq HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/register?_rsc=1pn8p HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/register?_rsc=fy47i HTTP/1.1" 200 513 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/login?_rsc=1pn8p HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/login?_rsc=17j2u HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:47 +0000] "GET /auth/login?_rsc=1yixr HTTP/1.1" 200 515 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:50 +0000] "GET /warranty?_rsc=1r34m HTTP/1.1" 200 221 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:50 +0000] "GET /warranty?_rsc=hv4i8 HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:50 +0000] "GET /warranty?_rsc=og2mz HTTP/1.1" 200 2536 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:50 +0000] "GET /warranty?_rsc=1pn8p HTTP/1.1" 200 988 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /assets/slides/products%20(3).jpeg HTTP/1.1" 304 0 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /contact?_rsc=1r34m HTTP/1.1" 200 220 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /services?_rsc=1r34m HTTP/1.1" 200 220 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /gallery?_rsc=1r34m HTTP/1.1" 200 220 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /about?_rsc=1r34m HTTP/1.1" 200 219 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /contact?_rsc=1pn8p HTTP/1.1" 200 970 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /services?_rsc=1pn8p HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /contact?_rsc=1399r HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /contact?_rsc=ufrug HTTP/1.1" 200 2726 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /services?_rsc=n9pvs HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /about?_rsc=uudir HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /about?_rsc=1pr6k HTTP/1.1" 200 3799 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /about?_rsc=1pn8p HTTP/1.1" 200 989 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /gallery?_rsc=1pn8p HTTP/1.1" 200 1019 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /services?_rsc=6uoq4 HTTP/1.1" 200 2532 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /gallery?_rsc=wwh2c HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /gallery?_rsc=tbdy8 HTTP/1.1" 200 480 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /_next/static/chunks/0wl7.5ca5y.~0.js HTTP/1.1" 200 5338 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:51 +0000] "GET /_next/static/chunks/0lenj5zgeb0-0.js HTTP/1.1" 200 6007 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:57 +0000] "GET /assets/slides/services.jpg HTTP/1.1" 200 1069174 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:15:59 +0000] "GET /assets/batt1-removebg-preview.png HTTP/1.1" 304 0 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:16:03 +0000] "GET /assets/slides/dealers%20(4).png HTTP/1.1" 304 0 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:16:09 +0000] "POST /api/auth/send-otp HTTP/1.1" 200 93 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:44 +0000] "GET /auth/login HTTP/1.1" 200 5604 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:44 +0000] "GET /assets/LOGO/logo2.png HTTP/1.1" 304 0 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /api/auth/session HTTP/1.1" 200 35 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /favicon.ico HTTP/1.1" 200 25944 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /cart?_rsc=ne5al HTTP/1.1" 200 222 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /?_rsc=ne5al HTTP/1.1" 200 208 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/register?_rsc=ne5al HTTP/1.1" 200 228 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/dealer-register?_rsc=ne5al HTTP/1.1" 200 232 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /api/auth/session HTTP/1.1" 200 35 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /cart?_rsc=1uor5 HTTP/1.1" 200 1747 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /cart?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /?_rsc=17liu HTTP/1.1" 200 985 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/dealer-register?_rsc=ay3vs HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/dealer-register?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/dealer-register?_rsc=dffcg HTTP/1.1" 200 514 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/dealer-register?_rsc=6gzwo HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/register?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/register?_rsc=l6nik HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /auth/register?_rsc=1jeqo HTTP/1.1" 200 513 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /cart?_rsc=733pk HTTP/1.1" 200 850 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:19:45 +0000] "GET /cart?_rsc=vz7e2 HTTP/1.1" 200 492 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/login HTTP/1.1" 304 0 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /assets/LOGO/logo2.png HTTP/1.1" 304 0 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /api/auth/session HTTP/1.1" 200 35 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /cart?_rsc=ne5al HTTP/1.1" 200 222 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /?_rsc=ne5al HTTP/1.1" 200 208 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/dealer-register?_rsc=ne5al HTTP/1.1" 200 232 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/register?_rsc=ne5al HTTP/1.1" 200 228 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /favicon.ico HTTP/1.1" 200 25944 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /api/auth/session HTTP/1.1" 200 35 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /cart?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /cart?_rsc=1uor5 HTTP/1.1" 200 1747 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/register?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/dealer-register?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/dealer-register?_rsc=ay3vs HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/dealer-register?_rsc=6gzwo HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/dealer-register?_rsc=dffcg HTTP/1.1" 200 514 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/register?_rsc=l6nik HTTP/1.1" 200 319 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /auth/register?_rsc=1jeqo HTTP/1.1" 200 513 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /?_rsc=1qqfn HTTP/1.1" 200 949 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /cart?_rsc=733pk HTTP/1.1" 200 850 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /?_rsc=17liu HTTP/1.1" 200 985 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:15 +0000] "GET /cart?_rsc=vz7e2 HTTP/1.1" 200 492 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:19 +0000] "POST /api/auth/send-otp HTTP/1.1" 200 93 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+157.51.49.73 - - [04/Sep/2026:21:20:25 +0000] "GET /api/auth/providers HTTP/1.1" 200 130 "http://cmibattery-prod-env.eba-uqx4sudt.ap-south-1.elasticbeanstalk.com/auth/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36" "-"
+
+
+----------------------------------------
+/var/log/nginx/error.log
+----------------------------------------
+2026/09/04 21:04:10 [warn] 2633#2633: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:04:11 [warn] 2691#2691: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:04:11 [warn] 2692#2692: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:09:54 [warn] 3943#3943: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:09:55 [warn] 4001#4001: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:09:55 [warn] 4002#4002: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:13:57 [warn] 5213#5213: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:13:58 [warn] 5276#5276: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:13:58 [warn] 5277#5277: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:19:10 [warn] 6498#6498: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:19:11 [warn] 6562#6562: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:19:11 [warn] 6563#6563: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:20:34 [warn] 7618#7618: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:20:35 [warn] 7676#7676: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+2026/09/04 21:20:35 [warn] 7677#7677: could not build optimal types_hash, you should increase either types_hash_max_size: 1024 or types_hash_bucket_size: 64; ignoring types_hash_bucket_size
+
+
+----------------------------------------
+/var/log/eb-docker/containers/eb-current-app/eb-20f00a583f63-stdouterr.log
+----------------------------------------
+▲ Next.js 16.2.6
+- Local:         http://localhost:3000
+- Network:       http://0.0.0.0:3000
+✓ Ready in 0ms
+
+

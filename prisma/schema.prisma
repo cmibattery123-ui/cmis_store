@@ -591,6 +591,7 @@ model CloudSettings {
   awsSecretKey    String?
   awsRegion       String?  @default("ap-south-1")
   awsAccountId    String?
+  awsS3Bucket     String?
   updatedAt       DateTime @updatedAt
 
   @@map("cloud_settings")

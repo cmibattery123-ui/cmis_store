@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { apiSuccess, apiError } from "@/lib/utils/api";
-import { uploadToR2 } from "@/lib/r2";
+import { uploadToS3 } from "@/lib/s3";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300; // 5 minute timeout
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(bytes);
 
     const folder = isVideo ? "videos" : "images";
-    const result = await uploadToR2(buffer, file.name, file.type, folder);
+    const result = await uploadToS3(buffer, file.name, file.type, folder);
 
     const format = file.type.split("/")[1] || "bin";
 

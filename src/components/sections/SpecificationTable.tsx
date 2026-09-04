@@ -13,9 +13,14 @@ const DEFAULT_SPECS = [
 ];
 
 export default async function SpecificationTable() {
-  const specs = await db.technicalSpec.findMany({
-    orderBy: { sortOrder: "asc" },
-  });
+  let specs: any[] = [];
+  try {
+    specs = await db.technicalSpec.findMany({
+      orderBy: { sortOrder: "asc" },
+    });
+  } catch {
+    // Graceful fallback for static prerendering builds
+  }
 
   return <SpecificationTableClient initialSpecs={specs.length > 0 ? specs : DEFAULT_SPECS} />;
 }

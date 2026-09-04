@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 20
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres?pgbouncer=true"
+  DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+  NEXTAUTH_SECRET: "ci-test-secret-minimum-32-chars-long"
+  AUTH_SECRET: "ci-test-secret-minimum-32-chars-long"
+  NEXTAUTH_URL: "http://localhost:3000"
+  AUTH_URL: "http://localhost:3000"
+  AUTH_TRUST_HOST: "true"
+  ADMIN_SECURITY_PIN: "123456"
+  NEXT_PUBLIC_SUPABASE_URL: "https://ci-test.supabase.co"
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_ci_dummy_key"
+  PAYMENT_PROVIDER: "MOCK"
+  RAZORPAY_KEY_ID: "rzp_test_ci_dummy_key"
+  NEXT_PUBLIC_RAZORPAY_KEY_ID: "rzp_test_ci_dummy_key"
+  RAZORPAY_SECRET: "ci_dummy_secret"
+  RAZORPAY_KEY_SECRET: "ci_dummy_secret"
+  CLOUDINARY_CLOUD_NAME: "ci_dummy_cloud"
+  CLOUDINARY_API_KEY: "ci_dummy_key"
+  CLOUDINARY_API_SECRET: "ci_dummy_secret"
+  ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Type-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm run db:generate
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run TypeScript type-check
+        run: pnpm type-check
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm run db:generate
+
+      - name: Run unit & integration tests
+        run: pnpm test
+
+  build:
+    name: Cloudflare Production Build
+    needs: [lint-and-typecheck, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm run db:generate
+
+      - name: Build Next.js & prepare Cloudflare Pages bundle
+        run: pnpm run pages:build
+
+      - name: Verify Cloudflare Pages bundle output
+        run: |
+          test -d dist
+          test -f dist/_worker.js
+          test -f dist/index.html
+          echo "Cloudflare Pages bundle verification successful!"

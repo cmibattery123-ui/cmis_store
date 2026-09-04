@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/dealer/layout,_N_T_/dealer/orders/layout,_N_T_/dealer/orders/page,_N_T_/dealer/orders"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/dealer/orders/__PAGE__",
+    "/dealer/orders",
+    "/dealer",
+    "/_index",
+    "/_head"
+  ]
+}

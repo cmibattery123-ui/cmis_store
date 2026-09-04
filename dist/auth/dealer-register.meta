@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/auth/layout,_N_T_/auth/dealer-register/layout,_N_T_/auth/dealer-register/page,_N_T_/auth/dealer-register"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/auth/dealer-register/__PAGE__",
+    "/auth/dealer-register",
+    "/auth",
+    "/_index",
+    "/_head"
+  ]
+}

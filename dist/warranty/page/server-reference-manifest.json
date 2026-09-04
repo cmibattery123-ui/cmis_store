@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40fc7eeba45acfde6e842a8d044d372abe0b3bcfca": {
+      "workers": {
+        "app/warranty/page": {
+          "moduleId": 4679,
+          "async": true,
+          "exportedName": "checkWarrantyAction",
+          "filename": "src/app/warranty/warranty-action.ts"
+        }
+      },
+      "exportedName": "checkWarrantyAction",
+      "filename": "src/app/warranty/warranty-action.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-heading: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", var(--font-inter), system-ui, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, monospace;
+  
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  --background: #F5F5F7;
+  --foreground: #1D1D1F;
+  --card: #FFFFFF;
+  --card-foreground: #1D1D1F;
+  --popover: #FFFFFF;
+  --popover-foreground: #1D1D1F;
+  --primary: #EAB308;
+  --primary-foreground: #000000;
+  --secondary: #E8E8ED;
+  --secondary-foreground: #1D1D1F;
+  --muted: #F5F5F7;
+  --muted-foreground: #6E6E73;
+  --accent: #FEF08A;
+  --accent-foreground: #000000;
+  --destructive: #FF3B30;
+  --destructive-foreground: #FFFFFF;
+  --border: #D2D2D7;
+  --input: #E5E5EA;
+  --ring: #EAB308;
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #F5F5F7;
+  --card: #161617;
+  --card-foreground: #F5F5F7;
+  --popover: #161617;
+  --popover-foreground: #F5F5F7;
+  --primary: #FAFF00;
+  --primary-foreground: #000000;
+  --secondary: #1D1D1F;
+  --secondary-foreground: #F5F5F7;
+  --muted: #1D1D1F;
+  --muted-foreground: #86868B;
+  --accent: #FAFF00;
+  --accent-foreground: #000000;
+  --destructive: #FF453A;
+  --destructive-foreground: #F5F5F7;
+  --border: rgba(255, 255, 255, 0.12);
+  --input: #1D1D1F;
+  --ring: #FAFF00;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-black;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", var(--font-inter), system-ui, sans-serif;
+    letter-spacing: -0.015em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/80 dark:bg-[#161617]/80 backdrop-blur-2xl border border-black/[0.06] dark:border-white/[0.08] shadow-lg;
+  }
+  .glass-card {
+    @apply bg-white dark:bg-[#161617] backdrop-blur-xl border border-black/[0.06] dark:border-white/[0.08] hover:border-black/15 dark:hover:border-white/20 transition-all duration-300;
+  }
+  .light-surface {
+    @apply bg-white dark:bg-[#161617] border border-black/[0.06] dark:border-white/[0.08] shadow-sm;
+  }
+  .apple-card {
+    @apply rounded-[24px] bg-white dark:bg-[#161617] border border-black/[0.06] dark:border-white/[0.08] shadow-[0_2px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.5)] transition-all duration-300;
+  }
+  .apple-subhead {
+    @apply text-base sm:text-lg md:text-xl font-normal leading-relaxed text-[#6E6E73] dark:text-[#86868B];
+  }
+  .apple-eyebrow {
+    @apply text-xs md:text-sm font-semibold tracking-normal text-amber-600 dark:text-primary mb-2 inline-block;
+  }
+  .apple-headline {
+    @apply text-4xl sm:text-6xl md:text-7xl font-bold tracking-[-0.025em] leading-[1.05] text-[#1D1D1F] dark:text-[#F5F5F7];
+  }
+  .apple-title {
+    @apply text-2xl sm:text-3xl md:text-4xl font-semibold tracking-[-0.02em] leading-tight text-[#1D1D1F] dark:text-[#F5F5F7];
+  }
+  .apple-link {
+    @apply inline-flex items-center gap-1 text-sm font-medium text-amber-600 dark:text-primary hover:underline transition-colors;
+  }
+  .neon-glow {
+    text-shadow: 0 0 16px rgba(234, 179, 8, 0.4);
+  }
+  .dark .neon-glow {
+    text-shadow: 0 0 16px rgba(250, 255, 0, 0.4);
+  }
+  .glow-yellow-sm {
+    box-shadow: 0 0 20px -3px rgba(234, 179, 8, 0.25);
+  }
+  .dark .glow-yellow-sm {
+    box-shadow: 0 0 20px -3px rgba(250, 255, 0, 0.25);
+  }
+  .bg-grid {
+    background-image: radial-gradient(circle at 2px 2px, rgba(0, 0, 0, 0.04) 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+  .dark .bg-grid {
+    background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  }
+  .bg-radial-glow {
+    background: radial-gradient(circle at 50% 0%, rgba(234, 179, 8, 0.06) 0%, rgba(234, 179, 8, 0.02) 40%, transparent 75%);
+  }
+  .dark .bg-radial-glow {
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.06) 0%, rgba(250, 255, 0, 0.03) 40%, transparent 75%);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Make surrounding Razorpay payment modal container background transparent/dark */
+.razorpay-container,
+.razorpay-backdrop,
+.razorpay-checkout-frame,
+iframe[name^="razorpay"] {
+  background-color: transparent !important;
+  background: transparent !important;
+}

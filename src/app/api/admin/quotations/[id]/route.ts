@@ -1,0 +1,67 @@
+import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
+import { apiSuccess, apiError } from "@/lib/utils/api";
+
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const session = await auth(request);
+    if (!session || session.user.role !== "ADMIN") return apiError("Unauthorized", 403);
+
+    const { id } = await params;
+    const quotation = await db.quotation.findUnique({
+      where: { id },
+      include: {
+        dealer: {
+          select: {
+            businessName: true,
+            phone: true,
+            city: true,
+            state: true,
+            user: { select: { name: true, email: true } },
+          },
+        },
+        items: {
+          include: {
+            product: { select: { name: true, sku: true, dealerPrice: true } },
+          },
+        },
+      },
+    });
+
+    if (!quotation) return apiError("Quotation not found", 404);
+    return apiSuccess(quotation);
+  } catch (error) {
+    console.error("[get_quotation]", error);
+    return apiError("Internal server error", 500);
+  }
+}
+
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const session = await auth(request);
+    if (!session || session.user.role !== "ADMIN") return apiError("Unauthorized", 403);
+
+    const { id } = await params;
+    const { status, adminNotes } = await request.json();
+
+    if (!status) return apiError("Status is required", 400);
+
+    const validUntil = status === "APPROVED" 
+      ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Valid for 7 days
+      : null;
+
+    const quotation = await db.quotation.update({
+      where: { id },
+      data: {
+        status,
+        ...(adminNotes !== undefined && { adminNotes }),
+        ...(validUntil && { validUntil }),
+      },
+    });
+
+    return apiSuccess(quotation);
+  } catch (error) {
+    console.error("[update_quotation]", error);
+    return apiError("Internal server error", 500);
+  }
+}

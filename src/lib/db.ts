@@ -50,7 +50,7 @@ export function getDb(): PrismaClient {
 
   const pool = new Pool({
     connectionString: cleanConnectionString,
-    max: isHyperdrive ? 5 : 1,
+    max: process.env.NODE_ENV === "production" ? 5 : 2,
     connectionTimeoutMillis: 20000,
     idleTimeoutMillis: 10000,
     ...(isHyperdrive

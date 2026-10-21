@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { DefaultGalleryEvent } from "@/lib/default-data";
+import { toYouTubeEmbedUrl } from "@/lib/youtube-client";
 
 export default function CompanyGallery({
   initialEvents,
@@ -319,11 +320,7 @@ export default function CompanyGallery({
                     selectedEvent.media[currentMediaIndex].url.includes("youtu.be") ? (
                     <div className="w-full h-full flex items-center justify-center p-2">
                       <iframe
-                        src={
-                          selectedEvent.media[currentMediaIndex].url.includes("?")
-                            ? `${selectedEvent.media[currentMediaIndex].url}&autoplay=1`
-                            : `${selectedEvent.media[currentMediaIndex].url}?autoplay=1`
-                        }
+                        src={`${toYouTubeEmbedUrl(selectedEvent.media[currentMediaIndex].url)}?autoplay=1`}
                         title={selectedEvent.name}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen

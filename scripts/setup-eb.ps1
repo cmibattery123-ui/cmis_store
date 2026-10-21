@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $AppName = "cmibattery-production"
 $EnvName = "cmibattery-prod-env"
 $RoleName = "aws-elasticbeanstalk-ec2-role"
-$Region = "us-east-1"
+$Region = "ap-south-1"
 
 Write-Host "1. Creating IAM Role for Elastic Beanstalk..." -ForegroundColor Cyan
 try {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Footer from "@/components/shared/Footer";
 import CompanyGallery from "@/components/sections/CompanyGallery";
 import { db } from "@/lib/db";
+import { DEFAULT_GALLERY_EVENTS } from "@/lib/default-data";
 
 export const metadata: Metadata = {
   title: "Media & Event Gallery | Chinna Mayil Industries — Perfect Batteries",
@@ -34,7 +35,7 @@ async function getInitialEvents() {
     console.error("Failed to load initial gallery events:", err);
   }
 
-  return [];
+  return DEFAULT_GALLERY_EVENTS;
 }
 
 export default async function GalleryPage() {

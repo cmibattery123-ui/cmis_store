@@ -117,12 +117,11 @@ Switching providers is automatic — no code changes required.
 
 ---
 
-## 🌐 Deployment (Vercel)
+## 🌐 Deployment (AWS Elastic Beanstalk)
 
-1. Connect your GitHub repo to Vercel
-2. Add all environment variables from `.env.example`
-3. Set **Build Command**: `prisma generate && next build`
-4. Deploy!
+1. Push your changes to the `main` branch to trigger GitHub Actions deployment.
+2. The pipeline builds the Docker image and deploys to AWS Elastic Beanstalk (`cmibattery-production`).
+3. Set your production environment variables using `scripts/set-eb-env-vars.sh`.
 
 > Make sure `NEXTAUTH_URL` is set to your production domain.
 
@@ -131,12 +130,11 @@ Switching providers is automatic — no code changes required.
 ## 📋 Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **Database**: PostgreSQL via Supabase + Prisma ORM
+- **Database**: Embedded SQLite (local server disk persistence) + Prisma ORM
 - **Auth**: Auth.js (NextAuth v5)
 - **Payments**: Razorpay (with Mock fallback)
-- **Storage**: Cloudinary
+- **Storage**: AWS S3 & Cloudinary
 - **UI**: Tailwind CSS + shadcn/ui + Framer Motion
 - **Validation**: Zod + React Hook Form
-- **Deployment**: Vercel
-# cmi-battery
-# cmi-battery
+- **Deployment**: AWS Elastic Beanstalk (Docker)
+

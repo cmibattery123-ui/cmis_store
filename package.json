@@ -5,14 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "build:cf": "prisma generate && next build && node scripts/prepare-cloudflare.mjs",
-    "build:frontend": "prisma generate && next build && node scripts/prepare-cloudflare.mjs",
-    "pages:build": "prisma generate && next build && node scripts/prepare-cloudflare.mjs",
-    "pages:deploy": "wrangler pages deploy dist --project-name=cmi-batteries",
-    "deploy:frontend": "wrangler pages deploy dist --project-name=cmi-batteries",
-    "deploy:backend": "wrangler deploy --config wrangler.backend.toml",
-    "deploy:all": "pnpm run deploy:backend && pnpm run pages:build && pnpm run deploy:frontend",
-    "deploy": "pnpm run deploy:all",
+    "deploy:eb": "git push origin main",
+    "deploy": "pnpm run build && git push origin main",
     "start": "next start",
     "postinstall": "prisma generate",
     "lint": "eslint",
@@ -21,10 +15,15 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "node --env-file=.env --import tsx prisma/seed.ts",
+    "db:backup": "bash scripts/backup-db.sh",
+    "setup:t4": "bash scripts/setup-t4-small.sh",
+    "setup:tiny": "bash scripts/setup-tiny-instance.sh",
+    "s3:sync-static": "bash scripts/sync-static-to-s3.sh",
+    "s3:setup": "bash scripts/create-and-sync-s3.sh",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
-    "cf:dev": "wrangler pages dev dist",
     "test": "vitest run",
+    "test:api": "vitest run tests/api",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
@@ -34,10 +33,12 @@
     "@base-ui/react": "^1.4.1",
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^5.2.2",
+    "@prisma/adapter-better-sqlite3": "^7.10.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.9.0",
     "@types/pg": "^8.20.0",
     "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
@@ -75,8 +76,7 @@
     "tsx": "^4.21.0",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.11",
-    "wrangler": "^4.0.0"
+    "vitest": "^4.1.11"
   },
   "packageManager": "pnpm@11.23.0+sha512.f00082e5b283a199b74e079da28d155c008fe232f44c8a06ea7ddfa014ecf719fc362f790ecc67b28106ddac2afb24c49a9a079159da560b2ce7d1e98efd11af"
 }

@@ -36,21 +36,22 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS="--max-old-space-size=1024"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy Prisma schema and generated client for migrations
-COPY --from=builder /app/prisma ./prisma
+# Create persistent data directory for SQLite or file storage
+RUN mkdir -p /app/data /app/data-template /app/.next && chown -R nextjs:nodejs /app/data /app/data-template /app/.next
+
+# Copy Prisma schema, generated client, and seed database
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+RUN cp /app/prisma/seed.db /app/data-template/cmis.db && cp /app/prisma/seed.db /app/data/cmis.db && chown -R nextjs:nodejs /app/data /app/data-template
 COPY --from=builder /app/node_modules/.pnpm ./node_modules/.pnpm
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/package.json ./package.json
 
 COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

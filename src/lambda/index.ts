@@ -57,9 +57,11 @@ import { POST as uploadPost } from "@/app/api/upload/route";
 import { GET as mediaIdGet, HEAD as mediaIdHead } from "@/app/api/media/[id]/route";
 
 const DEFAULT_ALLOWED_ORIGINS = [
-  "https://cmi-batteries.pages.dev",
   "https://cmibattery.com",
   "https://www.cmibattery.com",
+  "http://cmibattery-static-7099.s3-website.ap-south-1.amazonaws.com",
+  "https://cmibattery-static-7099.s3.ap-south-1.amazonaws.com",
+  "http://cmibattery-prod-env.ap-south-1.elasticbeanstalk.com",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
 ];
@@ -201,7 +203,8 @@ async function routeRequest(request: Request): Promise<Response | null> {
   } else if (pathname === "/api/auth/dealer-register" && method === "POST") {
     return authDealerRegisterPost(request);
   } else if (pathname.startsWith("/api/auth/")) {
-    const authUrl = new URL(pathname + url.search, "https://cmi-batteries-api.cmibatteryaws.workers.dev");
+    const baseUrl = process.env.NEXTAUTH_URL || "http://cmibattery-prod-env.ap-south-1.elasticbeanstalk.com";
+    const authUrl = new URL(pathname + url.search, baseUrl);
     const authHeaders = new Headers(request.headers);
     authHeaders.set("host", authUrl.host);
     authHeaders.set("x-forwarded-host", authUrl.host);
@@ -356,8 +359,8 @@ export const handler = async (
   process.env.DIRECT_URL = process.env.DIRECT_URL || "";
   process.env.NEXTAUTH_SECRET = process.env.AUTH_SECRET || "";
   process.env.AUTH_SECRET = process.env.AUTH_SECRET || "";
-  process.env.NEXTAUTH_URL = process.env.NEXTAUTH_URL || "https://cmi-batteries.pages.dev";
-  process.env.AUTH_URL = process.env.AUTH_URL || "https://cmi-batteries.pages.dev";
+  process.env.NEXTAUTH_URL = process.env.NEXTAUTH_URL || "https://cmibattery.com";
+  process.env.AUTH_URL = process.env.AUTH_URL || "https://cmibattery.com";
   process.env.ADMIN_SECURITY_PIN = process.env.ADMIN_SECURITY_PIN || "";
   process.env.PAYMENT_PROVIDER = process.env.PAYMENT_PROVIDER || "RAZORPAY";
   process.env.RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "";

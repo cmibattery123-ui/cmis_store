@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, Upload, CheckCircle2, Video, Link as LinkIcon, Sparkles, Play } from "lucide-react";
 import type { DropResult } from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
+import { getYouTubeLinks } from "@/lib/youtube-client";
 import type { GalleryMedia } from "./GalleryMediaReorderGrid";
 
 const GalleryMediaReorderGrid = dynamic(
@@ -72,6 +73,41 @@ export default function GalleryEventForm({ initialData }: GalleryEventFormProps)
   const [uploadingFileName, setUploadingFileName] = useState<string | null>(null);
   const [uploadStageText, setUploadStageText] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [showYouTubeInput, setShowYouTubeInput] = useState(false);
+  const [youtubeInputUrl, setYoutubeInputUrl] = useState("");
+
+  const handleAddYouTubeMedia = () => {
+    if (!youtubeInputUrl.trim()) return;
+    const links = getYouTubeLinks(youtubeInputUrl.trim());
+    if (!links) {
+      setError("Please enter a valid YouTube video URL or ID (e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...)");
+      return;
+    }
+    setError(null);
+    const hasImageCover = media.some((m) => m.isCover);
+    const newItems: GalleryMedia[] = [
+      {
+        mediaType: "VIDEO",
+        url: links.watchUrl,
+        publicId: `youtube:${links.videoId}`,
+        thumbnailUrl: links.maxResThumbnailUrl,
+        isCover: false,
+        sortOrder: media.length,
+      },
+      {
+        mediaType: "IMAGE",
+        url: links.maxResThumbnailUrl,
+        publicId: `youtube:${links.videoId}:thumb`,
+        thumbnailUrl: links.thumbnailUrl,
+        isCover: !hasImageCover && media.length === 0,
+        sortOrder: media.length + 1,
+      },
+    ];
+    setMedia((prev) => [...prev, ...newItems]);
+    setYoutubeInputUrl("");
+    setShowYouTubeInput(false);
+  };
 
   const uploadWithProgress = (
     url: string,
@@ -476,12 +512,21 @@ export default function GalleryEventForm({ initialData }: GalleryEventFormProps)
             <p className="text-slate-500 dark:text-gray-400 text-xs mt-0.5">Images (max 5MB) & Videos (max 256GB / YouTube max limit). First image is cover.</p>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowYouTubeInput((prev) => !prev)}
+              disabled={isUploading}
+              className="flex items-center gap-2 bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 border border-red-500/20 px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer"
+            >
+              <Video className="w-4 h-4" />
+              Add YouTube Media
+            </button>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="flex items-center gap-2 bg-amber-500/10 dark:bg-primary/10 text-amber-600 dark:text-primary hover:bg-amber-500/20 dark:hover:bg-primary/20 border border-amber-500/20 dark:border-primary/20 px-5 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer"
+              className="flex items-center gap-2 bg-amber-500/10 dark:bg-primary/10 text-amber-600 dark:text-primary hover:bg-amber-500/20 dark:hover:bg-primary/20 border border-amber-500/20 dark:border-primary/20 px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer"
             >
               {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
               Upload Media
@@ -496,6 +541,49 @@ export default function GalleryEventForm({ initialData }: GalleryEventFormProps)
             />
           </div>
         </div>
+
+        {showYouTubeInput && (
+          <div className="p-4 rounded-xl border border-red-500/30 bg-red-500/5 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase text-red-600 dark:text-red-400">
+                <Video className="w-4 h-4" />
+                <span>Add YouTube Media (@cmibattery)</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowYouTubeInput(false)}
+                className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-white"
+              >
+                Cancel
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-gray-400">
+              Paste any YouTube video link, shorts URL, or video ID. The video and high-resolution thumbnail will be automatically attached to this event.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={youtubeInputUrl}
+                onChange={(e) => setYoutubeInputUrl(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddYouTubeMedia();
+                  }
+                }}
+                placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
+                className="flex-1 bg-white dark:bg-[#12131A] border border-slate-300 dark:border-white/10 rounded-xl px-4 py-2 text-slate-900 dark:text-white text-sm focus:border-red-500 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={handleAddYouTubeMedia}
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-xs uppercase rounded-xl transition-colors cursor-pointer"
+              >
+                Attach
+              </button>
+            </div>
+          </div>
+        )}
 
         {isUploading && uploadProgress !== null && (
           <div className="bg-slate-50 dark:bg-[#12131A] border border-amber-500/30 dark:border-primary/30 rounded-xl p-4 space-y-2">

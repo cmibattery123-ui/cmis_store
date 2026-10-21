@@ -1,9 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import Database from "better-sqlite3";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import path from "path";
+import fs from "fs";
 
 let currentPrisma: PrismaClient | null = null;
 let currentPool: Pool | null = null;
+let currentSqlite: InstanceType<typeof Database> | null = null;
 let lastUsedConnString: string | null = null;
 
 export function resetDb() {
@@ -13,21 +18,25 @@ export function resetDb() {
     } catch {}
     currentPool = null;
   }
+  if (currentSqlite) {
+    try {
+      currentSqlite.close();
+    } catch {}
+    currentSqlite = null;
+  }
   currentPrisma = null;
   lastUsedConnString = null;
 }
 
 export function getDb(): PrismaClient {
-  const rawConnectionString = process.env.DATABASE_URL || process.env.DIRECT_URL;
-  if (!rawConnectionString) {
-    throw new Error("DATABASE_URL or DIRECT_URL environment variable is required but was not provided.");
-  }
+  const rawConnectionString = process.env.DATABASE_URL || process.env.DIRECT_URL || "file:./data/cmis.db";
 
   // Strip sslmode from the URL to let node-postgres use the explicit ssl options object
   const cleanConnectionString = rawConnectionString
     .replace(/[?&]sslmode=[^&]+/g, "")
     .replace(/\?&/g, "?")
-    .replace(/\?$/, "");
+    .replace(/\?$/, "")
+    .trim();
 
   if (currentPrisma && lastUsedConnString === cleanConnectionString) {
     return currentPrisma;
@@ -35,25 +44,69 @@ export function getDb(): PrismaClient {
 
   resetDb();
 
+  // SQLite Support for embedded EC2 disk persistence ($0 RDS cost)
+  if (cleanConnectionString.startsWith("file:") || cleanConnectionString.endsWith(".db")) {
+    const rawPath = cleanConnectionString.replace(/^file:/, "");
+    const dbPath = path.isAbsolute(rawPath) ? rawPath : path.resolve(process.cwd(), rawPath);
+    const dir = path.dirname(dbPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    // Auto-seed: If the target database does not exist yet (e.g. newly mounted empty volume), copy the bundled template
+    if (!fs.existsSync(dbPath)) {
+      const candidates = [
+        path.resolve(process.cwd(), "data-template", "cmis.db"),
+        path.resolve(process.cwd(), "prisma", "seed.db"),
+        path.resolve(process.cwd(), "data", "cmis.db"),
+        path.resolve(process.cwd(), "prisma", "cmis.db"),
+      ];
+      for (const cand of candidates) {
+        if (fs.existsSync(cand) && cand !== dbPath) {
+          try {
+            fs.copyFileSync(cand, dbPath);
+            console.log(`[SQLite] Seeded fresh database at ${dbPath} from ${cand}`);
+            break;
+          } catch (err) {
+            console.warn(`[SQLite] Could not copy seed template from ${cand}:`, err);
+          }
+        }
+      }
+    }
+
+    const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
+    currentPrisma = new PrismaClient({
+      adapter,
+      log: ["error"],
+    });
+    lastUsedConnString = cleanConnectionString;
+    return currentPrisma;
+  }
+
   let hostname: string | undefined;
   try {
     const parsed = new URL(cleanConnectionString.replace("postgresql://", "http://").replace("postgres://", "http://"));
     hostname = parsed.hostname || undefined;
   } catch {}
 
-  const isHyperdrive =
+  const isLocalOrNoSsl =
     process.env.IS_HYPERDRIVE === "true" ||
+    process.env.DATABASE_SSL === "false" ||
     cleanConnectionString.includes("cloudflare") ||
     cleanConnectionString.includes("hyperdrive") ||
     cleanConnectionString.includes("127.0.0.1") ||
-    cleanConnectionString.includes("localhost");
+    cleanConnectionString.includes("localhost") ||
+    cleanConnectionString.includes("sslmode=disable") ||
+    hostname === "db" ||
+    hostname === "localhost" ||
+    hostname === "127.0.0.1";
 
   const pool = new Pool({
     connectionString: cleanConnectionString,
-    max: process.env.NODE_ENV === "production" ? 5 : 2,
-    connectionTimeoutMillis: 20000,
+    max: process.env.NODE_ENV === "production" ? 4 : 2,
+    connectionTimeoutMillis: 15000,
     idleTimeoutMillis: 10000,
-    ...(isHyperdrive
+    ...(isLocalOrNoSsl
       ? {}
       : {
           ssl: {

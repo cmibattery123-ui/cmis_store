@@ -430,6 +430,81 @@ async function main() {
   });
   console.log(`✅ Created ${technicalSpecs.length} technical specifications`);
 
+  // ─────────────────────────────────────────────────────
+  // 8. Gallery Events & YouTube Media
+  // ─────────────────────────────────────────────────────
+  try {
+    await db.galleryMedia.deleteMany();
+    await db.galleryImage.deleteMany();
+    await db.galleryEvent.deleteMany();
+
+    const galleryEvents = [
+      {
+        id: "cmrc14e0r0000owu1t487dljy",
+        name: "Shop Opening",
+        category: "Events",
+        eventDate: new Date("2026-07-07T00:00:00.000Z"),
+        location: "Coimbatore",
+        description: "Welcome for the event",
+        isFeatured: true,
+        isPublished: true,
+        sortOrder: 1,
+        media: [
+          {
+            id: "cmrn74xke0000nku1ktkppfz9",
+            mediaType: "IMAGE",
+            url: "https://res.cloudinary.com/delk61fp0/image/upload/v1783512193/cmi-batteries/gallery/ytig1m88jlqtw3xvywsq.jpg",
+            publicId: "cmi-batteries/gallery/ytig1m88jlqtw3xvywsq",
+            thumbnailUrl: null,
+            isCover: true,
+            sortOrder: 0,
+          },
+          {
+            id: "cmrn74xke0001nku1loq2f286",
+            mediaType: "IMAGE",
+            url: "https://res.cloudinary.com/delk61fp0/image/upload/v1783512199/cmi-batteries/gallery/otcodq0qj4mov5qfhtbu.jpg",
+            publicId: "cmi-batteries/gallery/otcodq0qj4mov5qfhtbu",
+            thumbnailUrl: null,
+            isCover: false,
+            sortOrder: 1,
+          },
+          {
+            id: "cmrn74xkf0002nku1jo8l1nop",
+            mediaType: "IMAGE",
+            url: "https://res.cloudinary.com/delk61fp0/image/upload/v1784187438/cmi-batteries/gallery/ropvu0kwmghtvemdeplt.jpg",
+            publicId: "cmi-batteries/gallery/ropvu0kwmghtvemdeplt",
+            thumbnailUrl: null,
+            isCover: false,
+            sortOrder: 2,
+          },
+        ],
+      },
+    ];
+
+    for (const ev of galleryEvents) {
+      const { media, ...eventData } = ev;
+      await db.galleryEvent.create({
+        data: {
+          ...eventData,
+          media: {
+            create: media,
+          },
+          images: {
+            create: media.map((m) => ({
+              url: m.url,
+              publicId: m.publicId || m.url,
+              isCover: m.isCover,
+              sortOrder: m.sortOrder,
+            })),
+          },
+        },
+      });
+    }
+    console.log(`✅ Created ${galleryEvents.length} gallery events from cmibattery.com`);
+  } catch (galErr) {
+    console.error("⚠️ Error seeding gallery events:", galErr);
+  }
+
   console.log("\n🎉 Database cleanup and seeding complete!\n");
   console.log("==================================================");
   console.log("📋 DEFAULT LOGIN CREDENTIALS:");

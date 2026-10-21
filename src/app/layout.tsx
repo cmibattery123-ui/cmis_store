@@ -5,7 +5,7 @@ import Providers from "@/components/Providers";
 import Navbar from "@/components/shared/Navbar";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL || "https://cmi-batteries.pages.dev"),
+  metadataBase: new URL(process.env.NEXTAUTH_URL || "https://cmibattery.com"),
   title: {
     default: "Perfect Batteries | Next-Generation Lithium Technology",
     template: "%s | Perfect Batteries",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://cmi-batteries.pages.dev",
+    url: process.env.NEXTAUTH_URL || "https://cmibattery.com",
     siteName: "Perfect Batteries",
     title: "Perfect Batteries | Next-Generation Lithium Technology",
     description:

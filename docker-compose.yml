@@ -1,15 +1,29 @@
 version: '3.8'
 
 services:
+  # Optimized Next.js Application
   web:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: cmis-web
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - NODE_OPTIONS=--max-old-space-size=1024
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - DATABASE_URL=${DATABASE_URL:-file:/app/data/cmis.db}
     env_file:
       - .env
+    volumes:
+      # Persistent local storage for SQLite database and local uploads on EC2 disk
+      - ./data:/app/data
+    deploy:
+      resources:
+        limits:
+          memory: 1500M
+        reservations:
+          memory: 256M
     restart: always

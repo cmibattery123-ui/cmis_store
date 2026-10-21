@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { apiSuccess } from "@/lib/utils/api";
-import { withEdgeCache } from "@/lib/edge-cache";
+import { DEFAULT_GALLERY_EVENTS } from "@/lib/default-data";
 
 export const dynamic = "force-dynamic";
 
@@ -23,9 +23,15 @@ export async function GET() {
       "Cache-Control": "no-store, no-cache, must-revalidate",
     };
 
-    return apiSuccess(events || [], 200, cacheHeaders);
+    if (events && events.length > 0) {
+      return apiSuccess(events, 200, cacheHeaders);
+    }
   } catch (error) {
     console.error("[API Gallery GET Error]", error);
-    return apiSuccess([], 200);
   }
+
+  return apiSuccess(DEFAULT_GALLERY_EVENTS, 200, {
+    "Cache-Control": "no-store, no-cache, must-revalidate",
+  });
 }
+

@@ -10,7 +10,7 @@ WORKDIR /app
 RUN corepack enable pnpm
 
 # Install dependencies based on the preferred package manager (without ignore-scripts to build native bindings)
-COPY package.json pnpm-lock.yaml* prisma.config.ts* ./
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* .npmrc* prisma.config.ts* ./
 COPY prisma ./prisma
 RUN pnpm install --frozen-lockfile
 

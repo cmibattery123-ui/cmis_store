@@ -1,17 +1,17 @@
 FROM node:22-alpine AS base
+RUN apk add --no-cache libc6-compat libstdc++
 
 # Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache python3 make g++
 WORKDIR /app
 
 # Install pnpm
 RUN corepack enable pnpm
 
-# Install dependencies based on the preferred package manager
+# Install dependencies based on the preferred package manager (without ignore-scripts to build native bindings)
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -47,7 +47,7 @@ RUN mkdir -p /app/data /app/data-template /app/.next && chown -R nextjs:nodejs /
 # Copy Prisma schema, generated client, and seed database
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 RUN cp /app/prisma/seed.db /app/data-template/cmis.db && cp /app/prisma/seed.db /app/data/cmis.db && chown -R nextjs:nodejs /app/data /app/data-template
-COPY --from=builder /app/node_modules/.pnpm ./node_modules/.pnpm
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/package.json ./package.json
 

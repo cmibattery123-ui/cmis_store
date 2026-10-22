@@ -99,6 +99,13 @@ export async function PATCH(
 
     // Invalidate edge cache so next reads fetch fresh data
     invalidateEdgeCache("products", "product:");
+    try {
+      const { revalidatePath } = await import("next/cache");
+      revalidatePath("/products");
+      revalidatePath("/products/[slug]", "page");
+      revalidatePath("/");
+      revalidatePath("/admin/products");
+    } catch {}
 
     return apiSuccess(product);
   } catch {
@@ -121,8 +128,15 @@ export async function DELETE(
 
     await db.product.delete({ where: { id } });
 
-    // Invalidate edge cache so next reads fetch fresh data from Supabase
+    // Invalidate edge cache so next reads fetch fresh data from database
     invalidateEdgeCache("products", "product:");
+    try {
+      const { revalidatePath } = await import("next/cache");
+      revalidatePath("/products");
+      revalidatePath("/products/[slug]", "page");
+      revalidatePath("/");
+      revalidatePath("/admin/products");
+    } catch {}
 
     return apiSuccess(null);
   } catch {

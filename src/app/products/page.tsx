@@ -5,6 +5,9 @@ import ProductCatalogClient from "@/components/products/ProductCatalogClient";
 import { DEFAULT_PRODUCTS, DEFAULT_CATEGORIES } from "@/lib/default-data";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Products | Perfect Batteries",
   description:
@@ -22,7 +25,7 @@ async function getInitialData() {
           inventory: { select: { quantity: true, lowStockThreshold: true } },
           specs: { orderBy: { sortOrder: "asc" } },
         },
-        orderBy: { sortOrder: "asc" },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
       }),
       db.category.findMany({
         where: { isActive: true },

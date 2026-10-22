@@ -125,8 +125,15 @@ export async function POST(request: Request) {
       return p;
     });
 
-    // Invalidate edge cache so next reads fetch fresh data from Supabase
+    // Invalidate edge cache so next reads fetch fresh data from database
     invalidateEdgeCache("products", "product:");
+    try {
+      const { revalidatePath } = await import("next/cache");
+      revalidatePath("/products");
+      revalidatePath("/products/[slug]", "page");
+      revalidatePath("/");
+      revalidatePath("/admin/products");
+    } catch {}
 
     return apiSuccess(product, 201);
   } catch {

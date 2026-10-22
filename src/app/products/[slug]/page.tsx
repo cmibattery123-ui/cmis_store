@@ -5,30 +5,31 @@ import ProductDetailClient from "@/components/products/ProductDetailClient";
 import { DEFAULT_PRODUCTS } from "@/lib/default-data";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  try {
-    const products = await db.product.findMany({
-      where: { isActive: true },
-      select: { slug: true },
-    });
-    if (products && products.length > 0) {
-      return products.map((p) => ({ slug: p.slug }));
-    }
-  } catch {
-    // Fallback for static builds
-  }
-
-  return DEFAULT_PRODUCTS.map((p) => ({ slug: p.slug }));
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = DEFAULT_PRODUCTS.find((p) => p.slug === slug);
 
+  try {
+    const dbProduct = await db.product.findUnique({
+      where: { slug, isActive: true },
+      select: { name: true, shortDesc: true, description: true, metaTitle: true, metaDesc: true },
+    });
+    if (dbProduct) {
+      return {
+        title: dbProduct.metaTitle || `${dbProduct.name} | Chinna Mayil Industries — Perfect Batteries`,
+        description: dbProduct.metaDesc || dbProduct.shortDesc || dbProduct.description,
+      };
+    }
+  } catch {}
+
+  const product = DEFAULT_PRODUCTS.find((p) => p.slug === slug);
   if (!product) return { title: "Battery Product | Perfect Batteries" };
 
   return {

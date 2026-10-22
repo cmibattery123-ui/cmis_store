@@ -8,6 +8,9 @@ import Mission from "@/components/sections/Mission";
 import CTA from "@/components/sections/CTA";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 async function ProductSection() {
   let products: any[] = [];
   try {

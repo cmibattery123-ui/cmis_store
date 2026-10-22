@@ -33,11 +33,18 @@ export default function ProductCatalogClient({
   const [page, setPage] = useState(1);
   const limit = 12;
 
-  // Sync with API only if initial data was missing/empty
+  // Sync state if initialProducts or initialCategories updates from server
   useEffect(() => {
-    const hasInitialData = initialProducts && initialProducts.length > 0 && initialCategories && initialCategories.length > 0;
-    if (hasInitialData) return;
+    if (initialProducts && initialProducts.length > 0) {
+      setProducts(initialProducts);
+    }
+    if (initialCategories && initialCategories.length > 0) {
+      setCategories(initialCategories);
+    }
+  }, [initialProducts, initialCategories]);
 
+  // Client-side fetch on mount to guarantee fresh real-time data from database
+  useEffect(() => {
     let isMounted = true;
     async function loadData() {
       try {
@@ -48,26 +55,26 @@ export default function ProductCatalogClient({
 
         if (prodRes.ok && isMounted) {
           const prodJson = await prodRes.json();
-          if (prodJson?.data?.products?.length > 0) {
+          if (prodJson?.data?.products && Array.isArray(prodJson.data.products) && prodJson.data.products.length > 0) {
             setProducts(prodJson.data.products);
           }
         }
 
         if (catRes.ok && isMounted) {
           const catJson = await catRes.json();
-          if (catJson?.data?.length > 0) {
+          if (catJson?.data && Array.isArray(catJson.data) && catJson.data.length > 0) {
             setCategories(catJson.data);
           }
         }
       } catch {
-        // Fallback already loaded
+        // Fallback already in state
       }
     }
     loadData();
     return () => {
       isMounted = false;
     };
-  }, [initialProducts, initialCategories]);
+  }, []);
 
   const filteredProducts = useMemo(() => {
     return products

@@ -36,6 +36,8 @@ next-env.d.ts
 
 # deployment zips & build output
 deploy.zip
+*.zip
+.directory
 /dist/
 .wrangler/
 wrangler*.toml

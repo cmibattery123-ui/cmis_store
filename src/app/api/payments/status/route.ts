@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { apiSuccess } from "@/lib/utils/api";
-import { normalizeWhatsAppPhone } from "@/lib/whatsapp";
+import { normalizeWhatsAppPhone, formatPhoneDisplay } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -41,6 +41,7 @@ export async function GET() {
       "914224227227";
 
     const cleanPhone = normalizeWhatsAppPhone(rawPhone);
+    const whatsappPhoneDisplay = formatPhoneDisplay(rawPhone);
 
     const whatsappMessage =
       settingsMap["WHATSAPP_MESSAGE"] ||
@@ -51,7 +52,7 @@ export async function GET() {
         razorpayEnabled,
         whatsappEnabled,
         whatsappPhone: cleanPhone,
-        whatsappPhoneDisplay: rawPhone.startsWith("+") ? rawPhone : `+${cleanPhone}`,
+        whatsappPhoneDisplay,
         whatsappMessage,
       },
       200,

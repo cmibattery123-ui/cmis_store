@@ -38,6 +38,31 @@ export function normalizeWhatsAppPhone(phone: string): string {
 }
 
 /**
+ * Builds a valid RFC 3966 telephone URL: tel:+91...
+ */
+export function buildTelUrl(phone: string): string {
+  const clean = normalizeWhatsAppPhone(phone);
+  return `tel:+${clean}`;
+}
+
+/**
+ * Returns a clean, human-friendly display format for telephone/WhatsApp numbers:
+ * e.g. "+91 98422 41101"
+ */
+export function formatPhoneDisplay(phone: string): string {
+  if (!phone) return "";
+  const raw = phone.trim();
+  if (raw.startsWith("+") && raw.includes(" ")) {
+    return raw;
+  }
+  const clean = normalizeWhatsAppPhone(raw);
+  if (clean.startsWith("91") && clean.length === 12) {
+    return `+91 ${clean.slice(2, 7)} ${clean.slice(7)}`;
+  }
+  return `+${clean}`;
+}
+
+/**
  * Builds a direct WhatsApp chat link with a professionally pre-composed inquiry & order message.
  */
 export function buildWhatsAppOrderUrl({

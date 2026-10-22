@@ -4,7 +4,7 @@ import Footer from "@/components/shared/Footer";
 import ProductDetailClient from "@/components/products/ProductDetailClient";
 import { DEFAULT_PRODUCTS } from "@/lib/default-data";
 import { db } from "@/lib/db";
-import { normalizeWhatsAppPhone } from "@/lib/whatsapp";
+import { normalizeWhatsAppPhone, formatPhoneDisplay } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -118,7 +118,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       razorpayEnabled,
       whatsappEnabled,
       whatsappPhone: cleanPhone,
-      whatsappPhoneDisplay: rawPhone.startsWith("+") ? rawPhone : `+${cleanPhone}`,
+      whatsappPhoneDisplay: formatPhoneDisplay(rawPhone),
       whatsappMessage,
     };
   } catch {}

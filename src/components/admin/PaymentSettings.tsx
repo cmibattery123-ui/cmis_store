@@ -378,7 +378,7 @@ export default function PaymentSettings() {
                 )}
               </div>
               <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
-                When Razorpay is turned off, the product page and checkout seamlessly switch to professional WhatsApp order handling.
+                When Razorpay is turned off, product pages and checkout seamlessly switch to professional WhatsApp and direct telephone ordering.
               </p>
             </div>
           </div>
@@ -400,7 +400,7 @@ export default function PaymentSettings() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-emerald-500" /> WhatsApp Business Phone Number *
+                <Phone className="w-3.5 h-3.5 text-emerald-500" /> WhatsApp & Call Sales Phone Number *
               </label>
               <input
                 type="text"
@@ -411,7 +411,7 @@ export default function PaymentSettings() {
                 className={inputCls}
               />
               <p className="text-[11px] text-slate-500 dark:text-gray-400">
-                Include country code without special characters (e.g., 91 for India).
+                This number is used for both WhatsApp customer orders and direct Call Sales buttons. Include country code (e.g. 91 for India).
               </p>
             </div>
 

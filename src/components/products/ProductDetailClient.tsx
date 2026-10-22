@@ -17,7 +17,7 @@ import {
 import { formatCurrency } from "@/lib/utils/api";
 import { DEFAULT_PRODUCTS, DefaultProduct } from "@/lib/default-data";
 import AddToCartButton from "@/components/products/AddToCartButton";
-import { buildWhatsAppOrderUrl } from "@/lib/whatsapp";
+import { buildWhatsAppOrderUrl, buildTelUrl, formatPhoneDisplay } from "@/lib/whatsapp";
 
 function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
@@ -130,6 +130,10 @@ export default function ProductDetailClient({
     sku: product.sku,
     price: product.price,
   });
+
+  const callPhone = paymentConfig.whatsappPhone || "914224227227";
+  const telUrl = buildTelUrl(callPhone);
+  const callDisplay = paymentConfig.whatsappPhoneDisplay || formatPhoneDisplay(callPhone);
 
   return (
     <div className="max-w-7xl mx-auto px-4 pt-36 pb-24 text-[#1D1D1F] dark:text-[#F5F5F7]">
@@ -296,7 +300,7 @@ export default function ProductDetailClient({
                 </a>
 
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 text-[11px] text-[#86868B] px-1 font-mono">
-                  <span>Direct Sales Desk: {paymentConfig.whatsappPhoneDisplay || "+91 422 422 7227"}</span>
+                  <span>Direct Sales Desk: {callDisplay}</span>
                   <span className="text-emerald-600 dark:text-emerald-400">● Instant response during business hours</span>
                 </div>
               </div>
@@ -314,11 +318,11 @@ export default function ProductDetailClient({
                   </a>
                 )}
                 <a
-                  href="tel:04224227227"
+                  href={telUrl}
                   className="flex-1 flex items-center justify-center gap-1.5 border border-black/[0.08] dark:border-white/[0.12] bg-[#F5F5F7] dark:bg-[#1E1E20] text-[#1D1D1F] dark:text-[#F5F5F7] font-semibold py-2.5 px-4 rounded-full hover:bg-black/[0.03] transition-all text-xs"
                 >
                   <Phone className="w-3.5 h-3.5 text-amber-600 dark:text-primary" />
-                  Call Office (0422 422 7227)
+                  Call Office ({callDisplay})
                 </a>
               </div>
             </div>
@@ -350,15 +354,23 @@ export default function ProductDetailClient({
               </div>
 
               {paymentConfig.whatsappEnabled && (
-                <div className="text-center pt-1">
+                <div className="flex flex-wrap items-center justify-center gap-3 pt-1 text-xs text-[#6E6E73] dark:text-[#86868B]">
                   <a
                     href={whatsAppUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs text-[#6E6E73] dark:text-[#86868B] hover:text-[#25D366] transition-colors"
+                    className="inline-flex items-center gap-1.5 hover:text-[#25D366] transition-colors"
                   >
                     <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
-                    <span>Have technical or B2B bulk inquiry? Inquire via WhatsApp</span>
+                    <span>Inquire via WhatsApp</span>
+                  </a>
+                  <span>•</span>
+                  <a
+                    href={telUrl}
+                    className="inline-flex items-center gap-1.5 hover:text-amber-600 dark:hover:text-primary transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-amber-600 dark:text-primary" />
+                    <span>Call Sales ({callDisplay})</span>
                   </a>
                 </div>
               )}

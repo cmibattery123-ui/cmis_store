@@ -9,11 +9,11 @@ import Link from "next/link";
 import {
   MapPin, CreditCard, ShoppingCart, CheckCircle,
   AlertCircle, Loader2, ChevronRight, Lock, Plus, Home, Building2, Check,
-  MessageCircle, ExternalLink,
+  MessageCircle, ExternalLink, Phone,
 } from "lucide-react";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
-import { buildWhatsAppCartOrderUrl } from "@/lib/whatsapp";
+import { buildWhatsAppCartOrderUrl, buildTelUrl, formatPhoneDisplay } from "@/lib/whatsapp";
 
 const INDIAN_STATES = [
   "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
@@ -728,6 +728,17 @@ export default function CheckoutPage() {
                     <p className="text-slate-600 dark:text-gray-300 text-xs font-normal mt-0.5 leading-relaxed">
                       Online gateway payments are currently paused. Your order summary and delivery details will be forwarded directly to our official sales desk on WhatsApp for immediate invoice generation and bank transfer/NEFT details.
                     </p>
+                    <div className="mt-3 pt-2.5 border-t border-emerald-500/20 flex flex-wrap items-center gap-3 text-xs font-mono text-emerald-800 dark:text-emerald-300">
+                      <span>Order Desk: {paymentConfig.whatsappPhoneDisplay || formatPhoneDisplay(paymentConfig.whatsappPhone || "914224227227")}</span>
+                      <span>•</span>
+                      <a
+                        href={buildTelUrl(paymentConfig.whatsappPhone || "914224227227")}
+                        className="inline-flex items-center gap-1 font-bold underline hover:opacity-80"
+                      >
+                        <Phone className="w-3.5 h-3.5" />
+                        <span>Call Sales Helpline</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
               ) : (

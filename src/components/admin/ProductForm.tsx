@@ -180,25 +180,19 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
 
   return (
     <div className="max-w-5xl space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-heading font-bold text-white">
-            {isEdit ? "Edit Product" : "New Product"}
-          </h1>
-          {watchedName && <p className="text-gray-400 text-sm mt-0.5">{watchedName}</p>}
-        </div>
+      {/* Header Actions */}
+      <div className="flex items-center justify-end -mt-3 mb-2">
         <button
           type="button"
           onClick={() => router.back()}
-          className="text-gray-500 hover:text-white text-sm transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors"
         >
-          ← Back
+          ← Back to Products
         </button>
       </div>
 
       {serverError && (
-        <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl px-4 py-3">
+        <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-500 text-sm rounded-xl px-4 py-3">
           <AlertCircle className="w-4 h-4 shrink-0" />
           {serverError}
         </div>
@@ -206,7 +200,7 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
 
       <form onSubmit={handleSubmit(onSubmit, onError)} autoComplete="off">
         {/* Tabs */}
-        <div className="flex gap-1 border-b border-white/10 mb-6 overflow-x-auto">
+        <div className="flex gap-1 border-b border-slate-200 dark:border-white/10 mb-6 overflow-x-auto">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
@@ -214,8 +208,8 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
               onClick={() => setActiveTab(id)}
               className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${
                 activeTab === id
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-white"
+                  ? "border-amber-500 dark:border-primary text-amber-600 dark:text-primary font-bold"
+                  : "border-transparent text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -281,10 +275,10 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
               <label className={labelCls}>Product Images</label>
               <div className="flex flex-wrap gap-3 mb-3">
                 {images.map((img, i) => (
-                  <div key={i} className="relative group w-24 h-24 bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+                  <div key={i} className="relative group w-24 h-24 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl overflow-hidden">
                     <Image src={img.url} alt="Product" fill className="object-contain p-1" />
                     {img.isPrimary && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-primary/80 text-black text-[9px] font-bold text-center py-0.5">PRIMARY</div>
+                      <div className="absolute bottom-0 left-0 right-0 bg-amber-500 dark:bg-primary text-black text-[9px] font-bold text-center py-0.5">PRIMARY</div>
                     )}
                     <button
                       type="button"
@@ -296,19 +290,19 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
                     </button>
                   </div>
                 ))}
-                <label className={`flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-white/20 rounded-xl cursor-pointer hover:border-primary/50 transition-colors ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}>
+                <label className={`flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-slate-300 dark:border-white/20 rounded-xl cursor-pointer hover:border-amber-500 dark:hover:border-primary/50 transition-colors ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}>
                   {uploading ? (
-                    <Loader2 className="w-5 h-5 text-gray-500 animate-spin" />
+                    <Loader2 className="w-5 h-5 text-slate-400 dark:text-gray-500 animate-spin" />
                   ) : (
                     <>
-                      <Upload className="w-5 h-5 text-gray-500 mb-1" />
-                      <span className="text-xs text-gray-500">Upload</span>
+                      <Upload className="w-5 h-5 text-slate-400 dark:text-gray-500 mb-1" />
+                      <span className="text-xs text-slate-500 dark:text-gray-400">Upload</span>
                     </>
                   )}
                   <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
                 </label>
               </div>
-              <p className="text-xs text-gray-600">First image will be set as primary. Max 5 MB per image.</p>
+              <p className="text-xs text-slate-500 dark:text-gray-500">First image will be set as primary. Max 5 MB per image.</p>
             </div>
           </div>
         )}
@@ -328,11 +322,17 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
             </div>
             <div>
               <label htmlFor="product-tax-rate" className={labelCls}>GST Rate (%)</label>
-              <select id="product-tax-rate" {...register("taxRate", { valueAsNumber: true })} className={inputCls}>
-                {[0, 5, 12, 18, 28].map((r) => (
-                  <option key={r} value={r} className={optionCls}>{r}%</option>
-                ))}
-              </select>
+              <input
+                id="product-tax-rate"
+                type="number"
+                step="0.01"
+                min={0}
+                max={100}
+                placeholder="e.g. 18 or 28"
+                {...register("taxRate", { valueAsNumber: true })}
+                className={inputCls}
+              />
+              {errors.taxRate && <p className="text-red-400 text-xs mt-1">{errors.taxRate.message}</p>}
             </div>
             <div>
               <label htmlFor="product-stock" className={labelCls}>Stock Quantity *</label>
@@ -341,18 +341,18 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
             </div>
 
             {/* Price summary */}
-            <div className="md:col-span-2 lg:col-span-4 bg-white/5 border border-white/10 rounded-2xl p-5">
-              <p className="text-sm font-medium text-white mb-3">Price Summary (incl. GST)</p>
-              <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="md:col-span-2 lg:col-span-4 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-5 shadow-xs">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white mb-3">Price Summary (incl. GST)</p>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
                 {[
-                  { label: "Retail (incl. GST)", value: `₹${((watch("price") ?? 0) * (1 + (watch("taxRate") ?? 18) / 100)).toLocaleString("en-IN", { maximumFractionDigits: 2 })}` },
-                  { label: "Dealer (incl. GST)", value: `₹${((watch("dealerPrice") ?? 0) * (1 + (watch("taxRate") ?? 18) / 100)).toLocaleString("en-IN", { maximumFractionDigits: 2 })}` },
-                  { label: "Margin", value: `₹${((watch("price") ?? 0) - (watch("dealerPrice") ?? 0)).toLocaleString("en-IN", { maximumFractionDigits: 2 })}` },
-                  { label: "Margin %", value: `${watch("price") > 0 ? (((watch("price") - watch("dealerPrice")) / watch("price")) * 100).toFixed(1) : 0}%` },
+                  { label: "Retail (incl. GST)", value: `₹${((Number(watch("price")) || 0) * (1 + (Number(watch("taxRate")) || 0) / 100)).toLocaleString("en-IN", { maximumFractionDigits: 2 })}` },
+                  { label: "Dealer (incl. GST)", value: `₹${((Number(watch("dealerPrice")) || 0) * (1 + (Number(watch("taxRate")) || 0) / 100)).toLocaleString("en-IN", { maximumFractionDigits: 2 })}` },
+                  { label: "Margin", value: `₹${((Number(watch("price")) || 0) - (Number(watch("dealerPrice")) || 0)).toLocaleString("en-IN", { maximumFractionDigits: 2 })}` },
+                  { label: "Margin %", value: `${Number(watch("price")) > 0 ? ((((Number(watch("price")) || 0) - (Number(watch("dealerPrice")) || 0)) / Number(watch("price"))) * 100).toFixed(1) : 0}%` },
                 ].map(({ label, value }) => (
-                  <div key={label} className="bg-white/5 rounded-xl p-3">
-                    <p className="text-gray-500 text-xs">{label}</p>
-                    <p className="text-white font-medium mt-0.5">{value}</p>
+                  <div key={label} className="bg-white dark:bg-[#12131A] border border-slate-200 dark:border-white/10 rounded-xl p-3 shadow-xs">
+                    <p className="text-slate-500 dark:text-gray-400 text-xs font-mono uppercase tracking-wider">{label}</p>
+                    <p className="text-slate-900 dark:text-white font-bold text-base mt-1">{value}</p>
                   </div>
                 ))}
               </div>
@@ -364,20 +364,20 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
         {activeTab === "specs" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-gray-400 text-sm">Add technical specifications that appear on the product page.</p>
+              <p className="text-slate-600 dark:text-gray-400 text-sm">Add technical specifications that appear on the product page.</p>
               <button
                 type="button"
                 onClick={() => appendSpec({ label: "", value: "", unit: "", sortOrder: specFields.length })}
-                className="flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors"
+                className="flex items-center gap-1.5 text-sm font-semibold text-amber-600 dark:text-primary hover:opacity-80 transition-opacity"
               >
                 <Plus className="w-4 h-4" /> Add Spec
               </button>
             </div>
 
             {specFields.length === 0 && (
-              <div className="bg-white/5 border border-dashed border-white/10 rounded-2xl py-12 text-center">
-                <Tag className="w-8 h-8 text-gray-700 mx-auto mb-2" />
-                <p className="text-gray-500">No specs yet. Click &quot;Add Spec&quot; to start.</p>
+              <div className="bg-slate-100 dark:bg-white/5 border border-dashed border-slate-300 dark:border-white/10 rounded-2xl py-12 text-center">
+                <Tag className="w-8 h-8 text-slate-400 dark:text-gray-600 mx-auto mb-2" />
+                <p className="text-slate-500 dark:text-gray-400 text-sm">No specs yet. Click &quot;Add Spec&quot; to start.</p>
               </div>
             )}
 
@@ -410,7 +410,7 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
                       type="button"
                       onClick={() => removeSpec(i)}
                       aria-label="Remove specification"
-                      className="text-gray-600 hover:text-red-400 transition-colors"
+                      className="text-slate-400 hover:text-red-500 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -454,26 +454,26 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
         {/* ── Settings ── */}
         {activeTab === "settings" && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div className="flex items-center justify-between bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-5 shadow-xs">
               <div>
-                <p className="text-white font-medium">Active</p>
-                <p className="text-gray-400 text-sm">Show this product on the public site</p>
+                <p className="text-slate-900 dark:text-white font-medium">Active</p>
+                <p className="text-slate-500 dark:text-gray-400 text-sm">Show this product on the public site</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" {...register("isActive")} className="sr-only peer" />
-                <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:bg-primary transition-colors" />
+                <div className="w-11 h-6 bg-slate-300 dark:bg-white/10 rounded-full peer peer-checked:bg-amber-500 dark:peer-checked:bg-primary transition-colors" />
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
               </label>
             </div>
 
-            <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div className="flex items-center justify-between bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-5 shadow-xs">
               <div>
-                <p className="text-white font-medium">Featured</p>
-                <p className="text-gray-400 text-sm">Highlight this product on the home page</p>
+                <p className="text-slate-900 dark:text-white font-medium">Featured</p>
+                <p className="text-slate-500 dark:text-gray-400 text-sm">Highlight this product on the home page</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" {...register("isFeatured")} className="sr-only peer" />
-                <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:bg-primary transition-colors" />
+                <div className="w-11 h-6 bg-slate-300 dark:bg-white/10 rounded-full peer peer-checked:bg-amber-500 dark:peer-checked:bg-primary transition-colors" />
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
               </label>
             </div>
@@ -481,11 +481,11 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
         )}
 
         {/* Submit */}
-        <div className="flex items-center gap-3 mt-8 pt-6 border-t border-white/10">
+        <div className="flex items-center gap-3 mt-8 pt-6 border-t border-slate-200 dark:border-white/10">
           <button
             type="submit"
             disabled={isSubmitting || uploading}
-            className="flex items-center justify-center gap-2 bg-primary text-black font-heading font-bold px-8 py-3 rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 dark:bg-primary dark:hover:bg-primary/90 text-black font-heading font-bold px-8 py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
           >
             {isSubmitting ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Saving…</>
@@ -496,7 +496,7 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
           <button
             type="button"
             onClick={() => router.back()}
-            className="border border-white/10 text-gray-400 font-medium px-6 py-3 rounded-xl hover:bg-white/5 transition-colors"
+            className="border border-slate-300 dark:border-white/10 text-slate-700 dark:text-gray-300 font-medium px-6 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
           >
             Cancel
           </button>

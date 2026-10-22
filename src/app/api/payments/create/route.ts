@@ -46,6 +46,18 @@ export async function POST(request: Request) {
       return apiError("Unauthorized for this order", 403);
     }
 
+    // Check Gateway Enablement
+    const gatewaySetting = await db.systemSetting.findUnique({
+      where: { key: "RAZORPAY_ENABLED" },
+    });
+
+    if (gatewaySetting && gatewaySetting.value === "false") {
+      return apiError(
+        "Online payment gateway is currently paused. Please complete your order via WhatsApp.",
+        403
+      );
+    }
+
     // Check if order has timed out (15 minutes)
     const isExpired = Date.now() - new Date(order.createdAt).getTime() > PAYMENT_TIMEOUT_MS;
     if (isExpired && (order.status === "PENDING" || order.paymentStatus === "PENDING")) {

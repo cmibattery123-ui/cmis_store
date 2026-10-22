@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { User, Store, Shield, Bell, Save, Key, Mail, Globe, CreditCard, Loader2, Video } from "lucide-react";
+import { User, Store, Shield, Bell, Save, Key, Mail, Globe, CreditCard, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import PaymentSettings from "@/components/admin/PaymentSettings";
-import YouTubeSettings from "@/components/admin/YouTubeSettings";
 
 export default function AdminSettingsPage() {
   const { data: session, update: updateSession } = useSession();
@@ -88,7 +87,6 @@ export default function AdminSettingsPage() {
     { id: "general", label: "General", icon: Store },
     { id: "profile", label: "Profile", icon: User },
     { id: "payments", label: "Payment Gateway", icon: CreditCard },
-    { id: "youtube", label: "YouTube API", icon: Video },
     { id: "security", label: "Security", icon: Shield },
     { id: "notifications", label: "Notifications", icon: Bell },
   ];
@@ -255,9 +253,6 @@ export default function AdminSettingsPage() {
 
             {/* PAYMENTS TAB */}
             {activeTab === "payments" && <PaymentSettings />}
-
-            {/* YOUTUBE TAB */}
-            {activeTab === "youtube" && <YouTubeSettings />}
 
             {/* NOTIFICATIONS TAB */}
             {activeTab === "notifications" && (

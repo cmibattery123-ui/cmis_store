@@ -65,9 +65,70 @@ export default async function ProductDetailPage({ params }: PageProps) {
     // Graceful fallback to default data
   }
 
+  let paymentConfig = {
+    razorpayEnabled: true,
+    whatsappEnabled: true,
+    whatsappPhone: "914224227227",
+    whatsappPhoneDisplay: "+91 422 422 7227",
+    whatsappMessage:
+      "Hello Chinna Mayil Industries, I would like to inquire about purchasing {product_name} (SKU: {sku}) priced at {price}. Please provide ordering, payment, and delivery details.",
+  };
+
+  try {
+    const settings = await db.systemSetting.findMany({
+      where: {
+        key: {
+          in: [
+            "RAZORPAY_ENABLED",
+            "WHATSAPP_ENABLED",
+            "WHATSAPP_PHONE",
+            "WHATSAPP_MESSAGE",
+          ],
+        },
+      },
+    });
+    const map: Record<string, string> = {};
+    settings.forEach((s) => (map[s.key] = s.value));
+
+    const razorpayEnabled =
+      map["RAZORPAY_ENABLED"] !== undefined
+        ? map["RAZORPAY_ENABLED"] === "true"
+        : process.env.RAZORPAY_ENABLED !== undefined
+        ? process.env.RAZORPAY_ENABLED === "true"
+        : true;
+
+    const whatsappEnabled =
+      map["WHATSAPP_ENABLED"] !== undefined
+        ? map["WHATSAPP_ENABLED"] === "true"
+        : true;
+
+    const rawPhone =
+      map["WHATSAPP_PHONE"] ||
+      process.env.NEXT_PUBLIC_WHATSAPP_PHONE ||
+      "914224227227";
+
+    const cleanPhone = rawPhone.replace(/\D/g, "");
+
+    const whatsappMessage =
+      map["WHATSAPP_MESSAGE"] ||
+      "Hello Chinna Mayil Industries, I would like to inquire about purchasing {product_name} (SKU: {sku}) priced at {price}. Please provide ordering, payment, and delivery details.";
+
+    paymentConfig = {
+      razorpayEnabled,
+      whatsappEnabled,
+      whatsappPhone: cleanPhone,
+      whatsappPhoneDisplay: rawPhone.startsWith("+") ? rawPhone : `+${cleanPhone}`,
+      whatsappMessage,
+    };
+  } catch {}
+
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-[#07080C] text-slate-900 dark:text-white transition-colors duration-200">
-      <ProductDetailClient slug={slug} initialProduct={productData as any} />
+      <ProductDetailClient
+        slug={slug}
+        initialProduct={productData as any}
+        initialPaymentConfig={paymentConfig}
+      />
       <Footer />
     </main>
   );

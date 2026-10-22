@@ -8,10 +8,12 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
   MapPin, CreditCard, ShoppingCart, CheckCircle,
-  AlertCircle, Loader2, ChevronRight, Lock, Plus, Home, Building2, Check
+  AlertCircle, Loader2, ChevronRight, Lock, Plus, Home, Building2, Check,
+  MessageCircle, ExternalLink,
 } from "lucide-react";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { buildWhatsAppCartOrderUrl } from "@/lib/whatsapp";
 
 const INDIAN_STATES = [
   "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa",
@@ -62,6 +64,33 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [paymentConfig, setPaymentConfig] = useState<{
+    razorpayEnabled: boolean;
+    whatsappEnabled: boolean;
+    whatsappPhone: string;
+    whatsappPhoneDisplay: string;
+    whatsappMessage: string;
+  }>({
+    razorpayEnabled: true,
+    whatsappEnabled: true,
+    whatsappPhone: "914224227227",
+    whatsappPhoneDisplay: "+91 422 422 7227",
+    whatsappMessage: "",
+  });
+
+  useEffect(() => {
+    async function fetchPaymentStatus() {
+      try {
+        const res = await fetch("/api/payments/status");
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.data) setPaymentConfig(json.data);
+        }
+      } catch {}
+    }
+    fetchPaymentStatus();
+  }, []);
 
   useEffect(() => {
     if (!session?.user) return;
@@ -242,6 +271,32 @@ export default function CheckoutPage() {
 
       const orderId: string = orderData.data.id;
       setCreatedOrderId(orderId);
+
+      if (!paymentConfig.razorpayEnabled) {
+        // Direct WhatsApp order submission when payment gateway is disabled
+        const addressSummary = `${address.line1}, ${address.city}, ${address.state} - ${address.pincode}`;
+        const waUrl = buildWhatsAppCartOrderUrl({
+          phone: paymentConfig.whatsappPhone || "914224227227",
+          items: items.map((i) => ({
+            name: i.name,
+            sku: i.sku,
+            quantity: i.quantity,
+            price: Number(i.price),
+          })),
+          totalAmount: grandTotal,
+          customerName: address.name || session?.user?.name || "Customer",
+          customerPhone: address.phone,
+          addressSummary,
+        });
+
+        await clearCart();
+        setLoading(false);
+        if (typeof window !== "undefined") {
+          window.open(waUrl, "_blank");
+          window.location.href = `/customer/orders`;
+        }
+        return;
+      }
 
       // Schedule a 15-minute fallback timer to mark payment as failed if left pending
       setTimeout(async () => {
@@ -653,19 +708,41 @@ export default function CheckoutPage() {
             {/* Payment info */}
             <div className="bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/15 rounded-3xl p-6 md:p-8 shadow-xl">
               <h2 className="font-black text-slate-900 dark:text-white flex items-center gap-2 mb-4 uppercase tracking-tight text-lg">
-                <CreditCard className="w-5 h-5 text-amber-600 dark:text-primary" /> Payment Method
+                {!paymentConfig.razorpayEnabled ? (
+                  <>
+                    <MessageCircle className="w-5 h-5 text-emerald-500" /> WhatsApp Sales Desk
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-5 h-5 text-amber-600 dark:text-primary" /> Payment Method
+                  </>
+                )}
               </h2>
-              <div className="flex items-center gap-4 bg-amber-500/5 dark:bg-[#12131A] border border-amber-500/20 dark:border-white/10 rounded-2xl p-4">
-                <div className="w-10 h-10 bg-amber-500/10 dark:bg-[#161722] rounded-xl flex items-center justify-center shrink-0">
-                  <Lock className="w-5 h-5 text-amber-600 dark:text-primary" />
+              {!paymentConfig.razorpayEnabled ? (
+                <div className="flex items-start gap-4 bg-emerald-500/10 dark:bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-4">
+                  <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0 text-emerald-500">
+                    <MessageCircle className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-slate-900 dark:text-white text-sm font-bold">Direct WhatsApp Order Processing</p>
+                    <p className="text-slate-600 dark:text-gray-300 text-xs font-normal mt-0.5 leading-relaxed">
+                      Online gateway payments are currently paused. Your order summary and delivery details will be forwarded directly to our official sales desk on WhatsApp for immediate invoice generation and bank transfer/NEFT details.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-slate-900 dark:text-white text-sm font-bold">Secure Payment Gateway</p>
-                  <p className="text-slate-500 dark:text-gray-300 text-xs font-normal mt-0.5">
-                    UPI, Credit/Debit Cards, NetBanking via Razorpay
-                  </p>
+              ) : (
+                <div className="flex items-center gap-4 bg-amber-500/5 dark:bg-[#12131A] border border-amber-500/20 dark:border-white/10 rounded-2xl p-4">
+                  <div className="w-10 h-10 bg-amber-500/10 dark:bg-[#161722] rounded-xl flex items-center justify-center shrink-0">
+                    <Lock className="w-5 h-5 text-amber-600 dark:text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-slate-900 dark:text-white text-sm font-bold">Secure Payment Gateway</p>
+                    <p className="text-slate-500 dark:text-gray-300 text-xs font-normal mt-0.5">
+                      UPI, Credit/Debit Cards, NetBanking via Razorpay
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -710,10 +787,16 @@ export default function CheckoutPage() {
               <button
                 onClick={placeOrder}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-primary text-black font-black py-4 rounded-2xl hover:bg-yellow-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6 uppercase tracking-wider text-xs shadow-[0_0_20px_rgba(250,255,0,0.3)]"
+                className={`w-full flex items-center justify-center gap-2 font-black py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-6 uppercase tracking-wider text-xs cursor-pointer ${
+                  !paymentConfig.razorpayEnabled
+                    ? "bg-[#25D366] hover:bg-[#20ba59] text-white shadow-[0_4px_16px_rgba(37,211,102,0.3)]"
+                    : "bg-primary text-black hover:bg-yellow-300 shadow-[0_0_20px_rgba(250,255,0,0.3)]"
+                }`}
               >
                 {loading ? (
                   <><Loader2 className="w-4 h-4 animate-spin" /> Processing…</>
+                ) : !paymentConfig.razorpayEnabled ? (
+                  <><MessageCircle className="w-4 h-4" /> Send Order via WhatsApp — {formatCurrency(grandTotal)}</>
                 ) : (
                   <><Lock className="w-4 h-4" /> Place Order — {formatCurrency(grandTotal)}</>
                 )}

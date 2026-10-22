@@ -4,6 +4,9 @@ import CompanyGallery from "@/components/sections/CompanyGallery";
 import { db } from "@/lib/db";
 import { DEFAULT_GALLERY_EVENTS } from "@/lib/default-data";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Media & Event Gallery | Chinna Mayil Industries — Perfect Batteries",
   description:

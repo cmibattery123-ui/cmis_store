@@ -15,6 +15,7 @@ export async function GET(
     const event = await db.galleryEvent.findUnique({
       where: { id },
       include: {
+        media: { orderBy: { sortOrder: "asc" } },
         images: { orderBy: { sortOrder: "asc" } },
       },
     });

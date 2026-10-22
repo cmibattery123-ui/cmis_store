@@ -30,6 +30,29 @@ export default function AdminGalleryPage() {
     loadEvents();
   }, []);
 
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  async function togglePublish(id: string, currentPublished: boolean) {
+    setUpdatingId(id);
+    const nextStatus = !currentPublished;
+    try {
+      const res = await fetch(`/api/admin/gallery/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isPublished: nextStatus }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success(nextStatus ? "Event published" : "Event set to draft");
+      setEvents((prev) =>
+        prev.map((e) => (e.id === id ? { ...e, isPublished: nextStatus } : e))
+      );
+    } catch {
+      toast.error("Failed to update status");
+    } finally {
+      setUpdatingId(null);
+    }
+  }
+
   async function deleteEvent(id: string) {
     if (!confirm("Are you sure you want to delete this event?")) return;
     setDeletingId(id);
@@ -90,42 +113,73 @@ export default function AdminGalleryPage() {
                   <th className="px-6 py-4">Event</th>
                   <th className="px-6 py-4">Date</th>
                   <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Photos</th>
+                  <th className="px-6 py-4">Media</th>
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-white/5">
-                {events.map((event) => (
-                  <tr key={event.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
-                    <td className="px-6 py-4">
-                      <p className="font-medium text-slate-900 dark:text-white">{event.title}</p>
-                      {event.location && <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">{event.location}</p>}
-                    </td>
-                    <td className="px-6 py-4 text-slate-600 dark:text-gray-400 text-xs font-mono">{formatDate(event.eventDate)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
-                        event.isActive ? "bg-emerald-500/10 text-emerald-600 dark:text-green-400 border border-emerald-500/20" : "bg-slate-500/10 text-slate-600 dark:text-gray-400 border border-slate-500/20"
-                      }`}>
-                        {event.isActive ? "Published" : "Draft"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-slate-600 dark:text-gray-400 font-mono text-xs">{event.images?.length || 0} photos</td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link href={`/admin/gallery/${event.id}/edit`} className="text-slate-400 dark:text-gray-500 hover:text-amber-600 dark:hover:text-primary transition-colors p-1">
-                          <Pencil className="w-4 h-4" />
-                        </Link>
+                {events.map((event) => {
+                  const isPub = event.isPublished ?? event.isActive ?? true;
+                  const eventTitle = event.name || event.title || "Untitled Event";
+                  const mediaCount = (event.media?.length ?? 0) || (event.images?.length ?? 0);
+
+                  return (
+                    <tr key={event.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
+                      <td className="px-6 py-4">
+                        <p className="font-medium text-slate-900 dark:text-white">{eventTitle}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          {event.category && (
+                            <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-gray-300">
+                              {event.category}
+                            </span>
+                          )}
+                          {event.location && <span className="text-xs text-slate-500 dark:text-gray-400">{event.location}</span>}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-slate-600 dark:text-gray-400 text-xs font-mono">{formatDate(event.eventDate)}</td>
+                      <td className="px-6 py-4">
                         <button
-                          onClick={() => deleteEvent(event.id)}
-                          disabled={deletingId === event.id}
-                          className="text-slate-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1 cursor-pointer"
+                          type="button"
+                          onClick={() => togglePublish(event.id, isPub)}
+                          disabled={updatingId === event.id}
+                          title="Click to toggle published status"
+                          className={`text-xs px-2.5 py-1 rounded-full font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                            isPub
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-green-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                              : "bg-slate-500/10 text-slate-600 dark:text-gray-400 border border-slate-500/20 hover:bg-slate-500/20"
+                          }`}
                         >
-                          {deletingId === event.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                          {updatingId === event.id ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <span className={`w-1.5 h-1.5 rounded-full ${isPub ? "bg-emerald-500" : "bg-slate-400"}`} />
+                          )}
+                          {isPub ? "Published" : "Draft"}
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-6 py-4 text-slate-600 dark:text-gray-400 font-mono text-xs">{mediaCount} items</td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/admin/gallery/${event.id}/edit`}
+                            className="text-slate-400 dark:text-gray-500 hover:text-amber-600 dark:hover:text-primary transition-colors p-1"
+                            title="Edit Event"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Link>
+                          <button
+                            onClick={() => deleteEvent(event.id)}
+                            disabled={deletingId === event.id}
+                            className="text-slate-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1 cursor-pointer"
+                            title="Delete Event"
+                          >
+                            {deletingId === event.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

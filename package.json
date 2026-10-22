@@ -8,6 +8,7 @@
     "deploy:eb": "git push origin main",
     "deploy": "pnpm run build && git push origin main",
     "start": "next start",
+    "connect:server": "bash scripts/connect-server.sh",
     "postinstall": "prisma generate",
     "lint": "eslint",
     "type-check": "tsc --noEmit",

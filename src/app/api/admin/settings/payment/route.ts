@@ -232,7 +232,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await db.$transaction(upserts);
+    if (upserts.length > 0) {
+      await db.$transaction(upserts);
+    }
 
     return apiSuccess({
       message: "Payment and WhatsApp settings updated successfully",

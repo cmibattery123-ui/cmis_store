@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { apiSuccess } from "@/lib/utils/api";
+import { normalizeWhatsAppPhone } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -39,7 +40,7 @@ export async function GET() {
       process.env.NEXT_PUBLIC_WHATSAPP_PHONE ||
       "914224227227";
 
-    const cleanPhone = rawPhone.replace(/\D/g, "");
+    const cleanPhone = normalizeWhatsAppPhone(rawPhone);
 
     const whatsappMessage =
       settingsMap["WHATSAPP_MESSAGE"] ||

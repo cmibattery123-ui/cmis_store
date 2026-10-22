@@ -24,6 +24,20 @@ export interface WhatsAppCartOrderDetails {
 }
 
 /**
+ * Normalizes phone number into international format for WhatsApp (wa.me/...)
+ * Auto-prefixes India country code 91 if a 10-digit mobile number is supplied.
+ */
+export function normalizeWhatsAppPhone(phone: string): string {
+  let clean = (phone || "").replace(/\D/g, "");
+  if (clean.length === 10) {
+    clean = `91${clean}`;
+  } else if (clean.startsWith("0") && clean.length === 11) {
+    clean = `91${clean.slice(1)}`;
+  }
+  return clean;
+}
+
+/**
  * Builds a direct WhatsApp chat link with a professionally pre-composed inquiry & order message.
  */
 export function buildWhatsAppOrderUrl({
@@ -34,7 +48,7 @@ export function buildWhatsAppOrderUrl({
   price,
   url,
 }: WhatsAppOrderDetails): string {
-  const cleanPhone = phone.replace(/\D/g, "");
+  const cleanPhone = normalizeWhatsAppPhone(phone);
   const defaultTemplate =
     "Hello Chinna Mayil Industries, I would like to inquire about purchasing {product_name} (SKU: {sku}) priced at {price}. Please provide ordering, payment, and delivery details.";
 
@@ -63,7 +77,7 @@ export function buildWhatsAppCartOrderUrl({
   customerPhone,
   addressSummary,
 }: WhatsAppCartOrderDetails): string {
-  const cleanPhone = phone.replace(/\D/g, "");
+  const cleanPhone = normalizeWhatsAppPhone(phone);
 
   const lines: string[] = [
     "Hello Chinna Mayil Industries,",

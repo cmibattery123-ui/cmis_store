@@ -4,6 +4,7 @@ import Footer from "@/components/shared/Footer";
 import ProductDetailClient from "@/components/products/ProductDetailClient";
 import { DEFAULT_PRODUCTS } from "@/lib/default-data";
 import { db } from "@/lib/db";
+import { normalizeWhatsAppPhone } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -107,7 +108,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       process.env.NEXT_PUBLIC_WHATSAPP_PHONE ||
       "914224227227";
 
-    const cleanPhone = rawPhone.replace(/\D/g, "");
+    const cleanPhone = normalizeWhatsAppPhone(rawPhone);
 
     const whatsappMessage =
       map["WHATSAPP_MESSAGE"] ||

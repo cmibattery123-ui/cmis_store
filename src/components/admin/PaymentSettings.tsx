@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiUrl } from "@/lib/api";
-import { buildWhatsAppOrderUrl } from "@/lib/whatsapp";
+import { buildWhatsAppOrderUrl, normalizeWhatsAppPhone } from "@/lib/whatsapp";
 
 interface PaymentSettingsData {
   razorpayEnabled: boolean;
@@ -118,8 +118,37 @@ export default function PaymentSettings() {
     }
   };
 
-  const handleSaveCredentials = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleToggleWhatsApp = async (newVal: boolean) => {
+    setWhatsappEnabled(newVal);
+    try {
+      const res = await fetch("/api/admin/settings/payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ whatsappEnabled: newVal }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success !== false) {
+        toast.success(
+          newVal
+            ? "WhatsApp Ordering Enabled — fallback active when Razorpay is offline"
+            : "WhatsApp Ordering Disabled"
+        );
+      } else {
+        setWhatsappEnabled(!newVal);
+        toast.error(data.error || "Failed to update WhatsApp status");
+      }
+    } catch {
+      setWhatsappEnabled(!newVal);
+      toast.error("Error toggling WhatsApp status");
+    }
+  };
+
+  const handleSaveCredentials = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setSavingGateway(true);
     try {
       const payload: Record<string, any> = {
@@ -153,14 +182,21 @@ export default function PaymentSettings() {
     }
   };
 
-  const handleSaveWhatsApp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSaveWhatsApp = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const trimmedPhone = whatsappPhone.trim();
+    if (!trimmedPhone) {
+      toast.error("Please enter a valid WhatsApp phone number");
+      return;
+    }
     setSavingWhatsApp(true);
     try {
       const payload = {
-        razorpayEnabled,
         whatsappEnabled,
-        whatsappPhone: whatsappPhone.trim(),
+        whatsappPhone: trimmedPhone,
         whatsappMessage: whatsappMessage.trim(),
       };
 
@@ -173,7 +209,7 @@ export default function PaymentSettings() {
 
       const responseData = await res.json().catch(() => ({}));
       if (res.ok && responseData.success !== false) {
-        toast.success("WhatsApp Order & Inquiry Settings Updated");
+        toast.success("WhatsApp Order & Inquiry Settings Saved Successfully");
         await fetchSettings();
       } else {
         toast.error(responseData.error || "Failed to save WhatsApp settings");
@@ -306,7 +342,8 @@ export default function PaymentSettings() {
 
           <div className="flex items-center justify-end pt-2">
             <button
-              type="submit"
+              type="button"
+              onClick={() => handleSaveCredentials()}
               disabled={savingGateway}
               className="flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black font-mono font-bold uppercase text-xs px-5 py-2.5 rounded-xl hover:bg-black dark:hover:bg-slate-200 transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
             >
@@ -330,9 +367,15 @@ export default function PaymentSettings() {
                 <h3 className="font-bold text-slate-900 dark:text-white text-lg">
                   WhatsApp Ordering & Direct Inquiries
                 </h3>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-600 dark:text-green-400 border border-emerald-500/30 uppercase tracking-wider font-mono">
-                  <CheckCircle2 className="w-3 h-3" /> Ready
-                </span>
+                {whatsappEnabled ? (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-600 dark:text-green-400 border border-emerald-500/30 uppercase tracking-wider font-mono">
+                    <CheckCircle2 className="w-3 h-3" /> Active
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-500/20 text-slate-600 dark:text-slate-400 border border-slate-500/30 uppercase tracking-wider font-mono">
+                    <XCircle className="w-3 h-3" /> Disabled
+                  </span>
+                )}
               </div>
               <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
                 When Razorpay is turned off, the product page and checkout seamlessly switch to professional WhatsApp order handling.
@@ -345,7 +388,7 @@ export default function PaymentSettings() {
             <input
               type="checkbox"
               checked={whatsappEnabled}
-              onChange={(e) => setWhatsappEnabled(e.target.checked)}
+              onChange={(e) => handleToggleWhatsApp(e.target.checked)}
               className="sr-only peer"
             />
             <div className="w-12 h-7 bg-slate-300 dark:bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500"></div>
@@ -431,7 +474,8 @@ export default function PaymentSettings() {
 
           <div className="flex items-center justify-end pt-2">
             <button
-              type="submit"
+              type="button"
+              onClick={() => handleSaveWhatsApp()}
               disabled={savingWhatsApp}
               className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold uppercase text-xs px-5 py-2.5 rounded-xl transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
             >

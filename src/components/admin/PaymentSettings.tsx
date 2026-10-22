@@ -57,18 +57,21 @@ export default function PaymentSettings() {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const res = await fetch(apiUrl("/api/admin/settings/payment"));
-      const data = await res.json();
+      const res = await fetch("/api/admin/settings/payment", {
+        credentials: "same-origin",
+        cache: "no-store",
+      });
+      const data = await res.json().catch(() => ({}));
 
-      if (res.ok && data.success) {
-        const settings: PaymentSettingsData = data.data;
-        setRazorpayEnabled(settings.razorpayEnabled);
+      if (res.ok && (data.success !== false) && (data.data || data.success)) {
+        const settings: PaymentSettingsData = data.data || data;
+        setRazorpayEnabled(Boolean(settings.razorpayEnabled));
         setKeyId(settings.keyId || "");
         setKeySecretMasked(settings.keySecretMasked || "");
         setWebhookSecretMasked(settings.webhookSecretMasked || "");
 
         if (settings.whatsappEnabled !== undefined) {
-          setWhatsappEnabled(settings.whatsappEnabled);
+          setWhatsappEnabled(Boolean(settings.whatsappEnabled));
         }
         if (settings.whatsappPhone) {
           setWhatsappPhone(settings.whatsappPhone);
@@ -76,8 +79,10 @@ export default function PaymentSettings() {
         if (settings.whatsappMessage) {
           setWhatsappMessage(settings.whatsappMessage);
         }
+      } else if (res.status === 403) {
+        toast.error("Session expired or admin privileges required. Please refresh or log in.");
       } else {
-        toast.error("Failed to load payment settings");
+        toast.error(data.error || "Failed to load payment settings");
       }
     } catch (error) {
       console.error("[PaymentSettings Fetch]", error);
@@ -90,13 +95,14 @@ export default function PaymentSettings() {
   const handleToggleEnable = async (newVal: boolean) => {
     setRazorpayEnabled(newVal);
     try {
-      const res = await fetch(apiUrl("/api/admin/settings/payment"), {
+      const res = await fetch("/api/admin/settings/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify({ razorpayEnabled: newVal }),
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success !== false) {
         toast.success(
           newVal
             ? "Razorpay Gateway Enabled — Store online checkout is active"
@@ -123,14 +129,15 @@ export default function PaymentSettings() {
       if (keySecret.trim()) payload.keySecret = keySecret.trim();
       if (webhookSecret.trim()) payload.webhookSecret = webhookSecret.trim();
 
-      const res = await fetch(apiUrl("/api/admin/settings/payment"), {
+      const res = await fetch("/api/admin/settings/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify(payload),
       });
 
-      const responseData = await res.json();
-      if (res.ok && responseData.success) {
+      const responseData = await res.json().catch(() => ({}));
+      if (res.ok && responseData.success !== false) {
         toast.success("Razorpay Gateway Credentials Updated");
         setKeySecret("");
         setWebhookSecret("");
@@ -157,14 +164,15 @@ export default function PaymentSettings() {
         whatsappMessage: whatsappMessage.trim(),
       };
 
-      const res = await fetch(apiUrl("/api/admin/settings/payment"), {
+      const res = await fetch("/api/admin/settings/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify(payload),
       });
 
-      const responseData = await res.json();
-      if (res.ok && responseData.success) {
+      const responseData = await res.json().catch(() => ({}));
+      if (res.ok && responseData.success !== false) {
         toast.success("WhatsApp Order & Inquiry Settings Updated");
         await fetchSettings();
       } else {

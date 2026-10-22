@@ -73,12 +73,12 @@ export function truncate(str: string, n: number): string {
 
 /** Build a JSON error response */
 export function apiError(message: string, status = 400, headers?: HeadersInit) {
-  return Response.json({ error: message }, { status, headers });
+  return Response.json({ success: false, error: message }, { status, headers });
 }
 
 /** Build a JSON success response */
 export function apiSuccess<T>(data: T, status = 200, headers?: HeadersInit) {
-  return Response.json({ data }, { status, headers });
+  return Response.json({ success: true, data }, { status, headers });
 }
 
 /** Check if a string is a valid CUID */

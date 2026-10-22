@@ -4,8 +4,11 @@ import { db } from "@/lib/db";
 import { apiSuccess, apiError } from "@/lib/utils/api";
 import { z } from "zod";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const updatePaymentSettingsSchema = z.object({
-  razorpayEnabled: z.boolean(),
+  razorpayEnabled: z.boolean().optional(),
   keyId: z.string().optional(),
   keySecret: z.string().optional(),
   webhookSecret: z.string().optional(),
@@ -129,17 +132,21 @@ export async function POST(request: NextRequest) {
       whatsappMessage,
     } = validated.data;
 
-    const upserts = [
-      db.systemSetting.upsert({
-        where: { key: "RAZORPAY_ENABLED" },
-        update: { value: String(razorpayEnabled) },
-        create: {
-          key: "RAZORPAY_ENABLED",
-          value: String(razorpayEnabled),
-          description: "Toggles Razorpay Payment Gateway availability",
-        },
-      }),
-    ];
+    const upserts: any[] = [];
+
+    if (razorpayEnabled !== undefined) {
+      upserts.push(
+        db.systemSetting.upsert({
+          where: { key: "RAZORPAY_ENABLED" },
+          update: { value: String(razorpayEnabled) },
+          create: {
+            key: "RAZORPAY_ENABLED",
+            value: String(razorpayEnabled),
+            description: "Toggles Razorpay Payment Gateway availability",
+          },
+        })
+      );
+    }
 
     if (keyId !== undefined) {
       upserts.push(

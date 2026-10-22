@@ -156,8 +156,8 @@ export default function AdminSettingsPage() {
                     <div className="relative">
                       <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
                       <select className={`${inputCls} pl-11 appearance-none`}>
-                        <option>INR (₹) - Indian Rupee</option>
-                        <option>USD ($) - US Dollar</option>
+                        <option className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">INR (₹) - Indian Rupee</option>
+                        <option className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">USD ($) - US Dollar</option>
                       </select>
                     </div>
                   </div>

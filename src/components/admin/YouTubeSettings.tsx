@@ -144,9 +144,9 @@ export default function YouTubeSettings() {
               onChange={(e) => setPrivacyStatus(e.target.value as any)}
               className="w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 dark:focus:border-primary transition-colors text-sm"
             >
-              <option value="public">Public (Visible to everyone on YouTube)</option>
-              <option value="unlisted">Unlisted (Playable via embed link)</option>
-              <option value="private">Private (Only channel managers)</option>
+              <option value="public" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Public (Visible to everyone on YouTube)</option>
+              <option value="unlisted" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Unlisted (Playable via embed link)</option>
+              <option value="private" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Private (Only channel managers)</option>
             </select>
           </div>
 

@@ -199,9 +199,9 @@ export default function DealerRegisterPage() {
                 <div>
                   <label htmlFor="dealer-state" className={labelCls}>State</label>
                   <select id="dealer-state" {...register("state")} className={inputCls}>
-                    <option value="" className="bg-white dark:bg-[#111]">Select state</option>
+                    <option value="" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Select state</option>
                     {INDIAN_STATES.map((s) => (
-                      <option key={s} value={s} className="bg-white dark:bg-[#111]">{s}</option>
+                      <option key={s} value={s} className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">{s}</option>
                     ))}
                   </select>
                   {errors.state && <p className={errorCls}>{errors.state.message}</p>}

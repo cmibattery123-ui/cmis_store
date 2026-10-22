@@ -226,8 +226,8 @@ export default function AddressesClient({ initialAddresses }: { initialAddresses
                 <div className="col-span-2 md:col-span-1">
                   <label htmlFor="address-type" className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 mb-1.5">Type</label>
                   <select id="address-type" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/15 rounded-2xl px-4 py-2.5 text-slate-900 dark:text-white text-sm cursor-pointer">
-                    <option value="SHIPPING" className="bg-white dark:bg-[#12131A]">Shipping</option>
-                    <option value="BILLING" className="bg-white dark:bg-[#12131A]">Billing</option>
+                    <option value="SHIPPING" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Shipping</option>
+                    <option value="BILLING" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Billing</option>
                   </select>
                 </div>
                 <div className="col-span-2 flex items-center gap-2 mt-2">

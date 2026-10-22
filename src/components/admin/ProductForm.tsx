@@ -26,6 +26,7 @@ interface ProductFormProps {
 
 const inputCls = "w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500 dark:focus:border-primary transition-colors text-sm";
 const labelCls = "block text-xs font-mono font-bold uppercase text-slate-600 dark:text-gray-300 mb-1.5";
+const optionCls = "bg-white dark:bg-[#12131A] text-slate-900 dark:text-white";
 
 const TABS = [
   { id: "basic", label: "Basic Info", icon: Package },
@@ -203,7 +204,7 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)} autoComplete="off">
         {/* Tabs */}
         <div className="flex gap-1 border-b border-white/10 mb-6 overflow-x-auto">
           {TABS.map(({ id, label, icon: Icon }) => (
@@ -233,22 +234,22 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="md:col-span-2">
               <label htmlFor="product-name" className={labelCls}>Product Name *</label>
-              <input id="product-name" {...register("name")} placeholder="e.g. Perfect LiFe 100Ah Battery" className={inputCls} />
+              <input id="product-name" {...register("name")} placeholder="e.g. Perfect LiFe 100Ah Battery" className={inputCls} autoComplete="off" />
               {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
             </div>
 
             <div>
               <label htmlFor="product-sku" className={labelCls}>SKU *</label>
-              <input id="product-sku" {...register("sku")} placeholder="PB-LIFE-100" className={inputCls} />
+              <input id="product-sku" {...register("sku")} placeholder="PB-LIFE-100" className={inputCls} autoComplete="off" />
               {errors.sku && <p className="text-red-400 text-xs mt-1">{errors.sku.message}</p>}
             </div>
 
             <div>
               <label htmlFor="product-category" className={labelCls}>Category *</label>
               <select id="product-category" {...register("categoryId")} className={inputCls}>
-                <option value="" className="bg-[#111]">Select category…</option>
+                <option value="" className={optionCls}>Select category…</option>
                 {categories.map((c) => (
-                  <option key={c.id} value={c.id} className="bg-[#111]">{c.name}</option>
+                  <option key={c.id} value={c.id} className={optionCls}>{c.name}</option>
                 ))}
               </select>
               {errors.categoryId && <p className="text-red-400 text-xs mt-1">{errors.categoryId.message}</p>}
@@ -329,7 +330,7 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
               <label htmlFor="product-tax-rate" className={labelCls}>GST Rate (%)</label>
               <select id="product-tax-rate" {...register("taxRate", { valueAsNumber: true })} className={inputCls}>
                 {[0, 5, 12, 18, 28].map((r) => (
-                  <option key={r} value={r} className="bg-[#111]">{r}%</option>
+                  <option key={r} value={r} className={optionCls}>{r}%</option>
                 ))}
               </select>
             </div>
@@ -436,14 +437,14 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
 
             {/* SEO preview */}
             {(watch("metaTitle") || watch("name")) && (
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Google Preview</p>
-                <p className="text-blue-400 text-sm font-medium">
-                  {watch("metaTitle") || `${watch("name")} | Perfect Batteries`}
+              <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4">
+                <p className="text-xs text-slate-500 dark:text-gray-500 uppercase tracking-widest mb-2">Search Snippet Preview (Simulation)</p>
+                <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                  {watch("metaTitle") || (watch("name") ? `${watch("name")} | Perfect Batteries` : "Product Name | Perfect Batteries")}
                 </p>
-                <p className="text-green-600 text-xs">https://cmibattery.com/products/…</p>
-                <p className="text-gray-400 text-xs mt-1">
-                  {watch("metaDesc") || watch("shortDesc") || watch("description")?.slice(0, 160) || ""}
+                <p className="text-emerald-700 dark:text-green-500 text-xs">https://cmibattery.com/products/{watch("name") ? watch("name").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : "…"}</p>
+                <p className="text-slate-600 dark:text-gray-400 text-xs mt-1">
+                  {watch("metaDesc") || watch("shortDesc") || (watch("description") ? watch("description").slice(0, 160) : "")}
                 </p>
               </div>
             )}

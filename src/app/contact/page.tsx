@@ -132,12 +132,12 @@ export default function ContactPage() {
                 <div>
                   <label htmlFor="contact-subject" className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-gray-300 mb-2">Subject *</label>
                   <select id="contact-subject" name="subject" required className="w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/15 rounded-2xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 dark:focus:border-primary transition-all text-sm cursor-pointer">
-                    <option value="" className="bg-white dark:bg-[#12131A]">Select a topic…</option>
-                    <option value="product" className="bg-white dark:bg-[#12131A]">Product Inquiry</option>
-                    <option value="warranty" className="bg-white dark:bg-[#12131A]">Warranty Support</option>
-                    <option value="dealer" className="bg-white dark:bg-[#12131A]">Dealer Inquiry</option>
-                    <option value="bulk" className="bg-white dark:bg-[#12131A]">Bulk Order</option>
-                    <option value="other" className="bg-white dark:bg-[#12131A]">Other</option>
+                    <option value="" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Select a topic…</option>
+                    <option value="product" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Product Inquiry</option>
+                    <option value="warranty" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Warranty Support</option>
+                    <option value="dealer" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Dealer Inquiry</option>
+                    <option value="bulk" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Bulk Order</option>
+                    <option value="other" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Other</option>
                   </select>
                 </div>
                 <div>

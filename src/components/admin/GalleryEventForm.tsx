@@ -428,9 +428,9 @@ export default function GalleryEventForm({ initialData }: GalleryEventFormProps)
                 onChange={(e) => setCategoryType(e.target.value)}
                 className="flex-1 bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/10 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:border-amber-500 dark:focus:border-primary focus:outline-none transition-colors text-sm"
               >
-                <option value="">Select a category</option>
+                <option value="" className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">Select a category</option>
                 {PREDEFINED_CATEGORIES.map(c => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c} className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">{c}</option>
                 ))}
               </select>
             </div>

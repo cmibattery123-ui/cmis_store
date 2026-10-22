@@ -605,7 +605,7 @@ export default function CheckoutPage() {
                             className={inputCls}
                           >
                             {INDIAN_STATES.map((s) => (
-                              <option key={s} value={s} className="bg-white dark:bg-[#12131A]">{s}</option>
+                              <option key={s} value={s} className="bg-white dark:bg-[#12131A] text-slate-900 dark:text-white">{s}</option>
                             ))}
                           </select>
                         </div>

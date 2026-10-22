@@ -263,8 +263,7 @@ export default function GalleryEventForm({ initialData }: GalleryEventFormProps)
         }
 
         if (isVideo || true) {
-          // Stream media payload to Archive.org (Internet Archive - Unlimited Free Storage)
-          setUploadStageText(`Uploading "${file.name}" to Archive.org (Unlimited Storage)...`);
+          setUploadStageText(`Uploading "${file.name}"...`);
           try {
             const archiveFormData = new FormData();
             archiveFormData.append("file", file);
@@ -277,9 +276,9 @@ export default function GalleryEventForm({ initialData }: GalleryEventFormProps)
               (percent) => {
                 setUploadProgress(percent);
                 if (percent === 100) {
-                  setUploadStageText(`Processing & Saving on Archive.org...`);
+                  setUploadStageText(`Processing & Saving media...`);
                 } else {
-                  setUploadStageText(`Uploading to Archive.org: ${percent}%`);
+                  setUploadStageText(`Uploading "${file.name}": ${percent}%`);
                 }
               }
             );

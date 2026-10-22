@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth";
-import { apiSuccess, apiError } from "@/lib/utils/api";
+import { apiError } from "@/lib/utils/api";
 import { uploadToS3 } from "@/lib/s3";
+import { storeMediaFile } from "@/lib/media-storage";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300; // 5 minute timeout
@@ -41,21 +43,52 @@ export async function POST(request: Request) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
-    const folder = isVideo ? "videos" : "images";
-    const result = await uploadToS3(buffer, file.name, file.type, folder);
-
     const format = file.type.split("/")[1] || "bin";
+    const folder = isVideo ? "videos" : "images";
 
-    return apiSuccess({
-      url: result.publicUrl,
-      publicId: result.key,
-      mediaId: result.key,
-      filename: file.name,
-      mimeType: file.type,
-      bytes: result.size,
-      format,
-      checksum: result.checksum,
+    let uploadUrl = "";
+    let uploadId = "";
+    let checksum = "";
+    let fileSize = buffer.length;
+
+    // 1. First attempt: Upload to S3
+    try {
+      const result = await uploadToS3(buffer, file.name, file.type, folder);
+      uploadUrl = result.publicUrl;
+      uploadId = result.key;
+      checksum = result.checksum;
+      fileSize = result.size;
+    } catch (s3Err) {
+      console.warn("[API Upload] S3 upload failed or unconfigured, falling back to local database storage:", s3Err);
+    }
+
+    // 2. Fallback: If S3 didn't produce a URL, store in local database (MediaFile + MediaChunk)
+    if (!uploadUrl) {
+      const media = await storeMediaFile({
+        buffer,
+        filename: file.name,
+        mimeType: file.type,
+      });
+      uploadUrl = media.url;
+      uploadId = media.id;
+      checksum = media.checksum;
+      fileSize = media.totalSize;
+    }
+
+    return NextResponse.json({
+      success: true,
+      url: uploadUrl,
+      publicId: uploadId,
+      data: {
+        url: uploadUrl,
+        publicId: uploadId,
+        mediaId: uploadId,
+        filename: file.name,
+        mimeType: file.type,
+        bytes: fileSize,
+        format,
+        checksum,
+      },
     });
   } catch (error) {
     console.error("[API Upload POST]", error);

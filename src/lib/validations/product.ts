@@ -19,7 +19,7 @@ export const productSchema = z.object({
   isActive: z.boolean(),
   isFeatured: z.boolean(),
   images: z.array(z.object({
-    url: z.string().url(),
+    url: z.string().min(1, "Image URL is required"),
     publicId: z.string().optional(),
     isPrimary: z.boolean(),
     sortOrder: z.number().int(),
@@ -37,7 +37,7 @@ export const categorySchema = z.object({
   name: z.string().min(2, "Category name is required"),
   slug: z.string().optional(),
   description: z.string().optional(),
-  image: z.string().url().optional().or(z.literal("")),
+  image: z.string().optional().or(z.literal("")),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().default(0),
 });

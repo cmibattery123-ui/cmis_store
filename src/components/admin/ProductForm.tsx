@@ -87,7 +87,11 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
       formData.append("file", file);
       formData.append("folder", "cmi-batteries/products");
 
-      const res = await fetch(apiUrl("/api/upload"), { method: "POST", body: formData });
+      const res = await fetch(apiUrl("/api/upload"), {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
       const data = await res.json();
 
       if (!res.ok) {
@@ -95,11 +99,20 @@ export default function ProductForm({ categories, product, isEdit = false }: Pro
         return;
       }
 
-      const newImg = { url: data.data.url, publicId: data.data.publicId, isPrimary: images.length === 0 };
+      const uploadedUrl = data.data?.url || data.url;
+      const uploadedPublicId = data.data?.publicId || data.publicId || uploadedUrl;
+
+      if (!uploadedUrl) {
+        toast.error("Upload succeeded but no image URL was returned");
+        return;
+      }
+
+      const newImg = { url: uploadedUrl, publicId: uploadedPublicId, isPrimary: images.length === 0 };
       setImages((prev) => [...prev, newImg]);
-      toast.success("Image uploaded");
-    } catch {
-      toast.error("Upload failed. Check Cloudinary configuration.");
+      toast.success("Image uploaded successfully");
+    } catch (err: unknown) {
+      console.error("[ProductForm Image Upload]", err);
+      toast.error("Upload failed. Please check storage connection.");
     } finally {
       setUploading(false);
       e.target.value = "";

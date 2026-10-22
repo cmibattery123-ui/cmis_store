@@ -505,6 +505,27 @@ async function main() {
     console.error("⚠️ Error seeding gallery events:", galErr);
   }
 
+  // ─────────────────────────────────────────────────────
+  // 9. Cloud Settings
+  // ─────────────────────────────────────────────────────
+  try {
+    await db.cloudSettings.upsert({
+      where: { id: "DEFAULT" },
+      update: {
+        awsRegion: "ap-south-1",
+        awsS3Bucket: "cmibattery-static-7099",
+      },
+      create: {
+        id: "DEFAULT",
+        awsRegion: "ap-south-1",
+        awsS3Bucket: "cmibattery-static-7099",
+      },
+    });
+    console.log("✅ Configured default Cloud Settings (S3 bucket: cmibattery-static-7099, region: ap-south-1)");
+  } catch (cloudErr) {
+    console.warn("⚠️ Note during cloud settings seed:", cloudErr);
+  }
+
   console.log("\n🎉 Database cleanup and seeding complete!\n");
   console.log("==================================================");
   console.log("📋 DEFAULT LOGIN CREDENTIALS:");

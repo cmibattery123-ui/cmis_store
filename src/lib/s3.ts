@@ -23,27 +23,52 @@ function sanitizeFilename(filename: string): string {
 }
 
 /**
- * Gets the S3 client configured with credentials from the database.
+ * Gets the S3 client configured with credentials from the database or environment variables.
  */
 async function getS3Client() {
   const db = getDb();
-  const settings = await db.cloudSettings.findUnique({
-    where: { id: "DEFAULT" },
-  });
+  let settings: {
+    awsAccessKeyId?: string | null;
+    awsSecretKey?: string | null;
+    awsRegion?: string | null;
+    awsS3Bucket?: string | null;
+  } | null = null;
 
-  if (!settings || !settings.awsAccessKeyId || !settings.awsSecretKey || !settings.awsS3Bucket) {
-    throw new Error("AWS S3 is not configured in Cloud Settings.");
+  try {
+    settings = await db.cloudSettings.findUnique({
+      where: { id: "DEFAULT" },
+    });
+  } catch (err) {
+    console.warn("[S3] Could not read cloudSettings from DB:", err);
   }
 
-  const s3 = new S3Client({
-    region: settings.awsRegion || "ap-south-1",
-    credentials: {
-      accessKeyId: settings.awsAccessKeyId,
-      secretAccessKey: settings.awsSecretKey,
-    },
-  });
+  const bucketName =
+    settings?.awsS3Bucket ||
+    process.env.AWS_S3_BUCKET ||
+    process.env.S3_STATIC_BUCKET ||
+    process.env.S3_BUCKET ||
+    "cmibattery-static-7099";
 
-  return { s3, settings };
+  const region =
+    settings?.awsRegion ||
+    process.env.AWS_REGION ||
+    "ap-south-1";
+
+  const accessKeyId = settings?.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID;
+  const secretAccessKey = settings?.awsSecretKey || process.env.AWS_SECRET_ACCESS_KEY;
+
+  const clientConfig: {
+    region: string;
+    credentials?: { accessKeyId: string; secretAccessKey: string };
+  } = { region };
+
+  if (accessKeyId && secretAccessKey) {
+    clientConfig.credentials = { accessKeyId, secretAccessKey };
+  }
+
+  const s3 = new S3Client(clientConfig);
+
+  return { s3, bucketName, region };
 }
 
 export async function uploadToS3(
@@ -52,9 +77,7 @@ export async function uploadToS3(
   contentType: string,
   folder: string = "uploads"
 ): Promise<S3UploadResult> {
-  const { s3, settings } = await getS3Client();
-  const bucketName = settings.awsS3Bucket as string;
-  const region = settings.awsRegion || "ap-south-1";
+  const { s3, bucketName, region } = await getS3Client();
 
   const date = new Date();
   const datePrefix = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, "0")}`;

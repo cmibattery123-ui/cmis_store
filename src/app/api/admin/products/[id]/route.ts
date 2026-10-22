@@ -66,7 +66,38 @@ export async function PATCH(
       });
     }
 
-    // Invalidate edge cache so next reads fetch fresh data from Supabase
+    if (images !== undefined) {
+      await db.productImage.deleteMany({ where: { productId: id } });
+      if (images.length > 0) {
+        await db.productImage.createMany({
+          data: images.map((img) => ({
+            productId: id,
+            url: img.url,
+            publicId: img.publicId ?? "cmi-batteries/products/default",
+            isPrimary: img.isPrimary,
+            sortOrder: img.sortOrder,
+            altText: img.altText,
+          })),
+        });
+      }
+    }
+
+    if (specs !== undefined) {
+      await db.productSpec.deleteMany({ where: { productId: id } });
+      if (specs.length > 0) {
+        await db.productSpec.createMany({
+          data: specs.map((spec) => ({
+            productId: id,
+            label: spec.label,
+            value: spec.value,
+            unit: spec.unit,
+            sortOrder: spec.sortOrder,
+          })),
+        });
+      }
+    }
+
+    // Invalidate edge cache so next reads fetch fresh data
     invalidateEdgeCache("products", "product:");
 
     return apiSuccess(product);

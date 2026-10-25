@@ -53,7 +53,8 @@ export default auth((req) => {
   }
 
   if (nextUrl.pathname.startsWith("/api/customer")) {
-    if (!isLoggedIn) {
+    const isGuestOrderCreate = nextUrl.pathname === "/api/customer/orders" && req.method === "POST";
+    if (!isLoggedIn && !isGuestOrderCreate) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }

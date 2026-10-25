@@ -4,6 +4,11 @@ export interface PaymentCreateParams {
   currency?: string;
   receipt?: string;
   notes?: Record<string, string>;
+  customer?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+  };
 }
 
 export interface PaymentCreateResult {
@@ -11,6 +16,7 @@ export interface PaymentCreateResult {
   amount: number;
   currency: string;
   provider: string;
+  paymentUrl?: string;
   metadata?: Record<string, unknown>;
 }
 

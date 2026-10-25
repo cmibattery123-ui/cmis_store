@@ -80,8 +80,13 @@ export default function ProductDetailClient({
       } catch {}
     }
     fetchPaymentStatus();
+    const handleUpdate = () => {
+      fetchPaymentStatus();
+    };
+    window.addEventListener("whatsapp-settings-updated", handleUpdate);
     return () => {
       isMounted = false;
+      window.removeEventListener("whatsapp-settings-updated", handleUpdate);
     };
   }, []);
 

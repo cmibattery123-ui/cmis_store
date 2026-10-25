@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { apiSuccess } from "@/lib/utils/api";
-import { normalizeWhatsAppPhone, formatPhoneDisplay } from "@/lib/whatsapp";
+import { normalizeWhatsAppPhone, formatPhoneDisplay, formatLocalPhoneDisplay } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -38,10 +38,11 @@ export async function GET() {
     const rawPhone =
       settingsMap["WHATSAPP_PHONE"] ||
       process.env.NEXT_PUBLIC_WHATSAPP_PHONE ||
-      "914224227227";
+      "0 422 422 7227";
 
     const cleanPhone = normalizeWhatsAppPhone(rawPhone);
     const whatsappPhoneDisplay = formatPhoneDisplay(rawPhone);
+    const whatsappLocalDisplay = formatLocalPhoneDisplay(rawPhone);
 
     const whatsappMessage =
       settingsMap["WHATSAPP_MESSAGE"] ||
@@ -52,7 +53,9 @@ export async function GET() {
         razorpayEnabled,
         whatsappEnabled,
         whatsappPhone: cleanPhone,
+        rawPhone,
         whatsappPhoneDisplay,
+        whatsappLocalDisplay,
         whatsappMessage,
       },
       200,
@@ -67,7 +70,9 @@ export async function GET() {
         razorpayEnabled: true,
         whatsappEnabled: true,
         whatsappPhone: "914224227227",
-        whatsappPhoneDisplay: "+91 422 422 7227",
+        rawPhone: "0 422 422 7227",
+        whatsappPhoneDisplay: "0 422 422 7227",
+        whatsappLocalDisplay: "0 422 422 7227",
         whatsappMessage:
           "Hello Chinna Mayil Industries, I would like to inquire about purchasing {product_name} (SKU: {sku}) priced at {price}. Please provide ordering, payment, and delivery details.",
       },

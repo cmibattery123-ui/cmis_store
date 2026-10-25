@@ -7,8 +7,11 @@ import { Zap, Mail, Phone, MapPin, Clock, ShieldCheck, Award, ArrowUpRight } fro
 import { COMPANY_INFO, NAV_LINKS } from "@/lib/constants";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import CurrentYear from "@/components/shared/CurrentYear";
+import { useWhatsAppSettings } from "@/store/whatsapp-settings";
 
 export default function Footer() {
+  const { whatsappUrl, whatsappPhoneDisplay, callPhoneDisplay, telUrl } = useWhatsAppSettings();
+
   return (
     <footer className="bg-[#F5F5F7] dark:bg-[#111112] text-[#1D1D1F] dark:text-[#F5F5F7] border-t border-black/[0.06] dark:border-white/[0.08] pt-16 pb-12 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-8 relative z-10 max-w-6xl">
@@ -101,14 +104,14 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-3.5 h-3.5 text-amber-600 dark:text-primary shrink-0" />
-                <a href={`tel:${COMPANY_INFO.phone.replace(/\s/g, "")}`} className="hover:text-[#1D1D1F] dark:hover:text-white transition-colors">
-                  {COMPANY_INFO.phone}
+                <a href={telUrl || `tel:${COMPANY_INFO.phoneRaw}`} className="hover:text-[#1D1D1F] dark:hover:text-white transition-colors">
+                  {callPhoneDisplay || COMPANY_INFO.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366] shrink-0" />
-                <a href={COMPANY_INFO.whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors">
-                  WhatsApp: {COMPANY_INFO.whatsappDisplay}
+                <a href={whatsappUrl || COMPANY_INFO.whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors">
+                  WhatsApp: {whatsappPhoneDisplay || COMPANY_INFO.whatsappDisplay}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">

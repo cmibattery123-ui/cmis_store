@@ -64,11 +64,48 @@ export class RazorpayPaymentProvider implements PaymentProvider {
     }
 
     const data: any = await response.json();
+
+    // Optionally create a hosted payment link as an unblocked alternative for direct checkout
+    let paymentUrl: string | undefined;
+    try {
+      const linkPayload: Record<string, unknown> = {
+        amount: Math.round(Number(params.amount) * 100),
+        currency: params.currency ?? "INR",
+        description: `Order #${params.receipt ?? params.orderId}`,
+        reference_id: params.orderId,
+      };
+
+      if (params.customer) {
+        linkPayload.customer = {
+          name: params.customer.name || "Customer",
+          email: params.customer.email || undefined,
+          contact: params.customer.phone || undefined,
+        };
+      }
+
+      const linkRes = await fetch(`${this.baseUrl}/payment_links`, {
+        method: "POST",
+        headers: {
+          Authorization: this.authHeader,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(linkPayload),
+      });
+
+      if (linkRes.ok) {
+        const linkData = await linkRes.json();
+        paymentUrl = linkData.short_url;
+      }
+    } catch (e) {
+      console.warn("[Razorpay] Optional payment link generation skipped:", e);
+    }
+
     return {
       providerOrderId: data.id,
       amount: Number(data.amount) / 100, // Convert back from paise
       currency: data.currency,
       provider: "RAZORPAY",
+      paymentUrl,
       metadata: data,
     };
   }
@@ -85,7 +122,10 @@ export class RazorpayPaymentProvider implements PaymentProvider {
       .update(payload)
       .digest("hex");
 
-    if (expectedSignature !== params.signature) {
+    const expectedBuf = Buffer.from(expectedSignature, "utf-8");
+    const sigBuf = Buffer.from(params.signature, "utf-8");
+
+    if (expectedBuf.length !== sigBuf.length || !crypto.timingSafeEqual(expectedBuf, sigBuf)) {
       return {
         success: false,
         failureReason: "Payment signature verification failed",

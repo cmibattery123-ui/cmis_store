@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { User, Store, Shield, Bell, Save, Key, Mail, Globe, CreditCard, Loader2 } from "lucide-react";
+import { User, Store, Shield, Bell, Save, Key, Mail, Globe, CreditCard, Loader2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -98,6 +98,7 @@ export default function AdminSettingsPage() {
     { id: "general", label: "General", icon: Store },
     { id: "profile", label: "Profile", icon: User },
     { id: "payments", label: "Payment Gateway", icon: CreditCard },
+    { id: "whatsapp", label: "WhatsApp & Inquiries", icon: MessageCircle },
     { id: "security", label: "Security", icon: Shield },
     { id: "notifications", label: "Notifications", icon: Bell },
   ];
@@ -135,7 +136,9 @@ export default function AdminSettingsPage() {
         {/* Settings Content */}
         <div className="flex-1 bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/10 rounded-2xl p-6 md:p-8 shadow-sm">
           {activeTab === "payments" ? (
-            <PaymentSettings />
+            <PaymentSettings defaultSection="all" />
+          ) : activeTab === "whatsapp" ? (
+            <PaymentSettings defaultSection="whatsapp" />
           ) : (
             <form onSubmit={handleSave}>
               {/* GENERAL TAB */}

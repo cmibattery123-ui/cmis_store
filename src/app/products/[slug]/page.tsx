@@ -108,8 +108,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
   let paymentConfig = {
     razorpayEnabled: true,
     whatsappEnabled: true,
-    whatsappPhone: SITE_CONFIG.whatsapp || "917339670396",
-    whatsappPhoneDisplay: SITE_CONFIG.whatsappDisplay || "+91 73396 70396",
+    whatsappPhone: SITE_CONFIG.whatsapp || "914224227227",
+    whatsappPhoneDisplay: SITE_CONFIG.whatsappDisplay || "0 422 422 7227",
     whatsappMessage:
       "Hello Chinna Mayil Industries, I would like to inquire about purchasing {product_name} (SKU: {sku}) priced at {price}. Please provide ordering, payment, and delivery details.",
   };
@@ -145,7 +145,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
     const rawPhone =
       map["WHATSAPP_PHONE"] ||
       process.env.NEXT_PUBLIC_WHATSAPP_PHONE ||
-      "914224227227";
+      "0 422 422 7227";
 
     const cleanPhone = normalizeWhatsAppPhone(rawPhone);
 

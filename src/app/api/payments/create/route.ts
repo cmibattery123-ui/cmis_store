@@ -8,9 +8,6 @@ import { autoCancelExpiredPendingOrders, PAYMENT_TIMEOUT_MS } from "@/lib/orders
 export async function POST(request: Request) {
   try {
     const session = await auth(request);
-    if (!session?.user?.id) {
-      return apiError("Unauthorized", 401);
-    }
 
     let body: unknown;
     try {
@@ -37,13 +34,20 @@ export async function POST(request: Request) {
 
     if (!order) return apiError("Order not found", 404);
 
-    const isAuthorized =
-      order.userId === session.user.id ||
-      (session.user.email && order.user?.email?.toLowerCase() === session.user.email.toLowerCase()) ||
-      session.user.role === "ADMIN";
+    if (order.paymentStatus === "PAID" || order.payment?.status === "PAID") {
+      return apiError("Order has already been paid", 400);
+    }
 
-    if (!isAuthorized) {
-      return apiError("Unauthorized for this order", 403);
+    // Authorization: If user is logged in, verify order ownership. If guest checkout, allow paying for pending order.
+    if (session?.user?.id) {
+      const isAuthorized =
+        order.userId === session.user.id ||
+        (session.user.email && order.user?.email?.toLowerCase() === session.user.email.toLowerCase()) ||
+        session.user.role === "ADMIN";
+
+      if (!isAuthorized) {
+        return apiError("Unauthorized for this order", 403);
+      }
     }
 
     // Check Gateway Enablement
@@ -86,18 +90,28 @@ export async function POST(request: Request) {
 
     const result = await withDbRetry(async () => paymentService.createPayment(orderId));
 
-    const keyId =
+    let keyId =
       process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
       process.env.RAZORPAY_KEY_ID ||
       "";
+
+    if (!keyId) {
+      try {
+        const keySetting = await db.systemSetting.findUnique({
+          where: { key: "RAZORPAY_KEY_ID" },
+        });
+        if (keySetting?.value) keyId = keySetting.value;
+      } catch {}
+    }
 
     return apiSuccess({
       ...result,
       keyId,
       orderNumber: order.orderNumber,
-      customerName: order.shippingAddress?.name || order.user?.name || session.user.name || "Customer",
-      customerEmail: order.user?.email || session.user.email || "",
+      customerName: order.shippingAddress?.name || order.user?.name || session?.user?.name || "Customer",
+      customerEmail: order.user?.email || session?.user?.email || "",
       customerPhone: order.shippingAddress?.phone || "",
+      paymentUrl: result.paymentUrl,
     });
   } catch (error: unknown) {
     console.error("[API Payments Create POST Error]", error);

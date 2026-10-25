@@ -30,7 +30,11 @@ interface PaymentSettingsData {
   whatsappMessage?: string;
 }
 
-export default function PaymentSettings() {
+interface PaymentSettingsProps {
+  defaultSection?: "all" | "whatsapp" | "gateway";
+}
+
+export default function PaymentSettings({ defaultSection = "all" }: PaymentSettingsProps) {
   const [loading, setLoading] = useState(true);
   const [savingGateway, setSavingGateway] = useState(false);
   const [savingWhatsApp, setSavingWhatsApp] = useState(false);
@@ -45,7 +49,7 @@ export default function PaymentSettings() {
 
   // WhatsApp states
   const [whatsappEnabled, setWhatsappEnabled] = useState(true);
-  const [whatsappPhone, setWhatsappPhone] = useState("914224227227");
+  const [whatsappPhone, setWhatsappPhone] = useState("0 422 422 7227");
   const [whatsappMessage, setWhatsappMessage] = useState(
     "Hello Chinna Mayil Industries, I would like to inquire about purchasing {product_name} (SKU: {sku}) priced at {price}. Please provide ordering, payment, and delivery details."
   );
@@ -129,6 +133,9 @@ export default function PaymentSettings() {
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.success !== false) {
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("whatsapp-settings-updated"));
+        }
         toast.success(
           newVal
             ? "WhatsApp Ordering Enabled — fallback active when Razorpay is offline"
@@ -210,6 +217,9 @@ export default function PaymentSettings() {
       const responseData = await res.json().catch(() => ({}));
       if (res.ok && responseData.success !== false) {
         toast.success("WhatsApp Order & Inquiry Settings Saved Successfully");
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("whatsapp-settings-updated"));
+        }
         await fetchSettings();
       } else {
         toast.error(responseData.error || "Failed to save WhatsApp settings");
@@ -226,7 +236,7 @@ export default function PaymentSettings() {
     return (
       <div className="flex items-center justify-center p-12 text-slate-500 dark:text-gray-400 gap-3">
         <Loader2 className="w-5 h-5 animate-spin text-amber-600 dark:text-primary" />
-        <span>Loading payment settings...</span>
+        <span>Loading settings...</span>
       </div>
     );
   }
@@ -247,14 +257,17 @@ export default function PaymentSettings() {
       {/* Page Title */}
       <div>
         <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white mb-1">
-          Payment & Ordering Channels
+          {defaultSection === "whatsapp" ? "Common WhatsApp & Inquiry Channels" : "Payment & Ordering Channels"}
         </h2>
         <p className="text-sm text-slate-500 dark:text-gray-400">
-          Configure Razorpay online payment gateway and official WhatsApp ordering fallback.
+          {defaultSection === "whatsapp"
+            ? "Configure the common official WhatsApp contact number used across Floating Contact, Footer, Contact page, and Product orders."
+            : "Configure Razorpay online payment gateway and official WhatsApp ordering fallback."}
         </p>
       </div>
 
       {/* RAZORPAY GATEWAY SECTION */}
+      {defaultSection !== "whatsapp" && (
       <div className="p-6 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-[#07080C] space-y-6 shadow-sm">
         {/* Header Toggle Row */}
         <div className="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-white/10">
@@ -353,8 +366,10 @@ export default function PaymentSettings() {
           </div>
         </form>
       </div>
+      )}
 
       {/* WHATSAPP ORDERING & INQUIRY CONFIGURATION SECTION */}
+      {defaultSection !== "gateway" && (
       <div className="p-6 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-[#07080C] space-y-6 shadow-sm">
         {/* WhatsApp Header Row */}
         <div className="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-white/10">
@@ -400,18 +415,18 @@ export default function PaymentSettings() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-emerald-500" /> WhatsApp & Call Sales Phone Number *
+                <Phone className="w-3.5 h-3.5 text-emerald-500" /> Common WhatsApp & Call Sales Phone Number *
               </label>
               <input
                 type="text"
                 required
                 value={whatsappPhone}
                 onChange={(e) => setWhatsappPhone(e.target.value)}
-                placeholder="e.g. 919842241101 or +91 422 422 7227"
+                placeholder="e.g. 0 422 422 7227 or +91 422 422 7227"
                 className={inputCls}
               />
               <p className="text-[11px] text-slate-500 dark:text-gray-400">
-                This number is used for both WhatsApp customer orders and direct Call Sales buttons. Include country code (e.g. 91 for India).
+                This common number is used across the entire store for WhatsApp customer orders, inquiry buttons, Floating Contact widget, Footer, and Contact Sales links.
               </p>
             </div>
 
@@ -485,6 +500,7 @@ export default function PaymentSettings() {
           </div>
         </form>
       </div>
+      )}
     </div>
   );
 }

@@ -79,7 +79,7 @@ export async function GET(request?: Request) {
     const whatsappPhone =
       settingsMap["WHATSAPP_PHONE"] ||
       process.env.NEXT_PUBLIC_WHATSAPP_PHONE ||
-      "914224227227";
+      "0 422 422 7227";
 
     const whatsappMessage =
       settingsMap["WHATSAPP_MESSAGE"] ||

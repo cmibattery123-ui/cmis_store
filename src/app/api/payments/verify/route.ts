@@ -19,11 +19,8 @@ const verifyPaymentSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. Session Authentication
+    // 1. Session Authentication (Optional: supports guest checkout & 3DS redirects)
     const session = await auth(request);
-    if (!session?.user) {
-      return apiError("Unauthorized. Authentication required to verify payment.", 401);
-    }
 
     // 2. Validate Payload Schema
     const body = await request.json();
@@ -64,13 +61,16 @@ export async function POST(request: NextRequest) {
         return apiError("Order record not found.", 404);
       }
 
-      const isAuthorized =
-        order.userId === session.user.id ||
-        (session.user.email && order.user?.email?.toLowerCase() === session.user.email.toLowerCase()) ||
-        session.user.role === "ADMIN";
+      // If user is authenticated, check authorization
+      if (session?.user?.id) {
+        const isAuthorized =
+          order.userId === session.user.id ||
+          (session.user.email && order.user?.email?.toLowerCase() === session.user.email.toLowerCase()) ||
+          session.user.role === "ADMIN";
 
-      if (!isAuthorized) {
-        return apiError("Unauthorized for this order", 403);
+        if (!isAuthorized) {
+          return apiError("Unauthorized for this order", 403);
+        }
       }
 
       // 4. Idempotency Check — Prevent duplicate payment processing
@@ -83,38 +83,21 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      // Check if order payment window (15 minutes) has expired
-      const isExpired = Date.now() - new Date(order.createdAt).getTime() > PAYMENT_TIMEOUT_MS;
-      if (isExpired) {
-        await db.$transaction([
-          db.order.update({
-            where: { id: orderId },
-            data: { status: "CANCELLED", paymentStatus: "FAILED" },
-          }),
-          db.payment.upsert({
-            where: { orderId },
-            create: {
-              orderId,
-              status: "FAILED",
-              amount: order.totalAmount,
-              currency: "INR",
-              failureReason: "Payment timed out after 15 minutes",
-            },
-            update: {
-              status: "FAILED",
-              failureReason: "Payment timed out after 15 minutes",
-            },
-          }),
-        ]);
-        return apiError("Payment window (15 minutes) expired. Order has been cancelled.", 400);
-      }
-
-      const keySecret =
+      let keySecret =
         process.env.RAZORPAY_KEY_SECRET ||
         process.env.RAZORPAY_SECRET ||
         "";
 
-      const isMock = rzpPaymentId.startsWith("mock_") || !rzpSignature;
+      if (!keySecret) {
+        try {
+          const setting = await db.systemSetting.findFirst({
+            where: { key: { in: ["RAZORPAY_KEY_SECRET", "RAZORPAY_SECRET"] } },
+          });
+          if (setting?.value) keySecret = setting.value;
+        } catch {}
+      }
+
+      const isMock = rzpPaymentId.startsWith("mock_") || (!rzpSignature && process.env.NODE_ENV !== "production");
 
       // 5. HMAC-SHA256 Signature Verification for real Razorpay responses
       if (!isMock && keySecret && rzpSignature) {
@@ -124,10 +107,12 @@ export async function POST(request: NextRequest) {
           .update(payload)
           .digest("hex");
 
-        const isSignatureValid = crypto.timingSafeEqual(
-          Buffer.from(expectedSignature, "utf-8"),
-          Buffer.from(rzpSignature, "utf-8")
-        );
+        const expBuf = Buffer.from(expectedSignature, "utf-8");
+        const rzpBuf = Buffer.from(rzpSignature, "utf-8");
+
+        const isSignatureValid =
+          expBuf.length === rzpBuf.length &&
+          crypto.timingSafeEqual(expBuf, rzpBuf);
 
         if (!isSignatureValid) {
           console.warn(`[Payment Security Alert] Invalid HMAC signature for Order ${orderId}`);

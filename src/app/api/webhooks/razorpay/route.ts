@@ -42,10 +42,12 @@ export async function POST(request: NextRequest) {
         .update(rawBody)
         .digest("hex");
 
-      const isSignatureValid = crypto.timingSafeEqual(
-        Buffer.from(expectedSignature, "utf-8"),
-        Buffer.from(signature, "utf-8")
-      );
+      const expBuf = Buffer.from(expectedSignature, "utf-8");
+      const sigBuf = Buffer.from(signature, "utf-8");
+
+      const isSignatureValid =
+        expBuf.length === sigBuf.length &&
+        crypto.timingSafeEqual(expBuf, sigBuf);
 
       if (!isSignatureValid) {
         console.warn("[Webhook Security Alert] Invalid Razorpay webhook signature");

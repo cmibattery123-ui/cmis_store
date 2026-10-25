@@ -41,7 +41,7 @@ export const paymentService = {
   async createPayment(orderId: string) {
     const order = await db.order.findUnique({
       where: { id: orderId },
-      include: { payment: true },
+      include: { payment: true, user: true, shippingAddress: true },
     });
 
     if (!order) throw new Error("Order not found");
@@ -53,6 +53,11 @@ export const paymentService = {
       amount: Number(order.totalAmount),
       currency: "INR",
       receipt: order.orderNumber,
+      customer: {
+        name: order.shippingAddress?.name || order.user?.name || "Customer",
+        email: order.user?.email || undefined,
+        phone: order.shippingAddress?.phone || undefined,
+      },
     });
 
     // Update or create the payment record

@@ -15,21 +15,27 @@ interface PageProps {
 
 export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
   const session = await auth();
-  if (!session?.user) redirect("/auth/login");
-
   const { orderId } = await searchParams;
   if (!orderId) redirect("/");
 
-  const order = await db.order.findFirst({
-    where: { id: orderId, userId: session.user.id },
+  const order = await db.order.findUnique({
+    where: { id: orderId },
     include: {
       items: { select: { productName: true, quantity: true, unitPrice: true, totalPrice: true } },
       payment: { select: { status: true, provider: true, paidAt: true } },
       shippingAddress: true,
+      user: { select: { email: true, name: true } },
     },
   });
 
   if (!order) notFound();
+
+  // If user is authenticated, ensure they own the order or are admin
+  if (session?.user?.id && order.userId !== session.user.id && session.user.role !== "ADMIN") {
+    notFound();
+  }
+
+  const customerEmail = session?.user?.email || order.user?.email || "";
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-[#07080C] text-slate-900 dark:text-white pt-36 pb-20 px-4 transition-colors duration-200">
@@ -128,9 +134,11 @@ export default async function CheckoutSuccessPage({ searchParams }: PageProps) {
           </Link>
         </div>
 
-        <p className="text-slate-500 dark:text-gray-300 text-xs font-mono">
-          A confirmation was sent to <span className="text-slate-800 dark:text-white font-bold">{session.user.email}</span>
-        </p>
+        {customerEmail && (
+          <p className="text-slate-500 dark:text-gray-300 text-xs font-mono">
+            A confirmation was sent to <span className="text-slate-800 dark:text-white font-bold">{customerEmail}</span>
+          </p>
+        )}
       </div>
       <Footer />
     </main>

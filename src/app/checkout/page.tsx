@@ -64,6 +64,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [hostedPaymentUrl, setHostedPaymentUrl] = useState<string | null>(null);
 
   const [paymentConfig, setPaymentConfig] = useState<{
     razorpayEnabled: boolean;
@@ -75,7 +76,7 @@ export default function CheckoutPage() {
     razorpayEnabled: true,
     whatsappEnabled: true,
     whatsappPhone: "914224227227",
-    whatsappPhoneDisplay: "+91 422 422 7227",
+    whatsappPhoneDisplay: "0 422 422 7227",
     whatsappMessage: "",
   });
 
@@ -90,6 +91,13 @@ export default function CheckoutPage() {
       } catch {}
     }
     fetchPaymentStatus();
+    const handleUpdate = () => {
+      fetchPaymentStatus();
+    };
+    window.addEventListener("whatsapp-settings-updated", handleUpdate);
+    return () => {
+      window.removeEventListener("whatsapp-settings-updated", handleUpdate);
+    };
   }, []);
 
   useEffect(() => {
@@ -327,6 +335,10 @@ export default function CheckoutPage() {
       }
 
       const payData = paymentData.data;
+      if (payData.paymentUrl) {
+        setHostedPaymentUrl(payData.paymentUrl);
+      }
+
       const razorpayKey =
         payData.keyId ||
         process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
@@ -386,9 +398,9 @@ export default function CheckoutPage() {
               if (verifyRes.ok && verifyData.success) {
                 // Clear cart ONLY when payment is successful
                 await clearCart();
-                // Redirect to Home page after successful payment
+                // Redirect to order success page after successful payment
                 if (typeof window !== "undefined") {
-                  window.location.href = "/";
+                  window.location.href = `/checkout/success?orderId=${encodeURIComponent(orderId)}`;
                 }
               } else {
                 setError(verifyData.error ?? "Payment verification failed. Please contact support.");
@@ -400,18 +412,8 @@ export default function CheckoutPage() {
             }
           },
           modal: {
-            ondismiss: async () => {
+            ondismiss: () => {
               setLoading(false);
-              try {
-                await fetch("/api/payments/fail", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    orderId,
-                    reason: "Payment modal dismissed by user",
-                  }),
-                });
-              } catch {}
             },
           },
         };
@@ -419,18 +421,16 @@ export default function CheckoutPage() {
         const rzp = new (window as any).Razorpay(options);
         rzp.on("payment.failed", async (res: any) => {
           const failureReason = res.error?.description || "Transaction declined at payment gateway";
-          setError(`Payment failed: ${failureReason}`);
+          const isDomainBlocked = failureReason.toLowerCase().includes("website does not match registered website");
+          
+          if (isDomainBlocked && payData.paymentUrl) {
+            setError(
+              "Payment modal was blocked because this server's current address has not been registered in your Razorpay Dashboard (registered domain: cmibattery.com). You can complete payment on Razorpay's secure hosted page below:"
+            );
+          } else {
+            setError(`Payment failed: ${failureReason}`);
+          }
           setLoading(false);
-          try {
-            await fetch("/api/payments/fail", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                orderId,
-                reason: failureReason,
-              }),
-            });
-          } catch {}
         });
         rzp.open();
       } else {
@@ -453,7 +453,7 @@ export default function CheckoutPage() {
           if (verifyRes.ok) {
             await clearCart();
             if (typeof window !== "undefined") {
-              window.location.href = "/";
+              window.location.href = `/checkout/success?orderId=${encodeURIComponent(orderId)}`;
             }
           } else {
             setError("Payment verification failed. Please contact support.");
@@ -494,9 +494,26 @@ export default function CheckoutPage() {
         </h1>
 
         {error && (
-          <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm rounded-2xl px-4 py-3 mb-6 font-mono">
-            <AlertCircle className="w-4 h-4 shrink-0" />
-            {error}
+          <div className="bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm rounded-2xl p-4 mb-6 font-mono space-y-3">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <span>{error}</span>
+            </div>
+            {hostedPaymentUrl && (
+              <div className="pt-2 border-t border-red-500/20 flex flex-wrap items-center gap-3">
+                <a
+                  href={hostedPaymentUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-black font-black px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider hover:bg-yellow-300 transition-colors shadow-sm"
+                >
+                  Pay via Razorpay Secure Hosted Page →
+                </a>
+                <span className="text-xs opacity-75">
+                  (Hosted directly by Razorpay — bypasses domain checks)
+                </span>
+              </div>
+            )}
           </div>
         )}
 

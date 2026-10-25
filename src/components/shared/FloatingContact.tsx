@@ -2,14 +2,21 @@
 
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Phone, PhoneCall, X, MessageCircle } from "lucide-react";
-import { COMPANY_INFO } from "@/lib/constants";
+import { PhoneCall, X } from "lucide-react";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { motion, AnimatePresence } from "framer-motion";
+import { COMPANY_INFO } from "@/lib/constants";
+import { useWhatsAppSettings } from "@/store/whatsapp-settings";
 
 export function FloatingContact() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { whatsappUrl, whatsappPhoneDisplay, whatsappLocalDisplay, callPhoneDisplay, telUrl } = useWhatsAppSettings();
+
+  const activeWaUrl = whatsappUrl || COMPANY_INFO.whatsappUrl;
+  const activeTelUrl = telUrl || `tel:${COMPANY_INFO.phoneRaw}`;
+  const displayWaPhone = whatsappPhoneDisplay || whatsappLocalDisplay || COMPANY_INFO.whatsappDisplay;
+  const displayCallPhone = callPhoneDisplay || COMPANY_INFO.phone;
 
   // Hide on admin, dealer, or customer dashboard routes
   if (
@@ -48,7 +55,7 @@ export function FloatingContact() {
 
             {/* WhatsApp Chat Link */}
             <a
-              href={COMPANY_INFO.whatsappUrl}
+              href={activeWaUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 transition-all group"
@@ -58,13 +65,13 @@ export function FloatingContact() {
               </div>
               <div className="overflow-hidden">
                 <p className="text-xs font-bold leading-tight text-slate-900 dark:text-white">Chat on WhatsApp</p>
-                <p className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 truncate">{COMPANY_INFO.whatsappDisplay}</p>
+                <p className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 truncate">{displayWaPhone}</p>
               </div>
             </a>
 
             {/* Direct Phone Call */}
             <a
-              href={`tel:${COMPANY_INFO.phone.replace(/\s/g, "")}`}
+              href={activeTelUrl}
               className="flex items-center gap-3 p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-900 dark:text-amber-200 transition-all group"
             >
               <div className="w-9 h-9 rounded-xl bg-amber-500 text-black flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
@@ -72,7 +79,7 @@ export function FloatingContact() {
               </div>
               <div className="overflow-hidden">
                 <p className="text-xs font-bold leading-tight text-slate-900 dark:text-white">Call Office Directly</p>
-                <p className="text-[11px] font-mono text-amber-700 dark:text-amber-400 truncate">{COMPANY_INFO.phone}</p>
+                <p className="text-[11px] font-mono text-amber-700 dark:text-amber-400 truncate">{displayCallPhone}</p>
               </div>
             </a>
           </motion.div>
@@ -82,7 +89,7 @@ export function FloatingContact() {
       {/* Main Floating Trigger Button */}
       <div className="flex items-center gap-2">
         <a
-          href={COMPANY_INFO.whatsappUrl}
+          href={activeWaUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-[#12131A] border border-emerald-500/30 text-slate-900 dark:text-white text-xs font-bold shadow-lg hover:border-emerald-500 transition-all group"

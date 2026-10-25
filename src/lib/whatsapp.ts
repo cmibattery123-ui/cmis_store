@@ -47,19 +47,48 @@ export function buildTelUrl(phone: string): string {
 
 /**
  * Returns a clean, human-friendly display format for telephone/WhatsApp numbers:
- * e.g. "+91 98422 41101"
+ * e.g. "+91 422 422 7227" or "+91 98422 41101"
  */
 export function formatPhoneDisplay(phone: string): string {
-  if (!phone) return "";
+  if (!phone) return "0 422 422 7227";
   const raw = phone.trim();
+  const clean = normalizeWhatsAppPhone(raw);
+  if (clean === "914224227227" || (clean.startsWith("91422") && clean.length === 12)) {
+    return "0 422 422 7227";
+  }
   if (raw.startsWith("+") && raw.includes(" ")) {
     return raw;
   }
-  const clean = normalizeWhatsAppPhone(raw);
   if (clean.startsWith("91") && clean.length === 12) {
     return `+91 ${clean.slice(2, 7)} ${clean.slice(7)}`;
   }
-  return `+${clean}`;
+  return raw.startsWith("+") ? raw : `+${clean}`;
+}
+
+/**
+ * Returns a clean national/local display format for telephone/WhatsApp numbers:
+ * e.g. "0 422 422 7227"
+ */
+export function formatLocalPhoneDisplay(phone: string): string {
+  if (!phone) return "0 422 422 7227";
+  const raw = phone.trim();
+  const clean = normalizeWhatsAppPhone(raw);
+  if (clean === "914224227227" || (clean.startsWith("91422") && clean.length === 12)) {
+    return "0 422 422 7227";
+  }
+  if (clean.startsWith("91") && clean.length === 12) {
+    return `+91 ${clean.slice(2, 7)} ${clean.slice(7)}`;
+  }
+  return raw;
+}
+
+/**
+ * Builds a general WhatsApp inquiry URL.
+ */
+export function buildGeneralWhatsAppUrl(phone?: string, text?: string): string {
+  const cleanPhone = normalizeWhatsAppPhone(phone || "914224227227");
+  const msg = text || "Hello Perfect Batteries, I would like to inquire about your products.";
+  return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
 }
 
 /**

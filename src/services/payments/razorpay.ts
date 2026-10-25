@@ -68,11 +68,14 @@ export class RazorpayPaymentProvider implements PaymentProvider {
     // Optionally create a hosted payment link as an unblocked alternative for direct checkout
     let paymentUrl: string | undefined;
     try {
+      const baseUrl = process.env.NEXTAUTH_URL || "http://13.205.205.233";
       const linkPayload: Record<string, unknown> = {
         amount: Math.round(Number(params.amount) * 100),
         currency: params.currency ?? "INR",
         description: `Order #${params.receipt ?? params.orderId}`,
         reference_id: params.orderId,
+        callback_url: `${baseUrl}/api/payments/callback?orderId=${encodeURIComponent(params.orderId)}`,
+        callback_method: "get",
       };
 
       if (params.customer) {

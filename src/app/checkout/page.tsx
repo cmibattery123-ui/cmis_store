@@ -351,7 +351,21 @@ export default function CheckoutPage() {
         payData.providerOrderId.startsWith("rzp_order_mock_");
 
       if (!isMock) {
-        // Live / Test Razorpay Modal Flow
+        const isRegisteredDomain =
+          typeof window !== "undefined" &&
+          (window.location.hostname === "cmibattery.com" ||
+            window.location.hostname.endsWith(".cmibattery.com"));
+
+        // If accessed via raw IP address / staging, redirect to Razorpay Hosted Checkout
+        // Hosted directly on rzp.io to bypass domain block and automatically redirect back upon completion
+        if (!isRegisteredDomain && payData.paymentUrl) {
+          if (typeof window !== "undefined") {
+            window.location.href = payData.paymentUrl;
+            return;
+          }
+        }
+
+        // Live / Test Razorpay Modal Flow for registered domains
         const scriptLoaded = await loadRazorpayScript();
         if (!scriptLoaded || typeof window === "undefined" || !(window as any).Razorpay) {
           setError("Unable to load Razorpay payment gateway. Please check your internet connection.");

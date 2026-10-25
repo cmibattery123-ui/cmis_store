@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { formatCurrency, formatDate } from "@/lib/utils/api";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw, ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 
 const paymentColors: Record<string, string> = {
-  PENDING:  "bg-amber-500/10 text-amber-600 dark:text-yellow-400 border border-amber-500/20",
-  PAID:     "bg-emerald-500/10 text-emerald-600 dark:text-green-400 border border-emerald-500/20",
-  FAILED:   "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20",
-  REFUNDED: "bg-slate-500/10 text-slate-600 dark:text-gray-400 border border-slate-500/20",
+  PENDING:  "bg-amber-500/10 text-amber-600 dark:text-yellow-400 border border-amber-500/30",
+  PAID:     "bg-emerald-500/10 text-emerald-600 dark:text-green-400 border border-emerald-500/30",
+  FAILED:   "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30",
+  REFUNDED: "bg-slate-500/10 text-slate-600 dark:text-gray-400 border border-slate-500/30",
 };
 
 const statuses = ["PENDING", "PAID", "FAILED", "REFUNDED"];
@@ -20,6 +21,7 @@ export default function AdminPaymentsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   async function loadPayments() {
     setLoading(true);
@@ -34,8 +36,36 @@ export default function AdminPaymentsPage() {
       }
     } catch (err) {
       console.error("Failed to load payments:", err);
+      toast.error("Failed to load payments");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function updatePaymentStatus(paymentId: string, orderNumber: string, newStatus: string) {
+    setUpdatingId(paymentId);
+    const prev = [...payments];
+    setPayments((cur) =>
+      cur.map((p) => (p.id === paymentId ? { ...p, status: newStatus } : p))
+    );
+
+    try {
+      const res = await fetch("/api/admin/payments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: paymentId, status: newStatus }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to update payment status");
+      }
+      toast.success(`Payment status updated to ${newStatus}`);
+    } catch (err: any) {
+      console.error("Error updating payment:", err);
+      toast.error(err.message || "Failed to update payment status");
+      setPayments(prev);
+    } finally {
+      setUpdatingId(null);
     }
   }
 
@@ -119,9 +149,31 @@ export default function AdminPaymentsPage() {
                     <td className="p-4 font-mono text-slate-600 dark:text-gray-400 text-xs">{p.provider}</td>
                     <td className="p-4 text-slate-500 dark:text-gray-400 text-xs font-mono">{formatDate(p.createdAt)}</td>
                     <td className="p-4">
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${paymentColors[p.status] ?? ""}`}>
-                        {p.status}
-                      </span>
+                      <div className="relative inline-block">
+                        <select
+                          value={p.status}
+                          disabled={updatingId === p.id}
+                          onChange={(e) => updatePaymentStatus(p.id, p.order?.orderNumber || p.id, e.target.value)}
+                          className={`text-xs pl-2.5 pr-7 py-1 rounded-xl font-bold border appearance-none cursor-pointer transition-all outline-none focus:ring-2 focus:ring-amber-500/50 ${
+                            paymentColors[p.status] ?? "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                          } ${updatingId === p.id ? "opacity-60 cursor-wait" : ""}`}
+                        >
+                          {statuses.map((s) => (
+                            <option
+                              key={s}
+                              value={s}
+                              className="bg-white dark:bg-[#1A1A1E] text-slate-900 dark:text-white font-medium"
+                            >
+                              {s}
+                            </option>
+                          ))}
+                        </select>
+                        {updatingId === p.id ? (
+                          <Loader2 className="w-3.5 h-3.5 absolute right-2 top-1/2 -translate-y-1/2 animate-spin pointer-events-none text-current" />
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-70" />
+                        )}
+                      </div>
                     </td>
                     <td className="p-4 text-right text-slate-900 dark:text-white font-bold font-mono">
                       {formatCurrency(Number(p.amount))}

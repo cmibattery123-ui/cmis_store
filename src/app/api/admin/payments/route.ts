@@ -51,3 +51,54 @@ export async function GET(request: Request) {
     return apiError("Internal server error", 500);
   }
 }
+
+export async function PATCH(request: Request) {
+  try {
+    const session = await auth(request);
+    if (!session || session.user.role !== "ADMIN") return apiError("Unauthorized", 403);
+
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return apiError("Invalid JSON payload", 400);
+    }
+
+    const { id, status } = body || {};
+    if (!id || !["PENDING", "PAID", "FAILED", "REFUNDED"].includes(status)) {
+      return apiError("Valid payment ID and status (PENDING, PAID, FAILED, REFUNDED) are required", 400);
+    }
+
+    const existing = await db.payment.findUnique({
+      where: { id },
+      include: { order: true },
+    });
+
+    if (!existing) {
+      return apiError("Payment record not found", 404);
+    }
+
+    const updatedPayment = await db.payment.update({
+      where: { id },
+      data: {
+        status,
+        ...(status === "PAID" ? { paidAt: existing.paidAt || new Date() } : {}),
+      },
+    });
+
+    if (existing.orderId) {
+      await db.order.update({
+        where: { id: existing.orderId },
+        data: {
+          paymentStatus: status,
+          ...(status === "PAID" && existing.order?.status === "PENDING" ? { status: "CONFIRMED" } : {}),
+        },
+      });
+    }
+
+    return apiSuccess(updatedPayment);
+  } catch (error) {
+    console.error("[admin_payments_patch]", error);
+    return apiError("Internal server error", 500);
+  }
+}

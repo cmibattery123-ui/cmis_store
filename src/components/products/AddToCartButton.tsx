@@ -19,16 +19,16 @@ export default function AddToCartButton({ inStock, product, showBuyNow = true }:
   const router = useRouter();
 
   React.useEffect(() => {
-    // Prefetch checkout page for instant transitions
-    router.prefetch("/checkout");
+    // Prefetch cart page for instant transitions
+    router.prefetch("/cart");
   }, [router]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!inStock || isAdding) return;
     
     setIsAdding(true);
     try {
-      addItem({
+      await addItem({
         productId: product.id,
         name: product.name,
         sku: product.sku,
@@ -48,12 +48,12 @@ export default function AddToCartButton({ inStock, product, showBuyNow = true }:
     }
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (!inStock || isBuyingNow) return;
 
     setIsBuyingNow(true);
     try {
-      addItem({
+      await addItem({
         productId: product.id,
         name: product.name,
         sku: product.sku,
@@ -64,10 +64,11 @@ export default function AddToCartButton({ inStock, product, showBuyNow = true }:
         taxRate: Number(product.taxRate || 18),
       });
 
-      router.push("/checkout");
+      toast.success(`${product.name} added to cart!`);
+      router.push("/cart");
     } catch (error) {
       console.error("Buy now failed", error);
-      toast.error("Failed to proceed to checkout.");
+      toast.error("Failed to add to cart. Please try again.");
       setIsBuyingNow(false);
     }
   };

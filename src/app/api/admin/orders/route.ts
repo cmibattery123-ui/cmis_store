@@ -25,8 +25,8 @@ export async function GET(request: Request) {
         where,
         include: {
           user: { select: { name: true, email: true, phone: true } },
-          payment: { select: { status: true, provider: true, amount: true } },
-          items: { select: { productName: true, quantity: true, totalPrice: true } },
+          payment: { select: { id: true, status: true, provider: true, amount: true, providerPaymentId: true, paidAt: true } },
+          items: { select: { id: true, productName: true, sku: true, quantity: true, unitPrice: true, totalPrice: true } },
           shippingAddress: true,
         },
         orderBy: { createdAt: "desc" },
@@ -37,11 +37,9 @@ export async function GET(request: Request) {
     ]);
 
     const sanitizedOrders = orders.map((order) => {
-      const isFailed = order.payment?.status === "FAILED" || order.paymentStatus === "FAILED";
       return {
         ...order,
-        status: isFailed ? "FAILED" : order.status,
-        paymentStatus: isFailed ? "FAILED" : order.paymentStatus,
+        paymentStatus: order.payment?.status || order.paymentStatus || "PENDING",
       };
     });
 
@@ -71,19 +69,49 @@ export async function PATCH(request: Request) {
       return apiError("Invalid order status update payload", 400);
     }
 
-    const { id, status } = validated.data;
+    const { id, status, paymentStatus } = validated.data;
+    if (!status && !paymentStatus) {
+      return apiError("Either status or paymentStatus is required", 400);
+    }
 
     const existingOrder = await db.order.findUnique({
       where: { id },
+      include: { payment: true },
     });
     if (!existingOrder) {
       return apiError("Order not found", 404);
     }
 
+    const updateData: { status?: string; paymentStatus?: string } = {};
+    if (status) updateData.status = status;
+    if (paymentStatus) updateData.paymentStatus = paymentStatus;
+
     const order = await db.order.update({
       where: { id },
-      data: { status },
+      data: updateData,
+      include: {
+        payment: true,
+        user: { select: { name: true, email: true, phone: true } },
+      },
     });
+
+    if (paymentStatus) {
+      await db.payment.upsert({
+        where: { orderId: id },
+        create: {
+          orderId: id,
+          provider: existingOrder.payment?.provider || "ADMIN_MANUAL",
+          status: paymentStatus,
+          amount: existingOrder.totalAmount,
+          currency: "INR",
+          paidAt: paymentStatus === "PAID" ? new Date() : null,
+        },
+        update: {
+          status: paymentStatus,
+          ...(paymentStatus === "PAID" ? { paidAt: existingOrder.payment?.paidAt || new Date() } : {}),
+        },
+      });
+    }
 
     return apiSuccess(order);
   } catch (error) {

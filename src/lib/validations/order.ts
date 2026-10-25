@@ -84,16 +84,21 @@ export const quotationApprovalSchema = z.object({
 
 export const updateOrderStatusSchema = z.object({
   id: z.string().min(1, "Order ID is required"),
-  status: z.enum([
-    "PENDING",
-    "CONFIRMED",
-    "PROCESSING",
-    "SHIPPED",
-    "DELIVERED",
-    "CANCELLED",
-    "FAILED",
-    "REFUNDED",
-  ]),
+  status: z
+    .enum([
+      "PENDING",
+      "CONFIRMED",
+      "PROCESSING",
+      "SHIPPED",
+      "DELIVERED",
+      "CANCELLED",
+      "FAILED",
+      "REFUNDED",
+    ])
+    .optional(),
+  paymentStatus: z
+    .enum(["PENDING", "PAID", "FAILED", "REFUNDED"])
+    .optional(),
 });
 
 export const updateDealerStatusSchema = z.object({

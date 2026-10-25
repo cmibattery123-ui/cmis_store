@@ -12,10 +12,8 @@ export async function autoCancelExpiredPendingOrders(userId?: string) {
 
     const whereCondition: any = {
       createdAt: { lt: fifteenMinutesAgo },
-      OR: [
-        { status: "PENDING" },
-        { paymentStatus: "PENDING" },
-      ],
+      status: "PENDING",
+      paymentStatus: "PENDING",
     };
 
     if (userId) {

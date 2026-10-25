@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { User, Building2, Shield, Loader2, RefreshCw, KeyRound, Check, AlertCircle } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { User, Building2, Shield, Loader2, RefreshCw, KeyRound, Check, AlertCircle, Edit2, Save, X } from "lucide-react";
 import { formatDate } from "@/lib/utils/api";
+import { toast } from "sonner";
 
 const statusColor: Record<string, string> = {
   PENDING:   "bg-amber-500/10 text-amber-600 dark:text-yellow-400 border border-amber-500/20",
@@ -12,8 +14,15 @@ const statusColor: Record<string, string> = {
 };
 
 export default function DealerProfilePage() {
+  const { update: updateSession } = useSession();
   const [dealer, setDealer] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Profile Edit states
+  const [isEditing, setIsEditing] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
 
   // Security PIN states
   const [pin, setPin] = useState("123456");
@@ -28,6 +37,8 @@ export default function DealerProfilePage() {
       const json = await res.json();
       if (res.ok && json.data) {
         setDealer(json.data);
+        setFullName(json.data.user?.name || "");
+        setPhone(json.data.phone || json.data.user?.phone || "");
       }
 
       const pinRes = await fetch("/api/dealer/pin");
@@ -42,6 +53,37 @@ export default function DealerProfilePage() {
       console.error("Failed to load dealer profile:", err);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleUpdateProfile(e: React.FormEvent) {
+    e.preventDefault();
+    if (!fullName.trim()) {
+      toast.error("Full Name cannot be empty.");
+      return;
+    }
+
+    setSavingProfile(true);
+    try {
+      const res = await fetch("/api/dealer/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: fullName.trim(), phone: phone.trim() }),
+      });
+      const json = await res.json();
+
+      if (res.ok && json.data) {
+        setDealer(json.data);
+        await updateSession({ name: fullName.trim() });
+        setIsEditing(false);
+        toast.success("Profile updated successfully!");
+      } else {
+        toast.error(json.error || "Failed to update profile.");
+      }
+    } catch {
+      toast.error("An error occurred while updating profile.");
+    } finally {
+      setSavingProfile(false);
     }
   }
 
@@ -187,23 +229,76 @@ export default function DealerProfilePage() {
 
         {/* User Information */}
         <div className="bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/10 rounded-2xl p-6 shadow-sm md:col-span-2">
-          <h2 className="font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
-            <User className="w-4 h-4 text-amber-600 dark:text-primary" /> Personal Information
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <p className="text-slate-500 dark:text-gray-400 text-xs font-mono font-bold uppercase tracking-widest mb-1">Full Name</p>
-              <p className="text-slate-900 dark:text-white font-medium">{dealer.user?.name}</p>
-            </div>
-            <div>
-              <p className="text-slate-500 dark:text-gray-400 text-xs font-mono font-bold uppercase tracking-widest mb-1">Email Address</p>
-              <p className="text-slate-900 dark:text-white font-mono text-xs">{dealer.user?.email}</p>
-            </div>
-            <div>
-              <p className="text-slate-500 dark:text-gray-400 text-xs font-mono font-bold uppercase tracking-widest mb-1">Member Since</p>
-              <p className="text-slate-700 dark:text-gray-300 font-mono text-xs">{formatDate(dealer.user?.createdAt)}</p>
-            </div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <User className="w-4 h-4 text-amber-600 dark:text-primary" /> Personal Information
+            </h2>
+            <button
+              type="button"
+              onClick={() => setIsEditing(!isEditing)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-900 dark:text-white transition-colors cursor-pointer"
+            >
+              {isEditing ? <><X className="w-3.5 h-3.5" /> Cancel</> : <><Edit2 className="w-3.5 h-3.5" /> Edit Profile</>}
+            </button>
           </div>
+
+          {isEditing ? (
+            <form onSubmit={handleUpdateProfile} className="space-y-4 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="dealer-name-edit" className="block text-xs font-mono font-bold uppercase tracking-widest text-slate-500 dark:text-gray-400 mb-1">
+                    Full Name *
+                  </label>
+                  <input
+                    id="dealer-name-edit"
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                    className="w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/15 rounded-xl px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500 dark:focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="dealer-phone-edit" className="block text-xs font-mono font-bold uppercase tracking-widest text-slate-500 dark:text-gray-400 mb-1">
+                    Phone Number
+                  </label>
+                  <input
+                    id="dealer-phone-edit"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="9999999999"
+                    className="w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/15 rounded-xl px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500 dark:focus:border-primary"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end pt-2">
+                <button
+                  type="submit"
+                  disabled={savingProfile}
+                  className="py-2 px-5 rounded-xl bg-primary text-black font-bold text-xs uppercase font-mono tracking-wider hover:bg-yellow-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  {savingProfile ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <p className="text-slate-500 dark:text-gray-400 text-xs font-mono font-bold uppercase tracking-widest mb-1">Full Name</p>
+                <p className="text-slate-900 dark:text-white font-medium">{dealer.user?.name}</p>
+              </div>
+              <div>
+                <p className="text-slate-500 dark:text-gray-400 text-xs font-mono font-bold uppercase tracking-widest mb-1">Email Address</p>
+                <p className="text-slate-900 dark:text-white font-mono text-xs">{dealer.user?.email}</p>
+              </div>
+              <div>
+                <p className="text-slate-500 dark:text-gray-400 text-xs font-mono font-bold uppercase tracking-widest mb-1">Member Since</p>
+                <p className="text-slate-700 dark:text-gray-300 font-mono text-xs">{formatDate(dealer.user?.createdAt)}</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Business Information */}

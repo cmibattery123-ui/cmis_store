@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/shared/Navbar";
+import { FloatingContact } from "@/components/shared/FloatingContact";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || "https://cmibattery.com"),
@@ -64,6 +65,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
+          <FloatingContact />
           <Toaster
             position="top-right"
             richColors

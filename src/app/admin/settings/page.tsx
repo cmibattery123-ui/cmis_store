@@ -11,32 +11,43 @@ export default function AdminSettingsPage() {
   const { data: session, update: updateSession } = useSession();
   const [activeTab, setActiveTab] = useState("general");
   const [loading, setLoading] = useState(false);
+  const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (session?.user?.name) {
+      setFullName(session.user.name);
+    }
     if (session?.user?.image) {
       setAvatarUrl(session.user.image);
     }
-  }, [session?.user?.image]);
+  }, [session?.user?.name, session?.user?.image]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      if (activeTab === "profile" && avatarUrl) {
+      if (activeTab === "profile") {
+        const payload: { name?: string; image?: string } = {};
+        if (fullName.trim()) payload.name = fullName.trim();
+        if (avatarUrl) payload.image = avatarUrl;
+
         const res = await fetch("/api/admin/profile", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: avatarUrl }),
+          body: JSON.stringify(payload),
         });
         
         if (!res.ok) throw new Error("Failed to save profile");
         
-        // Force session update so the header avatar changes too
-        await updateSession({ image: avatarUrl });
+        // Force session update so the header avatar and name change
+        await updateSession({
+          name: fullName.trim(),
+          ...(avatarUrl && { image: avatarUrl }),
+        });
       }
       
       setTimeout(() => {
@@ -209,7 +220,13 @@ export default function AdminSettingsPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">Full Name</label>
-                      <input type="text" defaultValue={session?.user?.name || "Admin User"} className={inputCls} />
+                      <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Enter full name"
+                        className={inputCls}
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">Personal Email</label>

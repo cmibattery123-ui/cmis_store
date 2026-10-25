@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,13 +10,21 @@ import { User, Mail, Phone, Loader2, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const profileSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  phone: z.string().regex(/^[6-9]\d{9}$/, "Invalid phone number").optional().or(z.literal("")),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  phone: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^(\+91[\-\s]?)?[0]?[6-9]\d{9}$/.test(val.replace(/\s/g, "")),
+      "Please enter a valid 10-digit mobile number"
+    )
+    .or(z.literal("")),
 });
 
 type ProfileInput = z.infer<typeof profileSchema>;
 
 export default function ProfilePage() {
+  const router = useRouter();
   const { data: session, update } = useSession();
   const [saved, setSaved] = useState(false);
 
@@ -69,6 +78,7 @@ export default function ProfilePage() {
       if (!res.ok) throw new Error("Update failed");
 
       await update({ name: data.name });
+      router.refresh();
       setSaved(true);
       toast.success("Profile updated successfully");
       setTimeout(() => setSaved(false), 3000);

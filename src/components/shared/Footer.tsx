@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Zap, Mail, Phone, MapPin, Clock, ShieldCheck, Award, ArrowUpRight } from "lucide-react";
 import { COMPANY_INFO, NAV_LINKS } from "@/lib/constants";
+import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import CurrentYear from "@/components/shared/CurrentYear";
 
 export default function Footer() {
@@ -100,11 +101,21 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-3.5 h-3.5 text-amber-600 dark:text-primary shrink-0" />
-                <span>{COMPANY_INFO.phone}</span>
+                <a href={`tel:${COMPANY_INFO.phone.replace(/\s/g, "")}`} className="hover:text-[#1D1D1F] dark:hover:text-white transition-colors">
+                  {COMPANY_INFO.phone}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366] shrink-0" />
+                <a href={COMPANY_INFO.whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors">
+                  WhatsApp: {COMPANY_INFO.whatsappDisplay}
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-3.5 h-3.5 text-amber-600 dark:text-primary shrink-0" />
-                <span>{COMPANY_INFO.email}</span>
+                <a href={`mailto:${COMPANY_INFO.email}`} className="hover:text-[#1D1D1F] dark:hover:text-white transition-colors">
+                  {COMPANY_INFO.email}
+                </a>
               </li>
             </ul>
 

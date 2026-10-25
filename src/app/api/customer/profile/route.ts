@@ -7,8 +7,11 @@ const profileUpdateSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   phone: z
     .string()
-    .regex(/^[6-9]\d{9}$/, "Invalid phone number")
     .optional()
+    .refine(
+      (val) => !val || /^(\+91[\-\s]?)?[0]?[6-9]\d{9}$/.test(val.replace(/\s/g, "")),
+      "Please enter a valid 10-digit mobile number"
+    )
     .or(z.literal("")),
 });
 

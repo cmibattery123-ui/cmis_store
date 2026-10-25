@@ -28,6 +28,8 @@ export const COMPANY_INFO = {
   logo: "/logo.png",
 };
 
+export const SITE_CONFIG = COMPANY_INFO;
+
 export const PRODUCTS = [
   {
     id: "cmip-inverter",

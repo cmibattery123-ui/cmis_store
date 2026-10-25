@@ -1,0 +1,613 @@
+{
+  "categories": [
+    {
+      "id": "cmr922oiy0001oou1w0m9so0k",
+      "name": "UPS Batteries",
+      "slug": "ups-batteries",
+      "description": "Sealed maintenance-free batteries for UPS systems",
+      "image": null,
+      "imageId": null,
+      "isActive": true,
+      "sortOrder": 0,
+      "createdAt": "2026-07-06T10:06:53.098Z",
+      "updatedAt": "2026-07-27T10:14:05.387Z",
+      "_count": {
+        "products": 1
+      }
+    },
+    {
+      "id": "cmr8ycr56000004kyihagzaix",
+      "name": "Lithium Battery",
+      "slug": "lithium-battery",
+      "description": "",
+      "image": null,
+      "imageId": null,
+      "isActive": true,
+      "sortOrder": 1,
+      "createdAt": "2026-07-06T08:22:44.586Z",
+      "updatedAt": "2026-07-06T08:22:44.586Z",
+      "_count": {
+        "products": 1
+      }
+    },
+    {
+      "id": "cmr922oiw0000oou110ljcmkz",
+      "name": "Lead Acid",
+      "slug": "lithium-batteries",
+      "description": "High-performance non-maintenance lithium batteries",
+      "image": null,
+      "imageId": null,
+      "isActive": true,
+      "sortOrder": 2,
+      "createdAt": "2026-07-06T10:06:53.096Z",
+      "updatedAt": "2026-07-27T10:14:05.478Z",
+      "_count": {
+        "products": 3
+      }
+    },
+    {
+      "id": "cmr922ot00003oou1shd3fjcx",
+      "name": "Inverter Batteries",
+      "slug": "inverter-batteries",
+      "description": "Long-life inverter batteries for home and office",
+      "image": null,
+      "imageId": null,
+      "isActive": true,
+      "sortOrder": 3,
+      "createdAt": "2026-07-06T10:06:53.460Z",
+      "updatedAt": "2026-07-27T10:14:05.558Z",
+      "_count": {
+        "products": 1
+      }
+    },
+    {
+      "id": "cmr922oj20002oou1ej57ewtn",
+      "name": "Vehicle Batteries",
+      "slug": "vehicle-batteries",
+      "description": "Automotive batteries for two-wheelers and four-wheelers",
+      "image": null,
+      "imageId": null,
+      "isActive": true,
+      "sortOrder": 4,
+      "createdAt": "2026-07-06T10:06:53.102Z",
+      "updatedAt": "2026-07-27T10:14:05.627Z",
+      "_count": {
+        "products": 1
+      }
+    }
+  ],
+  "products": [
+    {
+      "id": "cmr8ye69y000104kyxnqixyq8",
+      "name": "12V -  Z4 / 4Ah / 4LB Perfect Lithium Batteries",
+      "slug": "12v-z4-4ah-4lb-perfect-lithium-batteries",
+      "description": "Versatile 4LB capacity battery balanced for performance with a 0.726 Kg weight and 11x7x9 cm size.",
+      "shortDesc": "Versatile 4LB capacity battery balanced for performance with a 0.726 Kg weight and 11x7x9 cm size.",
+      "sku": "CMIP 12 - 04",
+      "price": "1200",
+      "dealerPrice": "1000",
+      "taxRate": "18",
+      "categoryId": "cmr8ycr56000004kyihagzaix",
+      "isActive": true,
+      "isFeatured": true,
+      "warrantyMonths": 25,
+      "weight": null,
+      "datasheetUrl": "",
+      "metaTitle": "",
+      "metaDesc": "",
+      "sortOrder": 0,
+      "createdAt": "2026-07-06T08:23:50.854Z",
+      "updatedAt": "2026-07-21T12:22:52.268Z",
+      "images": [
+        {
+          "id": "cmrek2cto0000f0u1kdz8j0zv",
+          "productId": "cmr8ye69y000104kyxnqixyq8",
+          "url": "https://res.cloudinary.com/delk61fp0/image/upload/v1783664919/cmi-batteries/products/s8in176wrhlywpevq83x.jpg",
+          "publicId": "cmi-batteries/products/s8in176wrhlywpevq83x",
+          "altText": "12V -  Z4 / 4Ah / 4LB Perfect Lithium Batteries",
+          "isPrimary": true,
+          "sortOrder": 0
+        },
+        {
+          "id": "cmrek2cto0001f0u1fa9cbq2d",
+          "productId": "cmr8ye69y000104kyxnqixyq8",
+          "url": "https://res.cloudinary.com/delk61fp0/image/upload/v1783664953/cmi-batteries/products/x4un5i2rcdb1rgodaliu.jpg",
+          "publicId": "cmi-batteries/products/x4un5i2rcdb1rgodaliu",
+          "altText": "12V -  Z4 / 4Ah / 4LB Perfect Lithium Batteries",
+          "isPrimary": false,
+          "sortOrder": 1
+        }
+      ],
+      "category": {
+        "id": "cmr8ycr56000004kyihagzaix",
+        "name": "Lithium Battery",
+        "slug": "lithium-battery"
+      },
+      "inventory": {
+        "id": "cmr8ye6mg000204kyxmti42ec",
+        "productId": "cmr8ye69y000104kyxnqixyq8",
+        "quantity": 100,
+        "reservedQuantity": 5,
+        "lowStockThreshold": 10,
+        "updatedAt": "2026-07-15T11:21:56.547Z"
+      },
+      "specs": []
+    },
+    {
+      "id": "cmrbmnbnc0000lwu1btc9szkh",
+      "name": "12V -  Z5 / 5Ah / 5LB Perfect Lithium Batteries",
+      "slug": "12v-z5-5ah-5lb-perfect-lithium-batteries",
+      "description": "High cranking power, vibration resistant, and completely maintenance-free. Compatible with all major two-wheeler brands.",
+      "shortDesc": "Sealed maintenance-free battery for motorcycles and scooters",
+      "sku": "CMIP12-5",
+      "price": "1200",
+      "dealerPrice": "900",
+      "taxRate": "18",
+      "categoryId": "cmr922oj20002oou1ej57ewtn",
+      "isActive": true,
+      "isFeatured": true,
+      "warrantyMonths": 12,
+      "weight": null,
+      "datasheetUrl": "",
+      "metaTitle": "",
+      "metaDesc": "",
+      "sortOrder": -1,
+      "createdAt": "2026-07-08T05:18:20.856Z",
+      "updatedAt": "2026-07-21T12:22:52.208Z",
+      "images": [
+        {
+          "id": "cmrek2quj0002f0u1xr3mmtrg",
+          "productId": "cmrbmnbnc0000lwu1btc9szkh",
+          "url": "https://res.cloudinary.com/delk61fp0/image/upload/v1783664977/cmi-batteries/products/kxsipcbzis17wm11lqwi.jpg",
+          "publicId": "cmi-batteries/products/kxsipcbzis17wm11lqwi",
+          "altText": "12V -  Z5 / 5Ah / 5LB Perfect Lithium Batteries",
+          "isPrimary": true,
+          "sortOrder": 0
+        }
+      ],
+      "category": {
+        "id": "cmr922oj20002oou1ej57ewtn",
+        "name": "Vehicle Batteries",
+        "slug": "vehicle-batteries"
+      },
+      "inventory": {
+        "id": "cmrbmnbu00005lwu13l66k195",
+        "productId": "cmrbmnbnc0000lwu1btc9szkh",
+        "quantity": 104,
+        "reservedQuantity": 0,
+        "lowStockThreshold": 10,
+        "updatedAt": "2026-07-10T06:29:39.967Z"
+      },
+      "specs": [
+        {
+          "id": "cmrek2qxk0003f0u1mll93e2k",
+          "productId": "cmrbmnbnc0000lwu1btc9szkh",
+          "label": "Capacity",
+          "value": "2.5",
+          "unit": "Ah",
+          "sortOrder": 1
+        },
+        {
+          "id": "cmrek2qxk0004f0u1bn7gggl7",
+          "productId": "cmrbmnbnc0000lwu1btc9szkh",
+          "label": "Voltage",
+          "value": "12",
+          "unit": "V",
+          "sortOrder": 2
+        },
+        {
+          "id": "cmrek2qxk0005f0u1cq2izn78",
+          "productId": "cmrbmnbnc0000lwu1btc9szkh",
+          "label": "Type",
+          "value": "VRLA Sealed",
+          "unit": "",
+          "sortOrder": 3
+        },
+        {
+          "id": "cmrek2qxk0006f0u1s5s08mjd",
+          "productId": "cmrbmnbnc0000lwu1btc9szkh",
+          "label": "Weight",
+          "value": "0.92",
+          "unit": "kg",
+          "sortOrder": 4
+        }
+      ]
+    },
+    {
+      "id": "cmr922qci0008oou1aeynp75i",
+      "name": "Perfect LiFe 100Ah Lithium Iron Battery",
+      "slug": "perfect-life-100ah-lithium-iron-battery",
+      "description": "Industry-leading lithium iron phosphate battery offering superior cycle life, zero maintenance, and consistent power output. Perfect for residential solar systems, inverters, and telecom applications.",
+      "shortDesc": "100Ah LiFePO4 battery \u2014 ideal for solar and inverter setups",
+      "sku": "PB-LIFE-100",
+      "price": "32500",
+      "dealerPrice": "28000",
+      "taxRate": "18",
+      "categoryId": "cmr922oiw0000oou110ljcmkz",
+      "isActive": true,
+      "isFeatured": true,
+      "warrantyMonths": 24,
+      "weight": null,
+      "datasheetUrl": "",
+      "metaTitle": "",
+      "metaDesc": "",
+      "sortOrder": 0,
+      "createdAt": "2026-07-06T10:06:55.458Z",
+      "updatedAt": "2026-07-16T07:35:07.880Z",
+      "images": [
+        {
+          "id": "cmrek639i0007f0u1gfa9dy4p",
+          "productId": "cmr922qci0008oou1aeynp75i",
+          "url": "https://res.cloudinary.com/delk61fp0/image/upload/v1783665133/cmi-batteries/products/xuh4sy0lisyos7n8vwje.jpg",
+          "publicId": "cmi-batteries/products/xuh4sy0lisyos7n8vwje",
+          "altText": "Perfect LiFe 100Ah Lithium Iron Battery",
+          "isPrimary": true,
+          "sortOrder": 0
+        }
+      ],
+      "category": {
+        "id": "cmr922oiw0000oou110ljcmkz",
+        "name": "Lead Acid",
+        "slug": "lithium-batteries"
+      },
+      "inventory": {
+        "id": "cmr922qig000foou1i0l4m7as",
+        "productId": "cmr922qci0008oou1aeynp75i",
+        "quantity": 46,
+        "reservedQuantity": 1,
+        "lowStockThreshold": 10,
+        "updatedAt": "2026-07-15T11:22:18.705Z"
+      },
+      "specs": [
+        {
+          "id": "cmrek63cd0008f0u1qbma66yw",
+          "productId": "cmr922qci0008oou1aeynp75i",
+          "label": "Capacity",
+          "value": "100",
+          "unit": "Ah",
+          "sortOrder": 1
+        },
+        {
+          "id": "cmrek63cd0009f0u144bao1r1",
+          "productId": "cmr922qci0008oou1aeynp75i",
+          "label": "Voltage",
+          "value": "12",
+          "unit": "V",
+          "sortOrder": 2
+        },
+        {
+          "id": "cmrek63cd000af0u1vjpjkcbg",
+          "productId": "cmr922qci0008oou1aeynp75i",
+          "label": "Chemistry",
+          "value": "LiFePO4",
+          "unit": "",
+          "sortOrder": 3
+        },
+        {
+          "id": "cmrek63cd000bf0u1kazubape",
+          "productId": "cmr922qci0008oou1aeynp75i",
+          "label": "Cycle Life",
+          "value": "2000+",
+          "unit": "cycles",
+          "sortOrder": 4
+        },
+        {
+          "id": "cmrek63cd000cf0u14eyd8tso",
+          "productId": "cmr922qci0008oou1aeynp75i",
+          "label": "Weight",
+          "value": "13",
+          "unit": "kg",
+          "sortOrder": 5
+        },
+        {
+          "id": "cmrek63cd000df0u1x8bbdz9d",
+          "productId": "cmr922qci0008oou1aeynp75i",
+          "label": "Dimensions",
+          "value": "326\u00d7175\u00d7220",
+          "unit": "mm",
+          "sortOrder": 6
+        }
+      ]
+    },
+    {
+      "id": "cmr922qxz000noou1y5a6bpp0",
+      "name": "Perfect Power 150Ah Inverter Battery",
+      "slug": "perfect-power-150ah-inverter-battery",
+      "description": "Heavy-duty tall tubular battery engineered for maximum backup in power-intensive environments. Ideal for home inverters up to 2KVA.",
+      "shortDesc": "Tall tubular inverter battery for long backup hours",
+      "sku": "PB-INV-150",
+      "price": "14500",
+      "dealerPrice": "12500",
+      "taxRate": "12",
+      "categoryId": "cmr922ot00003oou1shd3fjcx",
+      "isActive": true,
+      "isFeatured": true,
+      "warrantyMonths": 24,
+      "weight": null,
+      "datasheetUrl": "",
+      "metaTitle": "",
+      "metaDesc": "",
+      "sortOrder": 1,
+      "createdAt": "2026-07-06T10:06:56.231Z",
+      "updatedAt": "2026-07-16T07:35:14.406Z",
+      "images": [
+        {
+          "id": "cmrek6rbu000ef0u1zu8901f2",
+          "productId": "cmr922qxz000noou1y5a6bpp0",
+          "url": "https://res.cloudinary.com/delk61fp0/image/upload/v1783665152/cmi-batteries/products/j3wzlcieuacnlfg3ttph.jpg",
+          "publicId": "cmi-batteries/products/j3wzlcieuacnlfg3ttph",
+          "altText": "Perfect Power 150Ah Inverter Battery",
+          "isPrimary": true,
+          "sortOrder": 0
+        }
+      ],
+      "category": {
+        "id": "cmr922ot00003oou1shd3fjcx",
+        "name": "Inverter Batteries",
+        "slug": "inverter-batteries"
+      },
+      "inventory": {
+        "id": "cmr922r3n000toou12627wy3f",
+        "productId": "cmr922qxz000noou1y5a6bpp0",
+        "quantity": 89,
+        "reservedQuantity": 1,
+        "lowStockThreshold": 10,
+        "updatedAt": "2026-07-15T11:22:18.741Z"
+      },
+      "specs": [
+        {
+          "id": "cmrek6rek000ff0u18ruy4cl7",
+          "productId": "cmr922qxz000noou1y5a6bpp0",
+          "label": "Capacity",
+          "value": "150",
+          "unit": "Ah",
+          "sortOrder": 1
+        },
+        {
+          "id": "cmrek6rek000gf0u1rkwmbxby",
+          "productId": "cmr922qxz000noou1y5a6bpp0",
+          "label": "Voltage",
+          "value": "12",
+          "unit": "V",
+          "sortOrder": 2
+        },
+        {
+          "id": "cmrek6rek000hf0u14udebxq0",
+          "productId": "cmr922qxz000noou1y5a6bpp0",
+          "label": "Type",
+          "value": "Tall Tubular",
+          "unit": "",
+          "sortOrder": 3
+        },
+        {
+          "id": "cmrek6rek000if0u1hjii13kk",
+          "productId": "cmr922qxz000noou1y5a6bpp0",
+          "label": "Backup",
+          "value": "8-10",
+          "unit": "hrs",
+          "sortOrder": 4
+        },
+        {
+          "id": "cmrek6rek000jf0u1f31ndzef",
+          "productId": "cmr922qxz000noou1y5a6bpp0",
+          "label": "Weight",
+          "value": "52",
+          "unit": "kg",
+          "sortOrder": 5
+        }
+      ]
+    },
+    {
+      "id": "cmr922qne000goou1njyko9yz",
+      "name": "Perfect LiFe 200Ah Lithium Iron Battery",
+      "slug": "perfect-life-200ah-lithium-iron-battery",
+      "description": "High-capacity 200Ah lithium iron phosphate battery designed for commercial solar systems, data centers, and critical power applications.",
+      "shortDesc": "200Ah LiFePO4 for heavy-duty solar and commercial use",
+      "sku": "PB-LIFE-200",
+      "price": "62000",
+      "dealerPrice": "54000",
+      "taxRate": "18",
+      "categoryId": "cmr922oiw0000oou110ljcmkz",
+      "isActive": true,
+      "isFeatured": true,
+      "warrantyMonths": 24,
+      "weight": null,
+      "datasheetUrl": "",
+      "metaTitle": "",
+      "metaDesc": "",
+      "sortOrder": 2,
+      "createdAt": "2026-07-06T10:06:55.850Z",
+      "updatedAt": "2026-07-16T07:35:14.450Z",
+      "images": [
+        {
+          "id": "cmrek7b16000kf0u18ilk5dk3",
+          "productId": "cmr922qne000goou1njyko9yz",
+          "url": "https://res.cloudinary.com/delk61fp0/image/upload/v1783665190/cmi-batteries/products/gjyjcwabiv639ynfnef8.jpg",
+          "publicId": "cmi-batteries/products/gjyjcwabiv639ynfnef8",
+          "altText": "Perfect LiFe 200Ah Lithium Iron Battery",
+          "isPrimary": true,
+          "sortOrder": 0
+        }
+      ],
+      "category": {
+        "id": "cmr922oiw0000oou110ljcmkz",
+        "name": "Lead Acid",
+        "slug": "lithium-batteries"
+      },
+      "inventory": {
+        "id": "cmr922qt4000moou1928uldcm",
+        "productId": "cmr922qne000goou1njyko9yz",
+        "quantity": 172,
+        "reservedQuantity": 0,
+        "lowStockThreshold": 10,
+        "updatedAt": "2026-07-10T06:33:12.748Z"
+      },
+      "specs": [
+        {
+          "id": "cmrek7b45000lf0u1p8m5xeis",
+          "productId": "cmr922qne000goou1njyko9yz",
+          "label": "Capacity",
+          "value": "200",
+          "unit": "Ah",
+          "sortOrder": 1
+        },
+        {
+          "id": "cmrek7b45000mf0u1oyzxrsnm",
+          "productId": "cmr922qne000goou1njyko9yz",
+          "label": "Voltage",
+          "value": "12",
+          "unit": "V",
+          "sortOrder": 2
+        },
+        {
+          "id": "cmrek7b45000nf0u1o5ipmh0p",
+          "productId": "cmr922qne000goou1njyko9yz",
+          "label": "Chemistry",
+          "value": "LiFePO4",
+          "unit": "",
+          "sortOrder": 3
+        },
+        {
+          "id": "cmrek7b45000of0u1mntrkn9t",
+          "productId": "cmr922qne000goou1njyko9yz",
+          "label": "Cycle Life",
+          "value": "2000+",
+          "unit": "cycles",
+          "sortOrder": 4
+        },
+        {
+          "id": "cmrek7b45000pf0u1hxv1xibb",
+          "productId": "cmr922qne000goou1njyko9yz",
+          "label": "Weight",
+          "value": "24",
+          "unit": "kg",
+          "sortOrder": 5
+        }
+      ]
+    },
+    {
+      "id": "cmr922rj60010oou1tu7nu00v",
+      "name": "Perfect Guard 7Ah UPS Battery",
+      "slug": "perfect-guard-7ah-ups-battery",
+      "description": "Reliable sealed maintenance-free battery providing consistent power backup for UPS systems. Available in 6V and 12V configurations.",
+      "shortDesc": "Sealed lead-acid battery for home and office UPS systems",
+      "sku": "PB-UPS-7",
+      "price": "1850",
+      "dealerPrice": "1500",
+      "taxRate": "18",
+      "categoryId": "cmr922oiy0001oou1w0m9so0k",
+      "isActive": true,
+      "isFeatured": true,
+      "warrantyMonths": 18,
+      "weight": null,
+      "datasheetUrl": "",
+      "metaTitle": "",
+      "metaDesc": "",
+      "sortOrder": 4,
+      "createdAt": "2026-07-06T10:06:56.994Z",
+      "updatedAt": "2026-07-10T06:07:31.300Z",
+      "images": [],
+      "category": {
+        "id": "cmr922oiy0001oou1w0m9so0k",
+        "name": "UPS Batteries",
+        "slug": "ups-batteries"
+      },
+      "inventory": {
+        "id": "cmr922rpg0016oou1ezqsf4tz",
+        "productId": "cmr922rj60010oou1tu7nu00v",
+        "quantity": 172,
+        "reservedQuantity": 1,
+        "lowStockThreshold": 10,
+        "updatedAt": "2026-07-08T12:11:39.014Z"
+      },
+      "specs": [
+        {
+          "id": "cmrdf77m100040ku1qohqhxq2",
+          "productId": "cmr922rj60010oou1tu7nu00v",
+          "label": "Capacity",
+          "value": "7",
+          "unit": "Ah",
+          "sortOrder": 1
+        },
+        {
+          "id": "cmrdf77m100050ku1flkr83mq",
+          "productId": "cmr922rj60010oou1tu7nu00v",
+          "label": "Voltage",
+          "value": "12",
+          "unit": "V",
+          "sortOrder": 2
+        },
+        {
+          "id": "cmrdf77m100060ku1foqya8tm",
+          "productId": "cmr922rj60010oou1tu7nu00v",
+          "label": "Type",
+          "value": "AGM VRLA",
+          "unit": "",
+          "sortOrder": 3
+        },
+        {
+          "id": "cmrdf77m100070ku1p9tj9puo",
+          "productId": "cmr922rj60010oou1tu7nu00v",
+          "label": "Dimensions",
+          "value": "151\u00d765\u00d797",
+          "unit": "mm",
+          "sortOrder": 4
+        },
+        {
+          "id": "cmrdf77m100080ku11u9drpv6",
+          "productId": "cmr922rj60010oou1tu7nu00v",
+          "label": "Weight",
+          "value": "2.1",
+          "unit": "kg",
+          "sortOrder": 5
+        }
+      ]
+    },
+    {
+      "id": "cmrfwpggm00052wu1pw07vsdh",
+      "name": "REDON LIPRO 12V - 2000 VA Perfect Lithium Batteries",
+      "slug": "redon-lipro-12v-2000-va-perfect-lithium-batteries",
+      "description": "REDON LIPRO 12V - 2000 VA Perfect Lithium Batteries",
+      "shortDesc": "",
+      "sku": "REDON LIPRO2000",
+      "price": "110000",
+      "dealerPrice": "100000",
+      "taxRate": "18",
+      "categoryId": "cmr922oiw0000oou110ljcmkz",
+      "isActive": true,
+      "isFeatured": true,
+      "warrantyMonths": 12,
+      "weight": null,
+      "datasheetUrl": null,
+      "metaTitle": "",
+      "metaDesc": "",
+      "sortOrder": 3,
+      "createdAt": "2026-07-11T05:11:01.270Z",
+      "updatedAt": "2026-07-16T07:35:14.490Z",
+      "images": [],
+      "category": {
+        "id": "cmr922oiw0000oou110ljcmkz",
+        "name": "Lead Acid",
+        "slug": "lithium-batteries"
+      },
+      "inventory": {
+        "id": "cmrfwpgkf00072wu1b34we5nm",
+        "productId": "cmrfwpggm00052wu1pw07vsdh",
+        "quantity": 100,
+        "reservedQuantity": 1,
+        "lowStockThreshold": 10,
+        "updatedAt": "2026-07-15T11:21:56.501Z"
+      },
+      "specs": [
+        {
+          "id": "cmrfwpgid00062wu1l06x3pz4",
+          "productId": "cmrfwpggm00052wu1pw07vsdh",
+          "label": "",
+          "value": "",
+          "unit": "",
+          "sortOrder": 0
+        }
+      ]
+    }
+  ]
+}

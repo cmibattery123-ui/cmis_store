@@ -6,6 +6,8 @@ import { DEFAULT_PRODUCTS } from "@/lib/default-data";
 import { db } from "@/lib/db";
 import { normalizeWhatsAppPhone, formatPhoneDisplay } from "@/lib/whatsapp";
 
+import { SITE_CONFIG } from "@/lib/constants";
+
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 0;
@@ -14,12 +16,38 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+function findDefaultProduct(slug: string) {
+  return (
+    DEFAULT_PRODUCTS.find(
+      (p) =>
+        p.slug === slug ||
+        p.slug === `${slug}-battery` ||
+        p.slug === `${slug}-lithium-iron-battery` ||
+        p.slug.replace(/-battery$/, "") === slug ||
+        p.slug.replace(/-lithium-iron-battery$/, "") === slug ||
+        p.id === slug ||
+        p.sku.toLowerCase() === slug.toLowerCase()
+    ) || null
+  );
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
 
   try {
-    const dbProduct = await db.product.findUnique({
-      where: { slug, isActive: true },
+    const dbProduct = await db.product.findFirst({
+      where: {
+        OR: [
+          { slug },
+          { slug: `${slug}-battery` },
+          { slug: `${slug}-lithium-iron-battery` },
+          { slug: slug.replace(/-battery$/, "") },
+          { slug: slug.replace(/-lithium-iron-battery$/, "") },
+          { id: slug },
+          { sku: slug.toUpperCase() },
+        ],
+        isActive: true,
+      },
       select: { name: true, shortDesc: true, description: true, metaTitle: true, metaDesc: true },
     });
     if (dbProduct) {
@@ -30,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   } catch {}
 
-  const product = DEFAULT_PRODUCTS.find((p) => p.slug === slug);
+  const product = findDefaultProduct(slug);
   if (!product) return { title: "Battery Product | Perfect Batteries" };
 
   return {
@@ -41,11 +69,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  let productData = DEFAULT_PRODUCTS.find((p) => p.slug === slug) || null;
+  let productData = findDefaultProduct(slug);
 
   try {
-    const dbProduct = await db.product.findUnique({
-      where: { slug, isActive: true },
+    const dbProduct = await db.product.findFirst({
+      where: {
+        OR: [
+          { slug },
+          { slug: `${slug}-battery` },
+          { slug: `${slug}-lithium-iron-battery` },
+          { slug: slug.replace(/-battery$/, "") },
+          { slug: slug.replace(/-lithium-iron-battery$/, "") },
+          { id: slug },
+          { sku: slug.toUpperCase() },
+        ],
+        isActive: true,
+      },
       include: {
         images: { orderBy: { sortOrder: "asc" } },
         category: { select: { id: true, name: true, slug: true } },
@@ -69,8 +108,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
   let paymentConfig = {
     razorpayEnabled: true,
     whatsappEnabled: true,
-    whatsappPhone: "914224227227",
-    whatsappPhoneDisplay: "+91 422 422 7227",
+    whatsappPhone: SITE_CONFIG.whatsapp || "917339670396",
+    whatsappPhoneDisplay: SITE_CONFIG.whatsappDisplay || "+91 73396 70396",
     whatsappMessage:
       "Hello Chinna Mayil Industries, I would like to inquire about purchasing {product_name} (SKU: {sku}) priced at {price}. Please provide ordering, payment, and delivery details.",
   };

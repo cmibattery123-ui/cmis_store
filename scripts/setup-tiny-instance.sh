@@ -41,7 +41,7 @@ fi
 
 # 3. Create persistent directories on disk
 echo "⚙️ Creating persistent data directories..."
-mkdir -p data/postgres data/backups
+mkdir -p data data/backups
 chmod -R 775 data
 
 # 4. Create .env if not exists
@@ -54,15 +54,11 @@ if [ ! -f .env ]; then
 PORT=3000
 NODE_ENV=production
 NODE_OPTIONS="--max-old-space-size=1024"
-NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_URL="http://localhost"
 NEXTAUTH_SECRET="change-this-to-a-secure-random-secret-key"
-DATABASE_URL="postgresql://postgres:postgres@db:5432/cmis_store?schema=public"
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=cmis_store
-DATABASE_SSL=false
+DATABASE_URL="file:./data/cmis.db"
 ENVFILE
-    echo "✅ Generated starter .env file configured for t4.small local database."
+    echo "✅ Generated starter .env file configured for t4.small local SQLite database."
   fi
 fi
 
@@ -72,7 +68,7 @@ docker compose up -d --build
 
 echo "===================================================================="
 echo "🎉 SUCCESS: Application and Local Database are Running on t4.small!"
-echo "• Web App:      http://<instance-ip>:3000"
-echo "• Database:     Maintained locally in ./data/postgres (zero RDS fees)"
-echo "• Memory Limit: 1300MB (Web) + 400MB (DB) - Perfectly tuned for 2GB RAM"
+echo "• Web App:      http://<instance-ip> (port 80 / 3000)"
+echo "• Database:     Maintained locally in ./data/cmis.db (zero RDS fees)"
+echo "• Memory Limit: 1500MB (Web) - Perfectly tuned for 2GB RAM + 2GB swap"
 echo "===================================================================="

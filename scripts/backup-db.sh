@@ -14,9 +14,14 @@ if docker ps | grep -q "cmis-db"; then
   echo "📦 Backing up PostgreSQL database from cmis-db..."
   docker exec cmis-db pg_dump -U postgres cmis_store | gzip > "$BACKUP_FILE"
   echo "✅ PostgreSQL backup created: ${BACKUP_FILE} ($(du -h "$BACKUP_FILE" | cut -f1))"
+elif [ -f "data/cmis.db" ]; then
+  BACKUP_FILE="${BACKUP_DIR}/cmis_${TIMESTAMP}.db.gz"
+  echo "📦 Backing up SQLite database file (data/cmis.db)..."
+  gzip -c data/cmis.db > "$BACKUP_FILE"
+  echo "✅ SQLite backup created: ${BACKUP_FILE} ($(du -h "$BACKUP_FILE" | cut -f1))"
 elif [ -f "data/app.db" ]; then
   BACKUP_FILE="${BACKUP_DIR}/app_${TIMESTAMP}.db.gz"
-  echo "📦 Backing up SQLite database file..."
+  echo "📦 Backing up SQLite database file (data/app.db)..."
   gzip -c data/app.db > "$BACKUP_FILE"
   echo "✅ SQLite backup created: ${BACKUP_FILE} ($(du -h "$BACKUP_FILE" | cut -f1))"
 else

@@ -1,0 +1,234 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CMIS Store - Single Low-Cost EC2 Instance with Static IP (No Elastic Beanstalk, No Auto-Scaling)'
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: 't4g.small'
+    AllowedValues:
+      - 't4g.small'
+      - 't4g.medium'
+      - 't3.small'
+      - 't3a.small'
+    Description: 'Cheapest medium-volume EC2 tier (t4g.small ARM64 ~$12/mo, t3.small x86_64 ~$15/mo)'
+
+  DiskSizeGB:
+    Type: Number
+    Default: 20
+    MinValue: 10
+    MaxValue: 100
+    Description: 'EBS gp3 Root disk volume size in GB'
+
+  ExistingElasticIpAllocationId:
+    Type: String
+    Default: ''
+    Description: 'Optional: Existing Elastic IP Allocation ID to reuse. Leave blank to allocate a new Static IP.'
+
+Conditions:
+  CreateNewEip: !Equals [!Ref ExistingElasticIpAllocationId, '']
+  IsArm64: !Or
+    - !Equals [!Ref InstanceType, 't4g.small']
+    - !Equals [!Ref InstanceType, 't4g.medium']
+
+Mappings:
+  # Ubuntu 24.04 LTS official Canonical AMIs in ap-south-1
+  RegionAmiMap:
+    ap-south-1:
+      arm64: 'ami-072d8688e7b3aba7a'
+      x86: 'ami-0fc5120b2d80d4749'
+
+Resources:
+  # 1. IAM Role & Instance Profile for AWS Systems Manager (SSM) and ECR
+  CmisEc2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: cmis-ec2-standalone-role
+      AssumeRolePolicyDocument:
+        Version: '2008-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ec2.amazonaws.com]
+            Action: ['sts:AssumeRole']
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+
+  CmisEc2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: cmis-ec2-standalone-profile
+      Roles:
+        - !Ref CmisEc2Role
+
+  # 2. Security Group (Port 80 HTTP, Port 443 HTTPS, Port 22 SSH)
+  CmisSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Security group for standalone CMIS Store instance'
+      GroupName: cmis-store-standalone-sg
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: 'HTTP Web Traffic'
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: 'HTTPS Web Traffic'
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: 'SSH Administration'
+      Tags:
+        - Key: Name
+          Value: cmis-store-sg
+        - Key: Project
+          Value: cmis-store
+
+  # 3. Standalone EC2 Instance
+  CmisEc2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !If
+        - IsArm64
+        - !FindInMap [RegionAmiMap, !Ref 'AWS::Region', arm64]
+        - !FindInMap [RegionAmiMap, !Ref 'AWS::Region', x86]
+      IamInstanceProfile: !Ref CmisEc2InstanceProfile
+      SecurityGroupIds:
+        - !Ref CmisSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: !Ref DiskSizeGB
+            VolumeType: gp3
+            DeleteOnTermination: true
+            Encrypted: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euxo pipefail
+
+          # Update and configure swap (2GB swap gives 4GB total virtual memory)
+          if [ $(free -m | awk '/^Swap:/ {print $2}') -lt 1000 ]; then
+            fallocate -l 2G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=2048
+            chmod 600 /swapfile
+            mkswap /swapfile
+            swapon /swapfile
+            echo '/swapfile none swap sw 0 0' >> /etc/fstab
+            sysctl vm.swappiness=20
+            echo 'vm.swappiness=20' >> /etc/sysctl.conf
+          fi
+
+          # Install Docker and dependencies on Ubuntu
+          apt-get update -y
+          apt-get install -y ca-certificates curl gnupg git
+          install -m 0755 -d /etc/apt/keyrings
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+          chmod a+r /etc/apt/keyrings/docker.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+          apt-get update -y
+          apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+          systemctl enable --now docker
+          usermod -aG docker ubuntu || true
+
+          # Clone repository and set up directory
+          mkdir -p /opt/cmis_store
+          git clone https://github.com/cmibattery123-ui/cmis_store.git /opt/cmis_store || (cd /opt/cmis_store && git pull)
+          cd /opt/cmis_store
+          mkdir -p data data/backups
+          chmod -R 775 data
+
+          # Ensure starter .env exists if not provided
+          if [ ! -f .env ]; then
+            if [ -f .env.example ]; then
+              cp .env.example .env
+            else
+              cat << 'EOF' > .env
+          PORT=3000
+          NODE_ENV=production
+          NODE_OPTIONS="--max-old-space-size=1024"
+          NEXTAUTH_URL="http://localhost"
+          NEXTAUTH_SECRET="$(openssl rand -hex 32)"
+          DATABASE_URL="file:./data/cmis.db"
+          EOF
+            fi
+          fi
+
+          # Create systemd auto-start service
+          cat << 'SERVICE' > /etc/systemd/system/cmis-store.service
+          [Unit]
+          Description=CMIS Store Application (Docker Compose)
+          Requires=docker.service
+          After=docker.service
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          WorkingDirectory=/opt/cmis_store
+          ExecStart=/usr/bin/docker compose up -d --build
+          ExecStop=/usr/bin/docker compose down
+          TimeoutStartSec=0
+
+          [Install]
+          WantedBy=multi-user.target
+          SERVICE
+
+          systemctl daemon-reload
+          systemctl enable cmis-store
+          systemctl start cmis-store
+
+      Tags:
+        - Key: Name
+          Value: cmis-store-server
+        - Key: Project
+          Value: cmis-store
+
+  # 4. Elastic IP (Static IP)
+  CmisStaticElasticIp:
+    Type: AWS::EC2::EIP
+    Condition: CreateNewEip
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: cmis-store-static-ip
+        - Key: Project
+          Value: cmis-store
+
+  # 5. Associate Elastic IP with the Standalone Instance
+  CmisEipAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      InstanceId: !Ref CmisEc2Instance
+      AllocationId: !If
+        - CreateNewEip
+        - !GetAtt CmisStaticElasticIp.AllocationId
+        - !Ref ExistingElasticIpAllocationId
+
+Outputs:
+  InstanceId:
+    Description: 'ID of the standalone EC2 instance'
+    Value: !Ref CmisEc2Instance
+
+  StaticIpAddress:
+    Description: 'Static Elastic IP address for CMIS Store'
+    Value: !If
+      - CreateNewEip
+      - !Ref CmisStaticElasticIp
+      - !Ref ExistingElasticIpAllocationId
+
+  WebUrl:
+    Description: 'Direct HTTP Web URL'
+    Value: !If
+      - CreateNewEip
+      - !Sub 'http://${CmisStaticElasticIp}'
+      - !Sub 'http://${CmisEc2Instance.PublicIp}'
+
+  SSMConnectCommand:
+    Description: 'Connect to terminal via AWS Systems Manager without SSH keys'
+    Value: !Sub 'aws ssm start-session --target ${CmisEc2Instance} --region ${AWS::Region}'

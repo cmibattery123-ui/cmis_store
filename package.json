@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "deploy:eb": "git push origin main",
+    "deploy:ec2": "bash scripts/deploy-ec2.sh",
     "deploy": "pnpm run build && git push origin main",
     "start": "next start",
     "connect:server": "bash scripts/connect-server.sh",

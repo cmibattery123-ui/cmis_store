@@ -49,13 +49,13 @@ PRODUCTS = [
         "name": "12V -  Z4 / 4Ah / 4LB Perfect Lithium Batteries",
         "sku": "CMIP 12 - 04",
         "slug": "12v-z4-4ah-4lb-perfect-lithium-batteries",
+        "categorySlug": "lithium-battery",
         "shortDesc": "Versatile 4LB capacity battery balanced for performance with a 0.726 Kg weight and 11x7x9 cm size.",
         "description": "Versatile 4LB capacity battery balanced for performance with a 0.726 Kg weight and 11x7x9 cm size. Engineered with lithium technology for ultra-fast charging, lightweight build, and extended service life.",
         "price": 1200,
         "dealerPrice": 1000,
         "taxRate": 18,
         "warrantyMonths": 25,
-        "categoryId": "cmr8ycr56000004kyihagzaix",
         "isActive": 1,
         "isFeatured": 1,
         "sortOrder": 1,
@@ -90,13 +90,13 @@ PRODUCTS = [
         "name": "12V -  Z5 / 5Ah / 5LB Perfect Lithium Batteries",
         "sku": "CMIP12-5",
         "slug": "12v-z5-5ah-5lb-perfect-lithium-batteries",
+        "categorySlug": "vehicle-batteries",
         "shortDesc": "Sealed maintenance-free battery for motorcycles and scooters",
         "description": "High cranking power, vibration resistant, and completely maintenance-free. Compatible with all major two-wheeler brands.",
         "price": 1200,
         "dealerPrice": 900,
         "taxRate": 18,
         "warrantyMonths": 12,
-        "categoryId": "cmr922oj20002oou1ej57ewtn",
         "isActive": 1,
         "isFeatured": 1,
         "sortOrder": 2,
@@ -129,13 +129,13 @@ PRODUCTS = [
         "name": "Perfect LiFe 100Ah Lithium Iron Battery",
         "sku": "PB-LIFE-100",
         "slug": "perfect-life-100ah-lithium-iron-battery",
+        "categorySlug": "lithium-batteries",
         "shortDesc": "100Ah LiFePO4 battery — ideal for solar and inverter setups",
         "description": "Industry-leading lithium iron phosphate battery offering superior cycle life, zero maintenance, and consistent power output. Perfect for residential solar systems, inverters, and telecom applications.",
         "price": 32500,
         "dealerPrice": 28000,
         "taxRate": 18,
         "warrantyMonths": 24,
-        "categoryId": "cmr922oiw0000oou110ljcmkz",
         "isActive": 1,
         "isFeatured": 1,
         "sortOrder": 3,
@@ -170,13 +170,13 @@ PRODUCTS = [
         "name": "Perfect Power 150Ah Inverter Battery",
         "sku": "PB-INV-150",
         "slug": "perfect-power-150ah-inverter-battery",
+        "categorySlug": "inverter-batteries",
         "shortDesc": "Tall tubular inverter battery for long backup hours",
         "description": "Heavy-duty tall tubular battery engineered for maximum backup in power-intensive environments. Ideal for home inverters up to 2KVA.",
         "price": 14500,
         "dealerPrice": 12500,
         "taxRate": 12,
         "warrantyMonths": 24,
-        "categoryId": "cmr922ot00003oou1shd3fjcx",
         "isActive": 1,
         "isFeatured": 1,
         "sortOrder": 4,
@@ -210,13 +210,13 @@ PRODUCTS = [
         "name": "Perfect LiFe 200Ah Lithium Iron Battery",
         "sku": "PB-LIFE-200",
         "slug": "perfect-life-200ah-lithium-iron-battery",
+        "categorySlug": "lithium-batteries",
         "shortDesc": "200Ah LiFePO4 for heavy-duty solar and commercial use",
         "description": "High-capacity 200Ah lithium iron phosphate battery designed for commercial solar systems, data centers, and critical power applications.",
         "price": 62000,
         "dealerPrice": 54000,
         "taxRate": 18,
         "warrantyMonths": 24,
-        "categoryId": "cmr922oiw0000oou110ljcmkz",
         "isActive": 1,
         "isFeatured": 1,
         "sortOrder": 5,
@@ -250,13 +250,13 @@ PRODUCTS = [
         "name": "Perfect Guard 7Ah UPS Battery",
         "sku": "PB-UPS-7",
         "slug": "perfect-guard-7ah-ups-battery",
+        "categorySlug": "ups-batteries",
         "shortDesc": "Sealed lead-acid battery for home and office UPS systems",
         "description": "Reliable sealed maintenance-free battery providing consistent power backup for UPS systems. Available in 6V and 12V configurations.",
         "price": 1850,
         "dealerPrice": 1500,
         "taxRate": 18,
         "warrantyMonths": 18,
-        "categoryId": "cmr922oiy0001oou1w0m9so0k",
         "isActive": 1,
         "isFeatured": 1,
         "sortOrder": 6,
@@ -290,13 +290,13 @@ PRODUCTS = [
         "name": "REDON LIPRO 12V - 2000 VA Perfect Lithium Batteries",
         "sku": "REDON LIPRO2000",
         "slug": "redon-lipro-12v-2000-va-perfect-lithium-batteries",
+        "categorySlug": "lithium-batteries",
         "shortDesc": "12V 2000VA High-Efficiency Lithium Power System",
         "description": "REDON LIPRO 12V - 2000 VA Perfect Lithium Batteries with integrated smart BMS, ultra-high efficiency inverter support, and rapid charging.",
         "price": 110000,
         "dealerPrice": 100000,
         "taxRate": 18,
         "warrantyMonths": 12,
-        "categoryId": "cmr922oiw0000oou110ljcmkz",
         "isActive": 1,
         "isFeatured": 1,
         "sortOrder": 7,
@@ -340,7 +340,7 @@ def update_db(db_path):
     print(f"\nUpdating database: {db_path}")
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
-    now = datetime.datetime.utcnow().isoformat() + "Z"
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
     # 1. Upsert categories
     for cat in CATEGORIES:
@@ -358,6 +358,9 @@ def update_db(db_path):
                 VALUES (?, ?, ?, ?, NULL, NULL, 1, ?, ?, ?)
             """, (cat["id"], cat["name"], cat["slug"], cat["description"], cat["sortOrder"], now, now))
 
+    # Build category slug -> id mapping
+    cat_map = {row[1]: row[0] for row in cur.execute("SELECT id, slug FROM categories").fetchall()}
+
     # 2. Clean old products and child tables
     cur.execute("DELETE FROM product_specs")
     cur.execute("DELETE FROM product_images")
@@ -366,6 +369,7 @@ def update_db(db_path):
 
     # 3. Insert new products
     for p in PRODUCTS:
+        cat_id = cat_map.get(p.get("categorySlug")) or cat_map.get("lithium-batteries")
         cur.execute("""
             INSERT INTO products (
                 id, name, slug, description, shortDesc, sku, price, dealerPrice, taxRate,
@@ -374,7 +378,7 @@ def update_db(db_path):
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, ?, ?)
         """, (
             p["id"], p["name"], p["slug"], p["description"], p["shortDesc"], p["sku"],
-            p["price"], p["dealerPrice"], p["taxRate"], p["categoryId"], p["isActive"],
+            p["price"], p["dealerPrice"], p["taxRate"], cat_id, p["isActive"],
             p["isFeatured"], p["warrantyMonths"], p["name"], p["shortDesc"], p["sortOrder"],
             now, now
         ))

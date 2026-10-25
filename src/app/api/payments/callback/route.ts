@@ -10,7 +10,26 @@ export const dynamic = "force-dynamic";
  * Handles browser redirect from Razorpay Hosted Checkout (Payment Links).
  * Verifies signature, updates order/payment state to PAID, and redirects to success page.
  */
+function getPublicBaseUrl(request: NextRequest): string {
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const host = forwardedHost || request.headers.get("host");
+  const proto = request.headers.get("x-forwarded-proto") || (host?.includes("cmibattery.com") ? "https" : "http");
+
+  if (host && !host.includes("0.0.0.0") && !host.includes("localhost")) {
+    return `${proto}://${host}`;
+  }
+
+  const envUrl = process.env.NEXTAUTH_URL;
+  if (envUrl && !envUrl.includes("0.0.0.0") && !envUrl.includes("localhost")) {
+    return envUrl.replace(/\/$/, "");
+  }
+
+  return "http://13.205.205.233";
+}
+
 export async function GET(request: NextRequest) {
+  const baseUrl = getPublicBaseUrl(request);
+
   try {
     const { searchParams } = new URL(request.url);
     const orderId = searchParams.get("orderId") || searchParams.get("razorpay_payment_link_reference_id");
@@ -21,7 +40,7 @@ export async function GET(request: NextRequest) {
     const signature = searchParams.get("razorpay_signature");
 
     if (!orderId) {
-      return NextResponse.redirect(new URL("/checkout?error=Missing+order+reference", request.url));
+      return NextResponse.redirect(`${baseUrl}/checkout?error=Missing+order+reference`);
     }
 
     let keySecret =
@@ -107,12 +126,12 @@ export async function GET(request: NextRequest) {
         }
       });
 
-      return NextResponse.redirect(new URL(`/checkout/success?orderId=${encodeURIComponent(orderId)}`, request.url));
+      return NextResponse.redirect(`${baseUrl}/checkout/success?orderId=${encodeURIComponent(orderId)}`);
     }
 
-    return NextResponse.redirect(new URL(`/checkout?error=Payment+not+completed`, request.url));
+    return NextResponse.redirect(`${baseUrl}/checkout?error=Payment+not+completed`);
   } catch (error) {
     console.error("[Razorpay Callback Error]", error);
-    return NextResponse.redirect(new URL("/checkout?error=Payment+callback+failed", request.url));
+    return NextResponse.redirect(`${baseUrl}/checkout?error=Payment+callback+failed`);
   }
 }

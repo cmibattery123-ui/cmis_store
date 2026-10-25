@@ -1,22 +1,72 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { PhoneCall, X } from "lucide-react";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { motion, AnimatePresence } from "framer-motion";
-import { COMPANY_INFO } from "@/lib/constants";
-import { useWhatsAppSettings } from "@/store/whatsapp-settings";
+import { normalizeWhatsAppPhone, formatPhoneDisplay, buildTelUrl } from "@/lib/whatsapp";
+
+interface WhatsAppConfig {
+  whatsappPhone: string;
+  whatsappPhoneDisplay: string;
+  whatsappUrl: string;
+  telUrl: string;
+  whatsappEnabled: boolean;
+}
 
 export function FloatingContact() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const { whatsappUrl, whatsappPhoneDisplay, whatsappLocalDisplay, callPhoneDisplay, telUrl } = useWhatsAppSettings();
+  const [config, setConfig] = useState<WhatsAppConfig | null>(null);
 
-  const activeWaUrl = whatsappUrl || COMPANY_INFO.whatsappUrl;
-  const activeTelUrl = telUrl || `tel:${COMPANY_INFO.phoneRaw}`;
-  const displayWaPhone = whatsappPhoneDisplay || whatsappLocalDisplay || COMPANY_INFO.whatsappDisplay;
-  const displayCallPhone = callPhoneDisplay || COMPANY_INFO.phone;
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchWhatsAppSettings() {
+      try {
+        const res = await fetch("/api/payments/status", { cache: "no-store" });
+        if (res.ok && isMounted) {
+          const json = await res.json();
+          const data = json?.data;
+          if (data) {
+            const rawPhone = data.rawPhone || data.whatsappPhone || "";
+            const cleanPhone = normalizeWhatsAppPhone(rawPhone);
+            const phoneDisplay = data.whatsappPhoneDisplay || formatPhoneDisplay(rawPhone) || rawPhone;
+            const message =
+              data.whatsappMessage ||
+              "Hello Perfect Batteries, I would like to inquire about your products.";
+            const waUrl = cleanPhone
+              ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`
+              : "";
+            const tel = cleanPhone ? buildTelUrl(cleanPhone) : "";
+
+            setConfig({
+              whatsappPhone: cleanPhone,
+              whatsappPhoneDisplay: phoneDisplay,
+              whatsappUrl: waUrl,
+              telUrl: tel,
+              whatsappEnabled: data.whatsappEnabled !== undefined ? Boolean(data.whatsappEnabled) : true,
+            });
+          }
+        }
+      } catch (err) {
+        console.error("[FloatingContact] Failed to fetch WhatsApp settings:", err);
+      }
+    }
+
+    fetchWhatsAppSettings();
+
+    const handleUpdate = () => {
+      fetchWhatsAppSettings();
+    };
+
+    window.addEventListener("whatsapp-settings-updated", handleUpdate);
+    return () => {
+      isMounted = false;
+      window.removeEventListener("whatsapp-settings-updated", handleUpdate);
+    };
+  }, []);
 
   // Hide on admin, dealer, or customer dashboard routes
   if (
@@ -26,6 +76,15 @@ export function FloatingContact() {
   ) {
     return null;
   }
+
+  // If WhatsApp settings have loaded and WhatsApp is explicitly disabled by admin, hide the widget
+  if (config && !config.whatsappEnabled) {
+    return null;
+  }
+
+  const activeWaUrl = config?.whatsappUrl || "";
+  const activeTelUrl = config?.telUrl || "";
+  const displayPhone = config?.whatsappPhoneDisplay || config?.whatsappPhone || "";
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 pointer-events-auto">
@@ -54,50 +113,60 @@ export function FloatingContact() {
             </div>
 
             {/* WhatsApp Chat Link */}
-            <a
-              href={activeWaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 p-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 transition-all group"
-            >
-              <div className="w-9 h-9 rounded-xl bg-[#25D366] text-black flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
-                <WhatsAppIcon className="w-5 h-5" />
-              </div>
-              <div className="overflow-hidden">
-                <p className="text-xs font-bold leading-tight text-slate-900 dark:text-white">Chat on WhatsApp</p>
-                <p className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 truncate">{displayWaPhone}</p>
-              </div>
-            </a>
+            {activeWaUrl && (
+              <a
+                href={activeWaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 transition-all group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-[#25D366] text-black flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                  <WhatsAppIcon className="w-5 h-5" />
+                </div>
+                <div className="overflow-hidden">
+                  <p className="text-xs font-bold leading-tight text-slate-900 dark:text-white">Chat on WhatsApp</p>
+                  {displayPhone && (
+                    <p className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 truncate">{displayPhone}</p>
+                  )}
+                </div>
+              </a>
+            )}
 
             {/* Direct Phone Call */}
-            <a
-              href={activeTelUrl}
-              className="flex items-center gap-3 p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-900 dark:text-amber-200 transition-all group"
-            >
-              <div className="w-9 h-9 rounded-xl bg-amber-500 text-black flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
-                <PhoneCall className="w-4 h-4 text-black" />
-              </div>
-              <div className="overflow-hidden">
-                <p className="text-xs font-bold leading-tight text-slate-900 dark:text-white">Call Office Directly</p>
-                <p className="text-[11px] font-mono text-amber-700 dark:text-amber-400 truncate">{displayCallPhone}</p>
-              </div>
-            </a>
+            {activeTelUrl && (
+              <a
+                href={activeTelUrl}
+                className="flex items-center gap-3 p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-900 dark:text-amber-200 transition-all group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-amber-500 text-black flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                  <PhoneCall className="w-4 h-4 text-black" />
+                </div>
+                <div className="overflow-hidden">
+                  <p className="text-xs font-bold leading-tight text-slate-900 dark:text-white">Call Office Directly</p>
+                  {displayPhone && (
+                    <p className="text-[11px] font-mono text-amber-700 dark:text-amber-400 truncate">{displayPhone}</p>
+                  )}
+                </div>
+              </a>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Main Floating Trigger Button */}
       <div className="flex items-center gap-2">
-        <a
-          href={activeWaUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-[#12131A] border border-emerald-500/30 text-slate-900 dark:text-white text-xs font-bold shadow-lg hover:border-emerald-500 transition-all group"
-          aria-label="Direct WhatsApp Chat"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-          <span>Chat on WhatsApp</span>
-        </a>
+        {activeWaUrl && (
+          <a
+            href={activeWaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-[#12131A] border border-emerald-500/30 text-slate-900 dark:text-white text-xs font-bold shadow-lg hover:border-emerald-500 transition-all group"
+            aria-label="Direct WhatsApp Chat"
+          >
+            <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
+            <span>Chat on WhatsApp</span>
+          </a>
+        )}
 
         <button
           type="button"

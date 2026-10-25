@@ -126,6 +126,14 @@ export async function DELETE(
     const existing = await db.product.findUnique({ where: { id } });
     if (!existing) return apiError("Product not found", 404);
 
+    // Clean up dependent child records to avoid foreign key constraint violations
+    await db.cartItem.deleteMany({ where: { productId: id } });
+    await db.productImage.deleteMany({ where: { productId: id } });
+    await db.productSpec.deleteMany({ where: { productId: id } });
+    await db.inventory.deleteMany({ where: { productId: id } });
+    await db.orderItem.deleteMany({ where: { productId: id } });
+    await db.quotationItem.deleteMany({ where: { productId: id } });
+
     await db.product.delete({ where: { id } });
 
     // Invalidate edge cache so next reads fetch fresh data from database
@@ -139,7 +147,8 @@ export async function DELETE(
     } catch {}
 
     return apiSuccess(null);
-  } catch {
-    return apiError("Internal server error", 500);
+  } catch (error: any) {
+    console.error("[API Product DELETE Error]", error);
+    return apiError(error?.message || "Internal server error", 500);
   }
 }

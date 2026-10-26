@@ -9,12 +9,27 @@ export async function PATCH(request: Request) {
 
     const data = await request.json();
 
+    const updateData: { image?: string; name?: string; email?: string } = {};
+    if (data.image !== undefined) updateData.image = data.image;
+    if (typeof data.name === "string" && data.name.trim().length >= 2) {
+      updateData.name = data.name.trim();
+    }
+    if (typeof data.email === "string" && data.email.trim()) {
+      const cleanEmail = data.email.toLowerCase().trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(cleanEmail)) {
+        return apiError("Please enter a valid email address", 400);
+      }
+      const existing = await db.user.findUnique({ where: { email: cleanEmail } });
+      if (existing && existing.id !== session.user.id) {
+        return apiError("This email address is already in use", 400);
+      }
+      updateData.email = cleanEmail;
+    }
+
     const user = await db.user.update({
       where: { id: session.user.id },
-      data: {
-        ...(data.image !== undefined && { image: data.image }),
-        ...(data.name !== undefined && { name: data.name }),
-      },
+      data: updateData,
     });
 
     return apiSuccess({ user });

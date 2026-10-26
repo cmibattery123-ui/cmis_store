@@ -33,11 +33,25 @@ export async function PATCH(request: Request) {
     if (!dbUser) return apiError("Unauthorized", 401);
 
     const body = await request.json();
-    const { name, phone, businessName, businessAddress } = body;
+    const { name, email, phone, businessName, businessAddress } = body;
 
-    const userUpdateData: { name?: string; phone?: string | null } = {};
+    const userUpdateData: { name?: string; email?: string; phone?: string | null } = {};
     if (typeof name === "string" && name.trim().length >= 2) {
       userUpdateData.name = name.trim();
+    }
+    if (typeof email === "string" && email.trim()) {
+      const cleanEmail = email.toLowerCase().trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(cleanEmail)) {
+        return apiError("Please enter a valid email address", 400);
+      }
+      if (cleanEmail !== dbUser.email.toLowerCase()) {
+        const existing = await db.user.findUnique({ where: { email: cleanEmail } });
+        if (existing && existing.id !== dbUser.id) {
+          return apiError("This email address is already in use", 400);
+        }
+        userUpdateData.email = cleanEmail;
+      }
     }
     if (phone !== undefined) {
       userUpdateData.phone = phone ? String(phone).trim() : null;

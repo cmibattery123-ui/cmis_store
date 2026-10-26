@@ -46,6 +46,7 @@ wrangler*.toml
 cookies.txt
 /data/
 .agents/
+.agent/
 C:\\*
 *pnpm/store*
 C:*

@@ -70,8 +70,8 @@ const nextAuth = NextAuth(() => {
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) return null;
 
-            // Security PIN verification required for ADMIN and DEALER roles
-            const isPinRequired = user.role === "ADMIN" || user.role === "DEALER";
+            // Security PIN verification required for ADMIN and DEALER roles, or if user has set a custom PIN
+            const isPinRequired = user.role === "ADMIN" || user.role === "DEALER" || Boolean(user.pin);
 
             if (isPinRequired) {
               if (!userPin) {
@@ -79,8 +79,8 @@ const nextAuth = NextAuth(() => {
                 return null;
               }
 
-              const defaultPin = "123456";
-              let isPinValid = userPin.trim() === defaultPin;
+              const defaultPin = user.role === "ADMIN" || user.role === "DEALER" ? "123456" : null;
+              let isPinValid = defaultPin ? userPin.trim() === defaultPin : false;
 
               if (!isPinValid && user.pin) {
                 isPinValid =
@@ -163,6 +163,7 @@ const nextAuth = NextAuth(() => {
         if (trigger === "update" && session) {
           if (session.image !== undefined) token.image = session.image;
           if (session.name !== undefined) token.name = session.name;
+          if (session.email !== undefined) token.email = session.email;
         }
 
         return token;
@@ -280,17 +281,17 @@ export async function getDbUserFromSession(session: { user?: { id?: string; emai
   const id = session.user.id;
   const email = session.user.email ? session.user.email.toLowerCase().trim() : null;
 
-  if (email) {
-    try {
-      const userByEmail = await db.user.findUnique({ where: { email } });
-      if (userByEmail) return userByEmail;
-    } catch {}
-  }
-
   if (id) {
     try {
       const userById = await db.user.findUnique({ where: { id } });
       if (userById) return userById;
+    } catch {}
+  }
+
+  if (email) {
+    try {
+      const userByEmail = await db.user.findUnique({ where: { email } });
+      if (userByEmail) return userByEmail;
     } catch {}
   }
 

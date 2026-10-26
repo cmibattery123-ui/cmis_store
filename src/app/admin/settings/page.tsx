@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { User, Store, Shield, Bell, Save, Key, Mail, Globe, CreditCard, Loader2, MessageCircle } from "lucide-react";
+import { User, Store, Shield, Bell, Save, Key, Mail, Globe, CreditCard, Loader2, MessageCircle, Check, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -12,18 +12,46 @@ export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState("general");
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Security PIN states
+  const [adminPin, setAdminPin] = useState("123456");
+  const [newAdminPin, setNewAdminPin] = useState("123456");
+  const [savingAdminPin, setSavingAdminPin] = useState(false);
+  const [adminPinMsg, setAdminPinMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
     if (session?.user?.name) {
       setFullName(session.user.name);
     }
+    if (session?.user?.email) {
+      setAdminEmail(session.user.email);
+    }
     if (session?.user?.image) {
       setAvatarUrl(session.user.image);
     }
-  }, [session?.user?.name, session?.user?.image]);
+  }, [session?.user?.name, session?.user?.email, session?.user?.image]);
+
+  useEffect(() => {
+    async function loadAdminPin() {
+      try {
+        const res = await fetch("/api/user/pin");
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data?.currentPin) {
+            setAdminPin(json.data.currentPin);
+            setNewAdminPin(json.data.currentPin);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load admin PIN:", err);
+      }
+    }
+    loadAdminPin();
+  }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,9 +59,10 @@ export default function AdminSettingsPage() {
     
     try {
       if (activeTab === "profile") {
-        const payload: { name?: string; image?: string } = {};
+        const payload: { name?: string; image?: string; email?: string } = {};
         if (fullName.trim()) payload.name = fullName.trim();
         if (avatarUrl) payload.image = avatarUrl;
+        if (adminEmail.trim()) payload.email = adminEmail.trim();
 
         const res = await fetch("/api/admin/profile", {
           method: "PATCH",
@@ -41,11 +70,13 @@ export default function AdminSettingsPage() {
           body: JSON.stringify(payload),
         });
         
-        if (!res.ok) throw new Error("Failed to save profile");
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || "Failed to save profile");
         
-        // Force session update so the header avatar and name change
+        // Force session update so the header avatar, email, and name change
         await updateSession({
           name: fullName.trim(),
+          email: adminEmail.trim(),
           ...(avatarUrl && { image: avatarUrl }),
         });
       }
@@ -54,9 +85,45 @@ export default function AdminSettingsPage() {
         setLoading(false);
         toast.success("Settings saved successfully!");
       }, 500);
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      toast.error("Failed to save settings");
+      toast.error(error.message || "Failed to save settings");
+    }
+  };
+
+  const handleSaveAdminPin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingAdminPin(true);
+    setAdminPinMsg(null);
+
+    const cleanPin = newAdminPin.trim();
+    if (cleanPin.length < 4 || cleanPin.length > 8) {
+      setAdminPinMsg({ type: "error", text: "Security PIN must be between 4 and 8 digits." });
+      setSavingAdminPin(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/user/pin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: cleanPin }),
+      });
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        setAdminPin(cleanPin);
+        setAdminPinMsg({ type: "success", text: "Security PIN updated successfully!" });
+        toast.success("Security PIN updated successfully!");
+      } else {
+        setAdminPinMsg({ type: "error", text: json.error || "Failed to update Security PIN." });
+        toast.error(json.error || "Failed to update Security PIN.");
+      }
+    } catch {
+      setAdminPinMsg({ type: "error", text: "An error occurred while saving Security PIN." });
+      toast.error("Failed to update Security PIN.");
+    } finally {
+      setSavingAdminPin(false);
     }
   };
 
@@ -136,7 +203,7 @@ export default function AdminSettingsPage() {
         {/* Settings Content */}
         <div className="flex-1 bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/10 rounded-2xl p-6 md:p-8 shadow-sm">
           {activeTab === "payments" ? (
-            <PaymentSettings defaultSection="all" />
+            <PaymentSettings defaultSection="gateway" />
           ) : activeTab === "whatsapp" ? (
             <PaymentSettings defaultSection="whatsapp" />
           ) : (
@@ -233,7 +300,16 @@ export default function AdminSettingsPage() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">Personal Email</label>
-                      <input type="email" defaultValue={session?.user?.email || "admin@cmibattery.com"} className={`${inputCls} opacity-70 cursor-not-allowed`} disabled />
+                      <div className="relative">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
+                        <input
+                          type="email"
+                          value={adminEmail}
+                          onChange={(e) => setAdminEmail(e.target.value)}
+                          placeholder="admin@cmibattery.com"
+                          className={`${inputCls} pl-11 font-mono`}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -241,32 +317,91 @@ export default function AdminSettingsPage() {
 
               {/* SECURITY TAB */}
               {activeTab === "security" && (
-                <div className="space-y-6">
+                <div className="space-y-8">
                   <div className="mb-6">
-                    <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white mb-1">Security & Passwords</h2>
-                    <p className="text-sm text-slate-500 dark:text-gray-400">Keep your account secure with a strong password.</p>
+                    <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white mb-1">Security & Access PIN</h2>
+                    <p className="text-sm text-slate-500 dark:text-gray-400">Manage your login Security PIN and account authentication.</p>
                   </div>
-                  
-                  <div className="space-y-6 max-w-md">
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">Current Password</label>
-                      <div className="relative">
-                        <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
-                        <input type="password" placeholder="••••••••" className={`${inputCls} pl-11`} />
-                      </div>
+
+                  {/* Security PIN Box */}
+                  <div className="bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 rounded-2xl p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-heading font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-amber-600 dark:text-primary" />
+                        Administrator Security PIN
+                      </h3>
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-primary border border-amber-500/20 px-2.5 py-1 rounded-full">
+                        Required for Login
+                      </span>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">New Password</label>
-                      <div className="relative">
-                        <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
-                        <input type="password" placeholder="••••••••" className={`${inputCls} pl-11`} />
+                    <p className="text-xs text-slate-500 dark:text-gray-400 font-mono">
+                      Your 4–8 digit Security PIN is required when signing into the administrator panel (Default: <strong className="text-slate-900 dark:text-white font-bold">123456</strong>).
+                    </p>
+
+                    {adminPinMsg && (
+                      <div
+                        className={`text-xs px-4 py-3 rounded-xl flex items-center gap-2 font-mono ${
+                          adminPinMsg.type === "success"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-green-400 border border-emerald-500/20"
+                            : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
+                        }`}
+                      >
+                        {adminPinMsg.type === "success" ? <Check className="w-3.5 h-3.5 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 shrink-0" />}
+                        {adminPinMsg.text}
                       </div>
+                    )}
+
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 pt-2">
+                      <div className="space-y-1.5 flex-1 max-w-xs">
+                        <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">
+                          Set Security PIN
+                        </label>
+                        <input
+                          type="text"
+                          maxLength={8}
+                          value={newAdminPin}
+                          onChange={(e) => setNewAdminPin(e.target.value)}
+                          placeholder="123456"
+                          className={`${inputCls} font-mono tracking-widest text-center text-base`}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleSaveAdminPin}
+                        disabled={savingAdminPin || (!newAdminPin.trim()) || (newAdminPin.trim() === adminPin)}
+                        className="flex items-center justify-center gap-2 bg-primary text-black font-mono font-bold uppercase text-xs px-6 py-2.5 rounded-xl hover:bg-yellow-300 transition-colors disabled:opacity-50 cursor-pointer shadow-sm h-[42px]"
+                      >
+                        {savingAdminPin ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        Update PIN
+                      </button>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">Confirm New Password</label>
-                      <div className="relative">
-                        <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
-                        <input type="password" placeholder="••••••••" className={`${inputCls} pl-11`} />
+                  </div>
+
+                  {/* Password Settings */}
+                  <div className="pt-2">
+                    <h3 className="font-heading font-bold text-slate-900 dark:text-white text-base mb-1">Password</h3>
+                    <p className="text-xs text-slate-500 dark:text-gray-400 mb-4 font-mono">Keep your account secure with a strong password.</p>
+                    <div className="space-y-4 max-w-md">
+                      <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">Current Password</label>
+                        <div className="relative">
+                          <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
+                          <input type="password" placeholder="••••••••" className={`${inputCls} pl-11`} />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">New Password</label>
+                        <div className="relative">
+                          <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
+                          <input type="password" placeholder="••••••••" className={`${inputCls} pl-11`} />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-gray-400 font-mono font-bold">Confirm New Password</label>
+                        <div className="relative">
+                          <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
+                          <input type="password" placeholder="••••••••" className={`${inputCls} pl-11`} />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -304,20 +439,22 @@ export default function AdminSettingsPage() {
               )}
 
               {/* Save Button */}
-              <div className="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 flex justify-end">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex items-center gap-2 bg-primary text-black font-mono font-bold uppercase text-xs px-6 py-2.5 rounded-xl hover:bg-yellow-300 transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
-                >
-                  {loading ? (
-                    <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                  ) : (
-                    <Save className="w-4 h-4" />
-                  )}
-                  Save Settings
-                </button>
-              </div>
+              {activeTab !== "security" && (
+                <div className="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex items-center gap-2 bg-primary text-black font-mono font-bold uppercase text-xs px-6 py-2.5 rounded-xl hover:bg-yellow-300 transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
+                  >
+                    {loading ? (
+                      <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                    ) : (
+                      <Save className="w-4 h-4" />
+                    )}
+                    Save Settings
+                  </button>
+                </div>
+              )}
             </form>
           )}
         </div>

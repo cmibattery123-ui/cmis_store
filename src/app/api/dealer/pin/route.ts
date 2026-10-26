@@ -10,9 +10,7 @@ export async function GET(request: Request) {
     const dbUser = await getDbUserFromSession(session);
     if (!dbUser) return apiError("Unauthorized", 401);
 
-    if (dbUser.role !== "DEALER" && dbUser.role !== "ADMIN") {
-      return apiError("Only Dealers and Admins can manage Security PIN", 403);
-    }
+
 
     return apiSuccess({
       hasCustomPin: Boolean(dbUser.pin),
@@ -30,9 +28,7 @@ export async function POST(request: Request) {
     const dbUser = await getDbUserFromSession(session);
     if (!dbUser) return apiError("Unauthorized", 401);
 
-    if (dbUser.role !== "DEALER" && dbUser.role !== "ADMIN") {
-      return apiError("Only Dealers and Admins can manage Security PIN", 403);
-    }
+
 
     const body = await request.json();
     const { pin } = body || {};

@@ -21,6 +21,7 @@ export default function DealerProfilePage() {
   // Profile Edit states
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
 
@@ -38,6 +39,7 @@ export default function DealerProfilePage() {
       if (res.ok && json.data) {
         setDealer(json.data);
         setFullName(json.data.user?.name || "");
+        setEmail(json.data.user?.email || "");
         setPhone(json.data.phone || json.data.user?.phone || "");
       }
 
@@ -62,19 +64,23 @@ export default function DealerProfilePage() {
       toast.error("Full Name cannot be empty.");
       return;
     }
+    if (!email.trim()) {
+      toast.error("Email cannot be empty.");
+      return;
+    }
 
     setSavingProfile(true);
     try {
       const res = await fetch("/api/dealer/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: fullName.trim(), phone: phone.trim() }),
+        body: JSON.stringify({ name: fullName.trim(), email: email.trim(), phone: phone.trim() }),
       });
       const json = await res.json();
 
       if (res.ok && json.data) {
         setDealer(json.data);
-        await updateSession({ name: fullName.trim() });
+        await updateSession({ name: fullName.trim(), email: email.trim() });
         setIsEditing(false);
         toast.success("Profile updated successfully!");
       } else {
@@ -244,7 +250,7 @@ export default function DealerProfilePage() {
 
           {isEditing ? (
             <form onSubmit={handleUpdateProfile} className="space-y-4 pt-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="dealer-name-edit" className="block text-xs font-mono font-bold uppercase tracking-widest text-slate-500 dark:text-gray-400 mb-1">
                     Full Name *
@@ -256,6 +262,19 @@ export default function DealerProfilePage() {
                     onChange={(e) => setFullName(e.target.value)}
                     required
                     className="w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/15 rounded-xl px-3 py-2 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500 dark:focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="dealer-email-edit" className="block text-xs font-mono font-bold uppercase tracking-widest text-slate-500 dark:text-gray-400 mb-1">
+                    Email Address *
+                  </label>
+                  <input
+                    id="dealer-email-edit"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full bg-slate-50 dark:bg-[#12131A] border border-slate-300 dark:border-white/15 rounded-xl px-3 py-2 text-slate-900 dark:text-white text-sm font-mono focus:outline-none focus:border-amber-500 dark:focus:border-primary"
                   />
                 </div>
                 <div>

@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       return apiError("Invalid email or password", 400);
     }
 
-    const isPinRequired = user.role === "ADMIN" || user.role === "DEALER";
+    const isPinRequired = user.role === "ADMIN" || user.role === "DEALER" || Boolean(user.pin);
 
     return apiSuccess({
       success: true,

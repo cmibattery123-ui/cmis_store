@@ -34,7 +34,7 @@ interface PaymentSettingsProps {
   defaultSection?: "all" | "whatsapp" | "gateway";
 }
 
-export default function PaymentSettings({ defaultSection = "all" }: PaymentSettingsProps) {
+export default function PaymentSettings({ defaultSection = "gateway" }: PaymentSettingsProps) {
   const [loading, setLoading] = useState(true);
   const [savingGateway, setSavingGateway] = useState(false);
   const [savingWhatsApp, setSavingWhatsApp] = useState(false);
@@ -110,6 +110,8 @@ export default function PaymentSettings({ defaultSection = "all" }: PaymentSetti
         toast.success(
           newVal
             ? "Razorpay Gateway Enabled — Store online checkout is active"
+            : defaultSection === "gateway"
+            ? "Razorpay Gateway Disabled"
             : "Razorpay Gateway Disabled — Product pages will now direct customers to WhatsApp"
         );
       } else {
@@ -257,11 +259,17 @@ export default function PaymentSettings({ defaultSection = "all" }: PaymentSetti
       {/* Page Title */}
       <div>
         <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white mb-1">
-          {defaultSection === "whatsapp" ? "Common WhatsApp & Inquiry Channels" : "Payment & Ordering Channels"}
+          {defaultSection === "whatsapp"
+            ? "Common WhatsApp & Inquiry Channels"
+            : defaultSection === "gateway"
+            ? "Payment Gateway Configuration"
+            : "Payment & Ordering Channels"}
         </h2>
         <p className="text-sm text-slate-500 dark:text-gray-400">
           {defaultSection === "whatsapp"
             ? "Configure the common official WhatsApp contact number used across Floating Contact, Footer, Contact page, and Product orders."
+            : defaultSection === "gateway"
+            ? "Configure Razorpay online payment gateway credentials and toggle live store checkout."
             : "Configure Razorpay online payment gateway and official WhatsApp ordering fallback."}
         </p>
       </div>
@@ -286,13 +294,15 @@ export default function PaymentSettings({ defaultSection = "all" }: PaymentSetti
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 uppercase tracking-wider font-mono">
-                    <XCircle className="w-3 h-3" /> Offline (WhatsApp Active)
+                    <XCircle className="w-3 h-3" /> {defaultSection === "gateway" ? "Offline" : "Offline (WhatsApp Active)"}
                   </span>
                 )}
               </div>
               <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
                 {razorpayEnabled
                   ? "Accept UPI, Cards, and NetBanking directly through Razorpay."
+                  : defaultSection === "gateway"
+                  ? "Gateway is currently paused. Online checkout is temporarily disabled."
                   : "Gateway paused. Product pages and checkout automatically route customers to WhatsApp."}
               </p>
             </div>

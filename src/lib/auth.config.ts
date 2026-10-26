@@ -24,6 +24,7 @@ export const authConfig = {
       if (trigger === "update" && session) {
         if (session.image !== undefined) token.image = session.image;
         if (session.name !== undefined) token.name = session.name;
+        if (session.email !== undefined) token.email = session.email;
       }
 
       return token;

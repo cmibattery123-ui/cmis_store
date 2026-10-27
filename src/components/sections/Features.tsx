@@ -37,9 +37,9 @@ const FEATURES = [
   {
     num: "05",
     title: "42+ Years of Precision",
-    description: "Rooted in Coimbatore's premier industrial manufacturing legacy with certified ISO 9001:2015 quality standards.",
+    description: "Rooted in Coimbatore's premier industrial manufacturing legacy with certified ISO 9001:2015 quality standards and official DPIIT startup recognition.",
     icon: Award,
-    highlight: "Certified Quality",
+    highlight: "DPIIT Recognized",
   },
   {
     num: "06",

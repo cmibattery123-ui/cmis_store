@@ -29,7 +29,7 @@ const HERO_SLIDES = [
   },
   {
     src: "/assets/slides/services.jpg",
-    eyebrow: "ISO 9001:2015 Certified Plant",
+    eyebrow: "DPIIT Recognized Startup • ISO 9001:2015 Plant",
     title: "Precision testing. Guaranteed reliability.",
     subtitle: "Direct factory support, 5-year replacement warranty, and pan-India dispatch from our Coimbatore manufacturing base.",
     ctaText: "Engineering Services",

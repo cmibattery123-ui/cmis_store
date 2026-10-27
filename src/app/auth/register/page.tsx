@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Zap, Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
@@ -67,7 +68,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#07080C] text-slate-900 dark:text-white flex items-center justify-center p-4 bg-grid transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#07080C] text-slate-900 dark:text-white flex items-center justify-center p-4 pt-28 sm:pt-32 pb-12 bg-grid transition-colors duration-200">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -75,15 +76,21 @@ export default function RegisterPage() {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(250,255,0,0.3)]">
-              <Zap className="w-6 h-6 text-black" />
+          <Link href="/" className="inline-flex items-center gap-3 group">
+            <div className="relative w-11 h-11 rounded-full overflow-hidden bg-white border border-slate-200 dark:border-white/20 p-0.5 shrink-0 flex items-center justify-center group-hover:scale-105 transition-all shadow-md">
+              <Image
+                src={COMPANY_INFO.logo}
+                alt="CMI Logo"
+                width={44}
+                height={44}
+                className="object-contain w-full h-full rounded-full"
+              />
             </div>
             <span className="font-black text-slate-900 dark:text-white text-xl tracking-tight uppercase">
               {COMPANY_INFO.brand}
             </span>
           </Link>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white mt-6 uppercase tracking-tight">
+          <h1 className="text-3xl font-black text-slate-900 dark:text-white mt-5 uppercase tracking-tight">
             Create your account
           </h1>
           <p className="text-slate-600 dark:text-gray-400 text-sm mt-1 font-normal">

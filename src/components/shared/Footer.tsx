@@ -37,10 +37,16 @@ export default function Footer() {
               Chinna Mayil Industries — Manufacturer of high-performance LiFePO4 batteries and solar energy storage systems in Coimbatore with over 42 years of engineering excellence.
             </p>
 
-            {/* Certification Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-[#1C1C1E] border border-black/[0.06] dark:border-white/[0.08] text-xs text-[#6E6E73] dark:text-[#86868B] shadow-sm">
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-600 dark:text-primary" />
-              <span>ISO 9001:2015 Certified Plant</span>
+            {/* Certification & Recognition Badges */}
+            <div className="flex flex-wrap gap-2 pt-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-[#1C1C1E] border border-black/[0.06] dark:border-white/[0.08] text-xs text-[#6E6E73] dark:text-[#86868B] shadow-sm">
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-600 dark:text-primary shrink-0" />
+                <span>ISO 9001:2015</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 dark:bg-primary/10 border border-amber-500/25 dark:border-primary/25 text-xs text-amber-800 dark:text-primary shadow-sm font-medium">
+                <Award className="w-3.5 h-3.5 text-amber-600 dark:text-primary shrink-0" />
+                <span>DPIIT Startup • {COMPANY_INFO.dpiit}</span>
+              </div>
             </div>
           </div>
 
@@ -141,8 +147,14 @@ export default function Footer() {
 
         {/* Bottom Bar - Apple Style */}
         <div className="pt-6 border-t border-black/[0.06] dark:border-white/[0.08] flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-[#86868B]">
-          <p>© <CurrentYear /> {COMPANY_INFO.name}. All rights reserved.</p>
-          <div className="flex gap-6">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-1.5 sm:gap-2.5 text-center sm:text-left">
+            <p>© <CurrentYear /> {COMPANY_INFO.name} ({COMPANY_INFO.legalName}). All rights reserved.</p>
+            <span className="hidden sm:inline opacity-40">•</span>
+            <p className="font-mono">CIN: {COMPANY_INFO.cin}</p>
+            <span className="hidden sm:inline opacity-40">•</span>
+            <p className="font-mono">DPIIT Reg: {COMPANY_INFO.dpiit}</p>
+          </div>
+          <div className="flex gap-6 shrink-0">
             <Link href="/privacy" className="hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7] transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7] transition-colors">Terms of Use</Link>
             <Link href="/contact" className="hover:text-[#1D1D1F] dark:hover:text-[#F5F5F7] transition-colors">Contact Support</Link>

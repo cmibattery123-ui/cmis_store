@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Send, MessageSquare } from "lucide-react";
+import { Send, MessageSquare, Award } from "lucide-react";
 import ContactChannels from "@/components/contact/ContactChannels";
 import Footer from "@/components/shared/Footer";
 
@@ -69,6 +69,34 @@ export default async function ContactPage() {
                 initialWaUrl={waUrl}
                 initialTelUrl={telUrl}
               />
+            </div>
+
+            {/* Corporate & DPIIT Registration Card */}
+            <div className="bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/15 rounded-3xl p-5 shadow-sm space-y-3">
+              <div className="flex items-center gap-2 text-amber-600 dark:text-primary">
+                <Award className="w-4 h-4 shrink-0" />
+                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+                  Corporate & Legal Identification
+                </h3>
+              </div>
+              <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                <p>
+                  <span className="text-slate-500 dark:text-gray-400 font-medium">Entity:</span>{" "}
+                  <strong className="text-slate-900 dark:text-white font-semibold">{COMPANY_INFO.legalName}</strong> ({COMPANY_INFO.name})
+                </p>
+                <p>
+                  <span className="text-slate-500 dark:text-gray-400 font-medium">CIN:</span>{" "}
+                  <span className="font-mono font-bold text-slate-900 dark:text-white">{COMPANY_INFO.cin}</span>
+                </p>
+                <p>
+                  <span className="text-slate-500 dark:text-gray-400 font-medium">DPIIT Recognition:</span>{" "}
+                  <span className="font-mono font-bold text-amber-600 dark:text-primary">{COMPANY_INFO.dpiit}</span>
+                </p>
+                <p>
+                  <span className="text-slate-500 dark:text-gray-400 font-medium">Order Desk:</span>{" "}
+                  <span className="font-mono font-bold text-slate-900 dark:text-white">{COMPANY_INFO.orderPhone}</span>
+                </p>
+              </div>
             </div>
 
             {/* Dealer CTA */}

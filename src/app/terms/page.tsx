@@ -62,8 +62,8 @@ export default function TermsPage() {
               body: "To the fullest extent permitted by law, Chinna Mayil Industries shall not be liable for any indirect, incidental, or consequential damages arising from use of our platform or products beyond the value of the product purchased.",
             },
             {
-              title: "10. Governing Law",
-              body: `These Terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Coimbatore, Tamil Nadu. For queries, contact: ${COMPANY_INFO.email}.`,
+              title: "10. Governing Law & Corporate Identification",
+              body: `These Terms are governed by the laws of India. The platform is operated by ${COMPANY_INFO.legalName} (${COMPANY_INFO.name}), CIN: ${COMPANY_INFO.cin}, DPIIT Recognition No: ${COMPANY_INFO.dpiit}. Any disputes shall be subject to the exclusive jurisdiction of courts in Coimbatore, Tamil Nadu. For queries, contact: ${COMPANY_INFO.email}.`,
             },
           ].map(({ title, body }) => (
             <div key={title} className="p-6 md:p-8 rounded-3xl bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/15 shadow-sm">

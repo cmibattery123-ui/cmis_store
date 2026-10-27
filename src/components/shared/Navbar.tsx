@@ -209,24 +209,24 @@ export default function Navbar() {
       )}
 
       {/* Main Navbar Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 pt-4 sm:pt-5 transition-all duration-300 pointer-events-none">
+      <header className="fixed top-0 left-0 right-0 z-50 px-2.5 sm:px-6 pt-3 sm:pt-5 transition-all duration-300 pointer-events-none">
         <motion.div
           initial={showIntro ? { opacity: 0, y: -10 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: showIntro ? 0.5 : 0, ease: "easeOut" }}
           className={cn(
-            "max-w-6xl mx-auto rounded-full transition-all duration-300 pointer-events-auto flex items-center justify-between px-5 sm:px-7 py-3 border",
+            "max-w-6xl mx-auto rounded-full transition-all duration-300 pointer-events-auto flex items-center justify-between px-3.5 sm:px-7 py-2 sm:py-3 border",
             scrolled
               ? "bg-white/95 dark:bg-[#000000]/95 backdrop-blur-2xl border-black/[0.12] dark:border-white/[0.18] shadow-[0_12px_36px_rgba(0,0,0,0.1)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.75)]"
               : "bg-white/90 dark:bg-[#0E0E10]/90 backdrop-blur-2xl border-black/[0.08] dark:border-white/[0.12] shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
           )}
         >
           {/* Brand Mark with Destination Logo Element */}
-          <Link href="/" className="flex items-center gap-3 shrink-0 group">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 shrink min-w-0 group">
             <div
               ref={logoRef}
               className={cn(
-                "relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-white border border-slate-200 dark:border-white/20 p-0.5 shrink-0 flex items-center justify-center group-hover:scale-105 transition-all shadow-sm",
+                "relative w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-white border border-slate-200 dark:border-white/20 p-0.5 shrink-0 flex items-center justify-center group-hover:scale-105 transition-all shadow-sm",
                 showIntro && !splashDone ? "opacity-0" : "opacity-100"
               )}
             >
@@ -243,9 +243,9 @@ export default function Navbar() {
               initial={showIntro ? { opacity: 0, x: -8 } : false}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: showIntro ? 1.0 : 0, ease: "easeOut" }}
-              className="flex items-center"
+              className="flex items-center min-w-0"
             >
-              <span className="font-bold text-base sm:text-lg tracking-tight leading-none text-[#1D1D1F] dark:text-white">
+              <span className="font-bold text-sm sm:text-lg tracking-tight leading-none text-[#1D1D1F] dark:text-white truncate">
                 {COMPANY_INFO.brand}
               </span>
             </motion.div>
@@ -282,20 +282,22 @@ export default function Navbar() {
             initial={showIntro ? { opacity: 0 } : false}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: showIntro ? 1.2 : 0, ease: "easeOut" }}
-            className="flex items-center gap-2.5 shrink-0"
+            className="flex items-center gap-1.5 sm:gap-2.5 shrink-0"
           >
-            {/* Theme Toggle Button */}
-            <ThemeToggle />
+            {/* Theme Toggle Button - hidden on screens < 390px since accessible in mobile drawer */}
+            <div className="hidden min-[390px]:flex sm:flex">
+              <ThemeToggle />
+            </div>
 
             {/* Cart Capsule */}
             <Link
               href="/cart"
-              className="relative bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 w-10 h-10 rounded-full transition-all flex items-center justify-center text-slate-800 dark:text-white shrink-0 active:scale-95 shadow-sm"
+              className="relative bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-full transition-all flex items-center justify-center text-slate-800 dark:text-white shrink-0 active:scale-95 shadow-sm"
               aria-label="Shopping Cart"
             >
-              <ShoppingCart className="w-4.5 h-4.5 text-slate-800 dark:text-white hover:text-amber-600 dark:hover:text-primary transition-colors" />
+              <ShoppingCart className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-800 dark:text-white hover:text-amber-600 dark:hover:text-primary transition-colors" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-black font-extrabold text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center border border-black shadow">
+                <span className="absolute -top-1 -right-1 bg-primary text-black font-extrabold text-[9px] sm:text-[10px] w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center border border-black shadow">
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
               )}
@@ -308,10 +310,10 @@ export default function Navbar() {
             <div className="lg:hidden flex items-center shrink-0">
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="w-10 h-10 rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 flex items-center justify-center text-slate-800 dark:text-white p-1 transition-colors cursor-pointer"
+                className="w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15 border border-black/10 dark:border-white/15 flex items-center justify-center text-slate-800 dark:text-white transition-colors cursor-pointer"
                 aria-label="Toggle menu"
               >
-                {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {mobileOpen ? <X className="w-4.5 h-4.5 sm:w-5 sm:h-5" /> : <Menu className="w-4.5 h-4.5 sm:w-5 sm:h-5" />}
               </button>
             </div>
           </motion.div>
@@ -325,7 +327,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden max-w-6xl mx-auto mt-2 bg-white/95 dark:bg-[#0E0E12]/95 backdrop-blur-2xl border border-black/10 dark:border-white/15 rounded-3xl p-5 space-y-2 shadow-2xl pointer-events-auto"
+              className="lg:hidden max-w-6xl mx-auto mt-2 bg-white/95 dark:bg-[#0E0E12]/95 backdrop-blur-2xl border border-black/10 dark:border-white/15 rounded-3xl p-4 sm:p-5 space-y-2 shadow-2xl pointer-events-auto"
             >
               {PUBLIC_NAV.map((link) => {
                 const active = isActiveLink(link.href);
@@ -335,7 +337,7 @@ export default function Navbar() {
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex items-center justify-between text-base font-bold py-3 px-4 rounded-2xl transition-colors",
+                      "flex items-center justify-between text-sm sm:text-base font-bold py-2.5 sm:py-3 px-4 rounded-2xl transition-colors",
                       active
                         ? "text-black bg-primary font-bold shadow-[0_0_15px_rgba(250,255,0,0.3)]"
                         : "text-slate-800 dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10"
@@ -348,6 +350,14 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+
+              {/* Mobile Drawer Utility Row */}
+              <div className="pt-2 border-t border-black/10 dark:border-white/10 flex items-center justify-between px-2">
+                <span className="text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">
+                  Appearance
+                </span>
+                <ThemeToggle />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

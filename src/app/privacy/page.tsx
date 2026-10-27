@@ -54,8 +54,8 @@ export default function PrivacyPage() {
               body: `You have the right to access, update, or delete your personal information at any time. You may also opt out of marketing communications. To exercise these rights, contact us at ${COMPANY_INFO.email}.`,
             },
             {
-              title: "8. Contact Us",
-              body: `For any privacy-related queries, contact: ${COMPANY_INFO.name}, ${COMPANY_INFO.address}. Email: ${COMPANY_INFO.email}. Phone: ${COMPANY_INFO.phone}.`,
+              title: "8. Contact Us & Legal Entity",
+              body: `For any privacy-related queries, contact: ${COMPANY_INFO.legalName} (${COMPANY_INFO.name}), CIN: ${COMPANY_INFO.cin}, DPIIT Reg: ${COMPANY_INFO.dpiit}, ${COMPANY_INFO.address}. Email: ${COMPANY_INFO.email}. Phone: ${COMPANY_INFO.phone}.`,
             },
           ].map(({ title, body }) => (
             <div key={title} className="p-6 md:p-8 rounded-3xl bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/15 shadow-sm">

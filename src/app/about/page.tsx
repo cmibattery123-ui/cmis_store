@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { COMPANY_INFO } from "@/lib/constants";
-import { Zap, Award, Users, MapPin, Phone, Mail, Factory } from "lucide-react";
+import { Zap, Award, Users, MapPin, Phone, Mail, Factory, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "@/components/shared/Footer";
@@ -20,6 +20,7 @@ const milestones = [
   { year: "2015", event: "Introduced Non-Maintenance Lithium technology" },
   { year: "2020", event: "Expanded pan-India dealer network" },
   { year: "2024", event: "Launched digital platform & dealer portal" },
+  { year: "2026", event: "Incorporated as CMI Pvt. Ltd. & Recognized as a Startup by DPIIT (Govt. of India)" },
 ];
 
 const stats = [
@@ -41,8 +42,12 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="bg-gradient-to-b from-white to-slate-50 dark:from-black dark:to-[#07080C] pt-36 pb-20 px-4 text-center border-b border-slate-200 dark:border-white/10">
         <div className="max-w-4xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 bg-amber-500/10 dark:bg-primary/10 border border-amber-500/20 dark:border-primary/20 text-amber-700 dark:text-primary text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-sm">
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 bg-amber-500/10 dark:bg-primary/10 border border-amber-500/20 dark:border-primary/20 text-amber-700 dark:text-primary text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm">
             <span>Established 1982 • Coimbatore, Tamil Nadu</span>
+            <span className="hidden sm:inline">•</span>
+            <span>DPIIT Startup: {COMPANY_INFO.dpiit}</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="font-mono">CIN: {COMPANY_INFO.cin}</span>
           </div>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tight">
             About {COMPANY_INFO.name}
@@ -69,6 +74,55 @@ export default function AboutPage() {
 
       {/* Factory Showcase */}
       <FactoryShowcase />
+
+      {/* DPIIT Recognition Spotlight */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 via-white to-amber-500/5 dark:from-[#1A1A12] dark:via-[#0C0D14] dark:to-[#161720] border-2 border-amber-500/30 dark:border-primary/30 p-8 md:p-12 shadow-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7 space-y-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 dark:bg-primary/20 border border-amber-500/30 dark:border-primary/30 text-amber-800 dark:text-primary text-xs font-bold uppercase tracking-wider">
+                <Award className="w-4 h-4 text-amber-600 dark:text-primary" />
+                <span>National Milestone • Startup India</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+                We Are Now a DPIIT Recognized Startup!
+              </h2>
+              <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed font-normal">
+                A huge milestone in our journey of innovation and engineering excellence. Chinna Mayil Industries is officially recognized as an innovative startup by the <strong className="text-slate-900 dark:text-white font-semibold">Department for Promotion of Industry and Internal Trade (DPIIT)</strong>, Government of India.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-2xl bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-gray-400 font-semibold">DPIIT Registration No.</p>
+                  <p className="text-xl font-black font-mono text-amber-600 dark:text-primary mt-1">{COMPANY_INFO.dpiit}</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-gray-400 font-semibold">Corporate Identity (CIN)</p>
+                  <p className="text-sm font-black font-mono text-slate-900 dark:text-white mt-2 break-all">{COMPANY_INFO.cin}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-4 pt-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-600" /> Government Recognized</span>
+                <span className="flex items-center gap-1.5"><Zap className="w-4 h-4 text-amber-600 dark:text-primary" /> Driving Innovation</span>
+                <span className="flex items-center gap-1.5"><Award className="w-4 h-4 text-amber-600 dark:text-primary" /> Empowering the Future</span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-500/20 max-w-sm w-full group">
+                <Image
+                  src={COMPANY_INFO.dpiitPoster}
+                  alt="DPIIT Recognized Startup Certificate Poster"
+                  width={600}
+                  height={900}
+                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Story */}
       <section className="max-w-6xl mx-auto px-4 py-24 border-t border-slate-200 dark:border-white/10">
@@ -143,7 +197,7 @@ export default function AboutPage() {
 
       {/* Contact info */}
       <section className="max-w-6xl mx-auto px-4 py-12">
-        <div className="bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/15 rounded-3xl p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-center shadow-lg dark:shadow-xl">
+        <div className="bg-white dark:bg-[#0C0D14] border border-slate-200 dark:border-white/15 rounded-3xl p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center shadow-lg dark:shadow-xl">
           <div>
             <Phone className="w-6 h-6 text-amber-600 dark:text-primary mx-auto mb-2" />
             <p className="text-slate-500 dark:text-gray-300 text-xs font-mono uppercase tracking-wider">Phone</p>
@@ -158,6 +212,12 @@ export default function AboutPage() {
             <MapPin className="w-6 h-6 text-amber-600 dark:text-primary mx-auto mb-2" />
             <p className="text-slate-500 dark:text-gray-300 text-xs font-mono uppercase tracking-wider">Location</p>
             <p className="text-slate-900 dark:text-white font-bold mt-0.5">Madukkarai, Coimbatore</p>
+          </div>
+          <div>
+            <Award className="w-6 h-6 text-amber-600 dark:text-primary mx-auto mb-2" />
+            <p className="text-slate-500 dark:text-gray-300 text-xs font-mono uppercase tracking-wider">Corporate & DPIIT</p>
+            <p className="text-slate-900 dark:text-white font-bold text-xs mt-0.5 font-mono">DPIIT: {COMPANY_INFO.dpiit}</p>
+            <p className="text-[10px] text-slate-500 dark:text-gray-400 font-mono mt-0.5">CIN: {COMPANY_INFO.cin}</p>
           </div>
         </div>
       </section>

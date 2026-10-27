@@ -13,11 +13,17 @@ export const NAV_LINKS = [
 
 export const COMPANY_INFO = {
   name: "Chinna Mayil Industries",
+  legalName: "CMI Pvt. Ltd.",
   brand: "Perfect Batteries",
   tagline: "Power Your Ride",
+  cin: "U27201TZ2026PTC041034",
+  dpiit: "DIPP289377",
+  dpiitRecognitionNo: "DIPP289377",
   address: "No. J31/1, ISP Godown, Mohan Block, Kurumbapalayam Pirivu, Sundrapuram Road, Madukkarai Post, Coimbatore – 641105",
   phone: "0 422 422 7227",
   phoneRaw: "+914224227227",
+  orderPhone: "+91 90474 00024",
+  orderPhoneRaw: "+919047400024",
   whatsapp: "914224227227",
   whatsappDisplay: "0 422 422 7227",
   whatsappLocalDisplay: "0 422 422 7227",
@@ -27,6 +33,7 @@ export const COMPANY_INFO = {
   instagram: "perfect_batteries",
   experience: "42+ Years",
   logo: "/logo.png",
+  dpiitPoster: "/assets/dpiit-recognition.jpg",
 };
 
 export const SITE_CONFIG = COMPANY_INFO;

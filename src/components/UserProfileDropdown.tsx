@@ -110,11 +110,11 @@ export function UserProfileDropdown({
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label="User profile menu"
-        className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/15 text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-500/50 dark:focus:ring-primary/50 transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
+        className="relative flex items-center justify-center w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-full bg-slate-100 dark:bg-white/[0.08] border border-slate-200 dark:border-white/15 text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-500/50 dark:focus:ring-primary/50 transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
       >
-        <User className="w-5 h-5" />
+        <User className="w-4 h-4 sm:w-5 sm:h-5" />
         {isAuthenticated && (
-          <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-amber-500 dark:bg-primary rounded-full border-2 border-white dark:border-black" />
+          <span className="absolute top-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-amber-500 dark:bg-primary rounded-full border-2 border-white dark:border-black" />
         )}
       </button>
 

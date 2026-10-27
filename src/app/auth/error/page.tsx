@@ -67,7 +67,7 @@ function AuthErrorContent() {
 
 export default function AuthErrorPage() {
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-[#07080C] text-slate-900 dark:text-white flex items-center justify-center p-4 transition-colors duration-200">
+    <main className="min-h-screen bg-slate-50 dark:bg-[#07080C] text-slate-900 dark:text-white flex items-center justify-center p-4 pt-28 sm:pt-32 pb-12 transition-colors duration-200">
       <Suspense
         fallback={
           <div className="text-slate-600 dark:text-white flex items-center gap-2 font-mono text-sm">

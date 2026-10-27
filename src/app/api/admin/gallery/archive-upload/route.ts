@@ -27,31 +27,32 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // 1. Try Archive.org if credentials exist
-    const archiveResult = await uploadToArchiveOrg({
-      buffer,
-      filename: file.name,
-      mimeType: file.type || (isVideo ? "video/mp4" : "image/jpeg"),
-      title,
-      description,
-    });
-
-    if (archiveResult.success && archiveResult.url) {
-      return apiSuccess({
-        mediaType: isVideo ? "VIDEO" : "IMAGE",
-        itemId: archiveResult.itemId,
-        url: archiveResult.url,
-        downloadUrl: archiveResult.downloadUrl,
-        embedUrl: archiveResult.embedUrl,
-        thumbnailUrl: archiveResult.thumbnailUrl,
+    // 1. Try Archive.org ONLY for videos if credentials exist
+    if (isVideo) {
+      const archiveResult = await uploadToArchiveOrg({
+        buffer,
+        filename: file.name,
+        mimeType: file.type || "video/mp4",
+        title,
+        description,
       });
-    }
 
-    // 2. Seamless Fallback: S3 or embedded database storage (identical to product media)
-    console.warn(
-      "[Gallery Upload] Archive.org unavailable or unconfigured, using fallback storage:",
-      archiveResult.error
-    );
+      if (archiveResult.success && archiveResult.url) {
+        return apiSuccess({
+          mediaType: "VIDEO",
+          itemId: archiveResult.itemId,
+          url: archiveResult.url,
+          downloadUrl: archiveResult.downloadUrl,
+          embedUrl: archiveResult.embedUrl,
+          thumbnailUrl: archiveResult.thumbnailUrl,
+        });
+      }
+
+      console.warn(
+        "[Gallery Upload] Archive.org unavailable or unconfigured, using fallback storage:",
+        archiveResult.error
+      );
+    }
 
     let uploadUrl = "";
     let uploadId = "";

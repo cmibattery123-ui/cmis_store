@@ -98,6 +98,7 @@ export async function uploadToArchiveOrg(
       method: "PUT",
       headers,
       body: new Uint8Array(params.buffer),
+      signal: AbortSignal.timeout(8000),
     });
 
     if (!res.ok) {

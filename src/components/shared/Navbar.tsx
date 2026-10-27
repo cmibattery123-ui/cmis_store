@@ -196,7 +196,7 @@ export default function Navbar() {
             duration: 0.85,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className="rounded-full overflow-hidden bg-primary/10 border-2 border-primary/40 p-1 flex items-center justify-center pointer-events-none shadow-2xl"
+          className="rounded-full overflow-hidden bg-white border-2 border-primary/40 p-1 flex items-center justify-center pointer-events-none shadow-2xl"
         >
           <Image
             src={COMPANY_INFO.logo}
@@ -226,7 +226,7 @@ export default function Navbar() {
             <div
               ref={logoRef}
               className={cn(
-                "relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-primary/10 border-2 border-primary/40 p-0.5 shrink-0 flex items-center justify-center group-hover:scale-105 transition-all shadow-sm",
+                "relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-white border border-slate-200 dark:border-white/20 p-0.5 shrink-0 flex items-center justify-center group-hover:scale-105 transition-all shadow-sm",
                 showIntro && !splashDone ? "opacity-0" : "opacity-100"
               )}
             >

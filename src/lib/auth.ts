@@ -79,13 +79,25 @@ const nextAuth = NextAuth(() => {
                 return null;
               }
 
-              const defaultPin = user.role === "ADMIN" || user.role === "DEALER" ? "123456" : null;
-              let isPinValid = defaultPin ? userPin.trim() === defaultPin : false;
+              let isPinValid = false;
 
-              if (!isPinValid && user.pin) {
-                isPinValid =
-                  userPin.trim() === user.pin.trim() ||
-                  bcrypt.compareSync(userPin.trim(), user.pin);
+              if (user.pin) {
+                // User has set a custom PIN — ONLY their custom PIN is valid
+                const cleanEnteredPin = userPin.trim();
+                const cleanStoredPin = user.pin.trim();
+
+                let matchesBcrypt = false;
+                if (cleanStoredPin.startsWith("$2a$") || cleanStoredPin.startsWith("$2b$") || cleanStoredPin.startsWith("$2y$")) {
+                  try {
+                    matchesBcrypt = bcrypt.compareSync(cleanEnteredPin, cleanStoredPin);
+                  } catch {}
+                }
+
+                isPinValid = cleanEnteredPin === cleanStoredPin || matchesBcrypt;
+              } else if (user.role === "ADMIN" || user.role === "DEALER") {
+                // No custom PIN set yet — fallback to default initial PIN
+                const defaultPin = "123456";
+                isPinValid = userPin.trim() === defaultPin;
               }
 
               if (!isPinValid) {

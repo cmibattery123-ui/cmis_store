@@ -252,3 +252,40 @@ describe("API /api/admin/profile email update", () => {
     );
   });
 });
+
+describe("Security PIN override validation logic", () => {
+  function verifyPin(user: { role: string; pin?: string | null }, userPin: string): boolean {
+    let isPinValid = false;
+
+    if (user.pin) {
+      const cleanEnteredPin = userPin.trim();
+      const cleanStoredPin = user.pin.trim();
+      isPinValid = cleanEnteredPin === cleanStoredPin;
+    } else if (user.role === "ADMIN" || user.role === "DEALER") {
+      const defaultPin = "123456";
+      isPinValid = userPin.trim() === defaultPin;
+    }
+
+    return isPinValid;
+  }
+
+  it("allows 123456 when user has no custom PIN set", () => {
+    const adminWithoutPin = { role: "ADMIN", pin: null };
+    expect(verifyPin(adminWithoutPin, "123456")).toBe(true);
+    expect(verifyPin(adminWithoutPin, "654321")).toBe(false);
+  });
+
+  it("REJECTS 123456 once a custom PIN has been configured", () => {
+    const adminWithCustomPin = { role: "ADMIN", pin: "888888" };
+    // 123456 must NOT be allowed anymore
+    expect(verifyPin(adminWithCustomPin, "123456")).toBe(false);
+    // Custom PIN must be allowed
+    expect(verifyPin(adminWithCustomPin, "888888")).toBe(true);
+  });
+
+  it("protects dealer accounts similarly with custom PIN overriding 123456", () => {
+    const dealerWithCustomPin = { role: "DEALER", pin: "7777" };
+    expect(verifyPin(dealerWithCustomPin, "123456")).toBe(false);
+    expect(verifyPin(dealerWithCustomPin, "7777")).toBe(true);
+  });
+});

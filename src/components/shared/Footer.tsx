@@ -19,7 +19,7 @@ export default function Footer() {
           {/* Brand & Mission (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative w-8 h-8 rounded-full overflow-hidden bg-primary/10 border border-primary/20 p-0.5 flex items-center justify-center">
+              <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white border border-slate-200 dark:border-white/20 p-0.5 flex items-center justify-center">
                 <Image
                   src={COMPANY_INFO.logo}
                   alt="CMI Logo"
